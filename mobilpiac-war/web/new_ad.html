@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>MobilPiactér</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="screen">
+</head>
+
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a href="index.html" class="navbar-brand">MobilPiactér</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <div class="navbar-right navbar-form">
+                    <a class="btn btn-default">Kijelentkezés</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <br/>
+    <br/>
+    <div class="container">
+        <div class="row">
+            <form class="form-horizontal">
+                <div class="col-md-6 col-md-push-3">
+                    <h2 class="text-center">Új hirdetés</h2>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Telefon típusa:</label>
+                        <div class="col-sm-8">
+                            <select class="form-control">
+                                <optgroup label="Nexus">
+                                    <option>Nexus 4</option>
+                                    <option>Nexus 5</option>
+                                </optgroup>
+                                <optgroup label="ZTE">
+                                    <option>ZTE Grand X In</option>
+                                    <option>ZTE Blade III</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Kikiáltási ár:</label>
+                        <div class="col-sm-7">
+                            <input class="form-control">
+                        </div>
+                        <div class="col-sm-1 control-label">
+                            Ft
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Szolgáltató:</label>
+                        <div class="col-sm-8">
+                            <select class="form-control">
+                                <option>Független</option>
+                                <option>Telenor</option>
+                                <option>T-Mobile</option>
+                                <option>Vodafone</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-10 col-md-push-1">
+                    <div class="form-group">
+                        <label class="col-sm-3 col-lg-2 control-label">Részletek leírása:</label>
+                        <div class="col-sm-9 col-lg-10">
+                            <textarea class="form-control" rows="5">
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-sm-push-3 col-md-4 col-md-push-4 text-center">
+                	<label class="checkbox">
+	                    <input type="checkbox" value="terms-conditions-accept">A licitálás feltételeit elfogadom
+	                </label>
+	                <button class="btn btn-md btn-primary" type="submit">Hirdetés feladása</button>
+                </div>
+            </form>
+        </div>
+
+
+        <hr>
+
+        <footer>
+            <p>&copy; DaniPeti 2013</p>
+        </footer>
+    </div>
+    <!-- /container -->
+
+    <script type="text/javascript" src="lib/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="lib/bootstrap/js/bootstrap.min.js"></script>
+</body>
+
+</html>

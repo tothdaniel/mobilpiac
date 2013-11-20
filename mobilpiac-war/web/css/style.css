@@ -1,0 +1,38 @@
+@media (min-width: 767px) {
+    .fixpadding {
+      padding:0;
+      margin:0;
+    }
+}
+
+.thumbnail {
+	margin-bottom: 5px;
+}
+
+.multiple-choice ul {
+	list-style-type: none;
+	text-align: left;
+	padding-left: 10px;
+	overflow-y:scroll;
+	height: 90px;
+}
+
+.multiple-choice input {
+	margin-right: 5px;
+}
+
+.multiple-choice label {
+	margin: 0;
+}
+
+.admin-phone-list ul {
+	list-style-type: none;
+	text-align: left;
+	padding-left: 10px;
+	overflow-y:scroll;
+	height: 640px;
+}
+
+.admin-phone-list a {
+	width: 100%;
+}

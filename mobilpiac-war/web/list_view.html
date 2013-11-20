@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>MobilPiactér</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8"> 
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="lib/slider/css/slider.css" rel="stylesheet" media="screen">
+    <link href="css/style.css" rel="stylesheet" media="screen">
+</head>
+
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a href="index.html" class="navbar-brand">MobilPiactér</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <div class="navbar-right navbar-form">
+                    <a href="registration.html" class="btn btn-default">Regisztráció</a>
+                    <a href="signin.html" class="btn btn-default">Bejelentkezés</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/><br/><br/>
+    
+    <div class="container">
+
+        <div class="row">
+            <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                <div class="text-center">
+                	<div class="thumbnail">
+                            <h4 style="margin-top: 5px;">Ár</h4>
+                            <input type="text" class="col-sm-10" data-slider-min="10000" data-slider-max="100000" data-slider-step="1000" data-slider-value="[80000,100000]" id="price">
+                            <div class="clearfix"></div>
+                            <b><span id="minprice">80000</span> Ft - <span id="maxprice">100000</span> Ft</b>
+                	</div>
+                	<div class="thumbnail multiple-choice">
+                            <h4 style="margin-top: 5px;">Szolgáltató</h4>
+                            <ul data-bind="foreach: mobileNetworks, visible: mobileNetworks().length > 0">
+                                <li>
+                                    <label>
+                                        <input type="checkbox" name="manufacturer" data-bind="attr:{value: id}"> <span data-bind="html: networkName"></span>
+                                    </label>
+                                </li>
+                            </ul>
+                	</div>
+                	<div class="thumbnail multiple-choice">
+                            <h4 style="margin-top: 5px;">Gyártó</h4>
+                            <ul data-bind="foreach: manufacturers, visible: manufacturers().length > 0">
+                                <li>
+                                    <label>
+                                        <input type="checkbox" name="manufacturer" data-bind="attr:{value: id}"> <span data-bind="html: manufacturer"></span>
+                                    </label>
+                                </li>
+                            </ul>
+                	</div>
+                	<div class="thumbnail multiple-choice">
+                            <h4 style="margin-top: 5px;">SIM kártya típus</h4>
+                            <ul style="height: 70px; overflow: auto;" data-bind="foreach: sims, visible: sims().length > 0">
+                                <li>
+                                    <label>
+                                        <input type="checkbox" name="manufacturer" data-bind="attr:{value: id}"><span data-bind="html: sim_type"></span>
+                                    </label>
+                                </li>
+                            </ul>
+                	</div>
+                </div>
+            </div>
+            <div class="col-xs-8 col-sm-9 col-md-9 col-lg-9">
+                <div class="row" data-bind="foreach: mobiles, visible: mobiles().length > 0">
+                    <div class="thumbnail">
+                        <div class="row">
+                                <h3 data-bind="html: title" class="col-xs-4" style="margin-top: 10px;"></h3>
+                                <h3 class="col-xs-push-4 col-xs-4" style="margin-top: 10px;">
+                                    Aktuális ár: <span data-bind="html: price">16000</span> Ft
+                                </h3>
+                                <div class="clearfix"></div>
+                                <img data-bind="attr:{src: image_path}" src="img/nexus-4.jpeg" style="width:50px;float:left;position:relative;margin-left: 16px;margin-right: 5px;">
+                                <div data-bind="html: os" class="col-xs-5 thumbnail" style="margin-right: 5px;"></div>
+                                <div data-bind="html: rom" class="col-xs-5 thumbnail" style="margin-right: 5px;"></div>
+                                <div data-bind="html: screen" class="col-xs-5 thumbnail" style="margin-right: 5px;"></div>
+                                <div data-bind="html: ram" class="col-xs-5 thumbnail" style="margin-right: 5px;"></div>
+                                <div data-bind="html: processor" class="col-xs-5 thumbnail" style="margin-right: 5px;"></div>
+                                <div data-bind="html: rear_camera" class="col-xs-5 thumbnail" style="margin-right: 5px;"></div>
+                                <div class="clearfix"></div>
+                                <div class="col-xs-4" style="margin-right: 5px;">Feladva: <span data-bind="html: published">2013-06-06 18:18:18</span></div>
+                                <div class="col-xs-push-3 col-xs-4" style="margin-right: 5px;text-align: right;">Feladó: <span data-bind="html: seller_user">Én</span></div>
+                        </div>
+                    </div>					
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <footer>
+            <p>&copy; DaniPeti 2013</p>
+        </footer>
+    </div>
+    <!-- /container -->
+
+    <script src="lib/jquery-2.0.3.min.js"></script>
+    <script src="lib/knockout-3.0.0.js"></script>
+    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="lib/slider/js/bootstrap-slider.js"></script>
+    <script>
+	$(function(){
+		var priceChange = function() {
+			var newPrice = price.getValue();
+			$("#minprice").text(newPrice[0]);
+			$("#maxprice").text(newPrice[1]);
+		};
+		var priceFormat = function(price) {
+			return price+" Ft";
+		}
+		var price = $('#price').slider({formater:priceFormat}).on('slide', priceChange).data('slider');
+	});
+        function Mobile(data) {
+            this.published = ko.observable(data.published);
+            this.seller_user = ko.observable(data.seller_user);
+            this.price = ko.observable(data.price);
+            this.image_path = ko.observable(data.image_path);
+            this.title = ko.computed(function() {
+                return data.manufacturer + " " + data.type_name;
+            }, this);
+            this.os = ko.computed(function() {
+                return data.os_name + " " + data.os_version;
+            }, this);
+            this.screen = ko.computed(function() {
+                return data.res_x + "x" + data.res_y + " (" + data.dpi + " dpi)";
+            }, this);
+            this.processor = ko.computed(function() {
+                return data.processor_clock + " Mhz (" + data.processor_number_of_cores + " mag)";
+            }, this);
+            this.ram = ko.computed(function() {
+                return data.ram + " GB RAM";
+            }, this);
+            this.rom = ko.computed(function() {
+                return data.rom + " GB Háttértár";
+            }, this);
+            this.rear_camera = ko.computed(function() {
+                return data.rear_camera + " Mpx kamera";
+            }, this);
+        }
+        
+        function MobileNetwork(data) {
+            this.id = ko.observable(data.id);
+            this.networkName = ko.observable(data.networkName);
+        }
+        
+        function Manufacturer(data) {
+            this.id = ko.observable(data.id);
+            this.manufacturer = ko.observable(data.manufacturer);
+        }
+        
+        function Sim(data) {
+            this.id = ko.observable(data.id);
+            this.sim_type = ko.observable(data.sim_type);
+        }
+
+        function ViewModel() {
+            // Data
+            var self = this;
+            self.mobiles = ko.observableArray([]);
+            self.mobileNetworks = ko.observableArray([]);
+            self.manufacturers = ko.observableArray([]);
+            self.sims = ko.observableArray([]);
+
+            // Operations
+            self.mobiles.push(new Mobile({
+                published: "2013",
+                seller_user: "Én",
+                price: "99000",
+                image_path: "img/nexus-4.jpeg",
+                manufacturer: "LG",
+                type_name: "Nexus 4",
+                os_name: "Android",
+                os_version: "v4.3 (Jelly Bean)",
+                res_x: "768",
+                res_y: "1280",
+                dpi: "320",
+                processor_clock : "1500", 
+                processor_number_of_cores: "4",
+                rom: "16",
+                ram: "2",
+                rear_camera: "8"
+            }));
+            
+            // Operations
+            self.mobileNetworks.push(new MobileNetwork({
+                id: "1",
+                networkName: "Független"
+            }));
+            
+            self.mobileNetworks.push(new MobileNetwork({
+                id: "2",
+                networkName: "T-mobile"
+            }));
+            
+            self.mobileNetworks.push(new MobileNetwork({
+                id: "3",
+                networkName: "Telenor"
+            }));
+            
+            self.manufacturers.push(new Manufacturer({
+                id: "1",
+                manufacturer: "Asus"
+            }));
+            
+            self.sims.push(new Sim({
+                id: "1",
+                sim_type: "normál SIM kártya"
+            }));
+        }
+
+        ko.applyBindings(new ViewModel());
+    </script>
+</body>
+
+</html>
