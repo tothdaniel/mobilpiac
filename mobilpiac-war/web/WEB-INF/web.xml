@@ -12,6 +12,14 @@
         <servlet-name>ListMobileNetworksServlet</servlet-name>
         <servlet-class>hu.bme.aait.mobilpiac.servlets.ListMobileNetworksServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ListSimsServlet</servlet-name>
+        <servlet-class>hu.bme.aait.mobilpiac.servlets.ListSimsServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListManufacturersServlet</servlet-name>
+        <servlet-class>hu.bme.aait.mobilpiac.servlets.ListManufacturersServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ListUsersServlet</servlet-name>
         <url-pattern>/ListUsersServlet</url-pattern>
@@ -23,6 +31,14 @@
     <servlet-mapping>
         <servlet-name>ListMobileNetworksServlet</servlet-name>
         <url-pattern>/ListMobileNetworksServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListSimsServlet</servlet-name>
+        <url-pattern>/ListSimsServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListManufacturersServlet</servlet-name>
+        <url-pattern>/ListManufacturersServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -6,10 +6,10 @@
 
 package hu.bme.aait.mobilpiac.beans;
 
+import hu.bme.aait.mobilpiac.entities.Manufacturer;
 import hu.bme.aait.mobilpiac.entities.MobileNetwork;
-import static hu.bme.aait.mobilpiac.entities.MobileNetwork_.networkName;
 import hu.bme.aait.mobilpiac.entities.PhoneType;
-import static hu.bme.aait.mobilpiac.entities.Users_.id;
+import hu.bme.aait.mobilpiac.entities.Sim;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -98,6 +98,33 @@ public class MobileSessionBean {
             JSONObject obj = new JSONObject();
             obj.put("id", m.getId());
             obj.put("network_name", m.getNetworkName());
+            jarray.add(obj);
+        }
+        return jarray;
+    }
+    
+    
+    public JSONArray listSimTypes(){
+        List<Sim> simsList = em.createQuery("SELECT s FROM Sim s").getResultList();
+        JSONArray jarray = new JSONArray();
+        for(Sim s:simsList)
+        {
+            JSONObject obj = new JSONObject();
+            obj.put("id", s.getId());
+            obj.put("network_name", s.getSimType());
+            jarray.add(obj);
+        }
+        return jarray;
+    }
+    
+    public JSONArray listManufacturers(){
+        List<Manufacturer> manufacturersList = em.createQuery("SELECT m FROM Manufacturer m").getResultList();
+        JSONArray jarray = new JSONArray();
+        for(Manufacturer m:manufacturersList)
+        {
+            JSONObject obj = new JSONObject();
+            obj.put("id", m.getId());
+            obj.put("network_name", m.getManufacturerName());
             jarray.add(obj);
         }
         return jarray;
