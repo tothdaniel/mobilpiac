@@ -42,7 +42,7 @@
                             <ul data-bind="foreach: mobileNetworks, visible: mobileNetworks().length > 0">
                                 <li>
                                     <label>
-                                        <input type="checkbox" name="manufacturer" data-bind="attr:{value: id}"> <span data-bind="html: networkName"></span>
+                                        <input type="checkbox" name="manufacturer" data-bind="attr:{value: id}"> <span data-bind="html: network_name"></span>
                                     </label>
                                 </li>
                             </ul>
@@ -52,7 +52,7 @@
                             <ul data-bind="foreach: manufacturers, visible: manufacturers().length > 0">
                                 <li>
                                     <label>
-                                        <input type="checkbox" name="manufacturer" data-bind="attr:{value: id}"> <span data-bind="html: manufacturer"></span>
+                                        <input type="checkbox" name="manufacturer" data-bind="attr:{value: id}"> <span data-bind="html: manufacturer_name"></span>
                                     </label>
                                 </li>
                             </ul>
@@ -148,12 +148,12 @@
         
         var MobileNetwork = function(data) {
             this.id = ko.observable(data.id);
-            this.networkName = ko.observable(data.networkName);
+            this.network_name = ko.observable(data.network_name);
         };
         
         var Manufacturer = function(data) {
             this.id = ko.observable(data.id);
-            this.manufacturer = ko.observable(data.manufacturer);
+            this.manufacturer_name = ko.observable(data.manufacturer_name);
         };
         
         var Sim = function(data) {
@@ -170,51 +170,6 @@
             self.sims = ko.observableArray([]);
 
             // Operations
-            /*self.mobiles.push(new Mobile({
-                published: "2013",
-                seller_user: "Én",
-                price: "99000",
-                image_path: "img/nexus-4.jpeg",
-                manufacturer: "LG",
-                type_name: "Nexus 4",
-                os_name: "Android",
-                os_version: "v4.3 (Jelly Bean)",
-                res_x: "768",
-                res_y: "1280",
-                dpi: "320",
-                processor_clock : "1500", 
-                processor_number_of_cores: "4",
-                rom: "16",
-                ram: "2",
-                rear_camera: "8"
-            }));*/
-            
-            // Operations
-            self.mobileNetworks.push(new MobileNetwork({
-                id: "1",
-                networkName: "Független"
-            }));
-            
-            self.mobileNetworks.push(new MobileNetwork({
-                id: "2",
-                networkName: "T-mobile"
-            }));
-            
-            self.mobileNetworks.push(new MobileNetwork({
-                id: "3",
-                networkName: "Telenor"
-            }));
-            
-            self.manufacturers.push(new Manufacturer({
-                id: "1",
-                manufacturer: "Asus"
-            }));
-            
-            self.sims.push(new Sim({
-                id: "1",
-                sim_type: "normál SIM kártya"
-            }));    
-            
             $.ajax({
                 url: "/mobilpiac-war/ListMobilesServlet",
                 type: "get",
@@ -223,6 +178,39 @@
                 for(key in data.mobiles)
                 {
                     self.mobiles.push(new Mobile(data.mobiles[key]));
+                }   
+            });
+            
+            $.ajax({
+                url: "/mobilpiac-war/ListMobileNetworksServlet",
+                type: "get",
+                dataType: "json"
+            }).success(function(data) {
+                for(key in data.mobile_networks)
+                {
+                    self.mobileNetworks.push(new MobileNetwork(data.mobile_networks[key]));
+                }   
+            });
+            
+            $.ajax({
+                url: "/mobilpiac-war/ListSimsServlet",
+                type: "get",
+                dataType: "json"
+            }).success(function(data) {
+                for(key in data.sims)
+                {
+                    self.sims.push(new Sim(data.sims[key]));
+                }   
+            });
+            
+            $.ajax({
+                url: "/mobilpiac-war/ListManufacturersServlet",
+                type: "get",
+                dataType: "json"
+            }).success(function(data) {
+                for(key in data.manufacturers)
+                {
+                    self.manufacturers.push(new Manufacturer(data.manufacturers[key]));
                 }   
             });
             
