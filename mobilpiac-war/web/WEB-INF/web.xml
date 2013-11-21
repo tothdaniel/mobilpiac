@@ -20,6 +20,10 @@
         <servlet-name>ListManufacturersServlet</servlet-name>
         <servlet-class>hu.bme.aait.mobilpiac.servlets.ListManufacturersServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ListAdsServlet</servlet-name>
+        <servlet-class>hu.bme.aait.mobilpiac.servlets.ListAdsServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ListUsersServlet</servlet-name>
         <url-pattern>/ListUsersServlet</url-pattern>
@@ -39,6 +43,10 @@
     <servlet-mapping>
         <servlet-name>ListManufacturersServlet</servlet-name>
         <url-pattern>/ListManufacturersServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListAdsServlet</servlet-name>
+        <url-pattern>/ListAdsServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
