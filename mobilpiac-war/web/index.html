@@ -77,10 +77,6 @@
             // Data
             var self = this;
             self.mobiles = ko.observableArray([]);
-
-            self.push = function(data) {
-               self.mobiles.push(new Mobile(data)); 
-            };
            
             $.ajax({
                 url: "/mobilpiac-war/ListMobilesServlet",
@@ -89,7 +85,7 @@
             }).success(function(data) {
                 for(key in data.mobiles)
                 {
-                    self.push(data.mobiles[key]);
+                    self.mobiles.push(new Mobile(data.mobiles[key]));
                 }   
             });
         };     
