@@ -44,7 +44,7 @@
                 <div class="row" data-bind="foreach: mobiles, visible: mobiles().length > 0">
                     <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
                         <div class="thumbnail">
-                            <img data-bind="attr:{src: image_path, alt: title}" style="width:100px;">
+                            <img data-bind="attr:{src: image_url, alt: title}" style="width:100px;">
                             <div class="caption text-center">
                                 <h3 data-bind="html: title"></h3>
                             </div>
@@ -66,38 +66,37 @@
     <script src="lib/knockout-3.0.0.js"></script>
     <script src="lib/bootstrap/js/bootstrap.min.js"></script>
     <script> 
-        function Mobile(data) {
-            this.image_path = ko.observable(data.image_path);
-            this.title = ko.observable(data.title);
-        }
+        var Mobile = function(data) {
+            this.image_url = ko.observable(data.image_url);
+            this.title = ko.computed(function() {
+                return data.manufacturer + " " + data.type_name;
+            }, this);
+        };
 
-        function MobileListViewModel() {
+        var MobileModel = function() {
             // Data
             var self = this;
             self.mobiles = ko.observableArray([]);
 
-            // Operations
-            /*self.mobiles.push(new Mobile({ 
-                image_path: "img/nexus-4.jpeg",
-                title: "Nexus 4"
-            }));*/
-        }
-
-        ko.applyBindings(new MobileListViewModel());
-        
-        $( document ).ready(function() {
+            self.push = function(data) {
+               self.mobiles.push(new Mobile(data)); 
+            };
+           
             $.ajax({
-                url: "/mobilpiac-war/MobileListServlet",
+                url: "/mobilpiac-war/ListMobilesServlet",
                 type: "get",
                 dataType: "json"
             }).success(function(data) {
-                console.log(data);
                 for(key in data.mobiles)
                 {
-                    MobileListViewModel.mobiles.push(new Mobile(key));
-                }    
+                    self.push(data.mobiles[key]);
+                }   
             });
-        });
+        };     
+
+        ko.applyBindings(new MobileModel());
+        
+        
     </script>
 </body>
 
