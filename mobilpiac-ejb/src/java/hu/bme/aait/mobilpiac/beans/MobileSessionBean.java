@@ -111,7 +111,7 @@ public class MobileSessionBean {
         {
             JSONObject obj = new JSONObject();
             obj.put("id", s.getId());
-            obj.put("network_name", s.getSimType());
+            obj.put("sim_type", s.getSimType());
             jarray.add(obj);
         }
         return jarray;
@@ -124,7 +124,7 @@ public class MobileSessionBean {
         {
             JSONObject obj = new JSONObject();
             obj.put("id", m.getId());
-            obj.put("network_name", m.getManufacturerName());
+            obj.put("manufacturer_name", m.getManufacturerName());
             jarray.add(obj);
         }
         return jarray;
