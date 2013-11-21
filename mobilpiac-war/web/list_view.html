@@ -74,11 +74,11 @@
                     <div class="thumbnail">
                         <div class="row">
                                 <h3 data-bind="html: title" class="col-xs-4" style="margin-top: 10px;"></h3>
-                                <h3 class="col-xs-push-4 col-xs-4" style="margin-top: 10px;">
+                                <h3 class="col-xs-push-2 col-xs-5" style="margin-top: 10px; text-align: right;">
                                     Aktuális ár: <span data-bind="html: price">16000</span> Ft
                                 </h3>
                                 <div class="clearfix"></div>
-                                <img data-bind="attr:{src: image_path}" src="img/nexus-4.jpeg" style="width:50px;float:left;position:relative;margin-left: 16px;margin-right: 5px;">
+                                <img data-bind="attr:{src: image_url}" style="width:50px;float:left;position:relative;margin-left: 16px;margin-right: 5px;">
                                 <div data-bind="html: os" class="col-xs-5 thumbnail" style="margin-right: 5px;"></div>
                                 <div data-bind="html: rom" class="col-xs-5 thumbnail" style="margin-right: 5px;"></div>
                                 <div data-bind="html: screen" class="col-xs-5 thumbnail" style="margin-right: 5px;"></div>
@@ -118,11 +118,11 @@
 		}
 		var price = $('#price').slider({formater:priceFormat}).on('slide', priceChange).data('slider');
 	});
-        function Mobile(data) {
+        var Mobile = function(data) {
             this.published = ko.observable(data.published);
             this.seller_user = ko.observable(data.seller_user);
             this.price = ko.observable(data.price);
-            this.image_path = ko.observable(data.image_path);
+            this.image_url = ko.observable(data.image_url);
             this.title = ko.computed(function() {
                 return data.manufacturer + " " + data.type_name;
             }, this);
@@ -144,22 +144,22 @@
             this.rear_camera = ko.computed(function() {
                 return data.rear_camera + " Mpx kamera";
             }, this);
-        }
+        };
         
-        function MobileNetwork(data) {
+        var MobileNetwork = function(data) {
             this.id = ko.observable(data.id);
             this.networkName = ko.observable(data.networkName);
-        }
+        };
         
-        function Manufacturer(data) {
+        var Manufacturer = function(data) {
             this.id = ko.observable(data.id);
             this.manufacturer = ko.observable(data.manufacturer);
-        }
+        };
         
-        function Sim(data) {
+        var Sim = function(data) {
             this.id = ko.observable(data.id);
             this.sim_type = ko.observable(data.sim_type);
-        }
+        };
 
         function ViewModel() {
             // Data
@@ -170,7 +170,7 @@
             self.sims = ko.observableArray([]);
 
             // Operations
-            self.mobiles.push(new Mobile({
+            /*self.mobiles.push(new Mobile({
                 published: "2013",
                 seller_user: "Én",
                 price: "99000",
@@ -187,7 +187,7 @@
                 rom: "16",
                 ram: "2",
                 rear_camera: "8"
-            }));
+            }));*/
             
             // Operations
             self.mobileNetworks.push(new MobileNetwork({
@@ -213,7 +213,20 @@
             self.sims.push(new Sim({
                 id: "1",
                 sim_type: "normál SIM kártya"
-            }));
+            }));    
+            
+            $.ajax({
+                url: "/mobilpiac-war/ListMobilesServlet",
+                type: "get",
+                dataType: "json"
+            }).success(function(data) {
+                for(key in data.mobiles)
+                {
+                    self.mobiles.push(new Mobile(data.mobiles[key]));
+                }   
+            });
+            
+            
         }
 
         ko.applyBindings(new ViewModel());
