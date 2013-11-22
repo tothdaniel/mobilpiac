@@ -7,7 +7,6 @@
 package hu.bme.aait.mobilpiac.beans;
 
 import hu.bme.aait.mobilpiac.entities.Advertisement;
-import hu.bme.aait.mobilpiac.entities.PhoneType;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.List;
