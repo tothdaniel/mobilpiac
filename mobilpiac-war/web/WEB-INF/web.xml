@@ -26,7 +26,7 @@
     </servlet>
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
-        <servlet-class>hu.bme.aait.mobilpiac.servlets.LogoutServlet</servlet-class>
+        <servlet-class>hu.bme.aait.mobilpiac.servlets.LoginServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>RegistrationServlet</servlet-name>
@@ -35,6 +35,10 @@
     <servlet>
         <servlet-name>LogoutServlet</servlet-name>
         <servlet-class>hu.bme.aait.mobilpiac.servlets.LogoutServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ResetPasswordServlet</servlet-name>
+        <servlet-class>hu.bme.aait.mobilpiac.servlets.ResetPasswordServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ListUsersServlet</servlet-name>
@@ -71,6 +75,10 @@
     <servlet-mapping>
         <servlet-name>LogoutServlet</servlet-name>
         <url-pattern>/LogoutServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ResetPasswordServlet</servlet-name>
+        <url-pattern>/ResetPasswordServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

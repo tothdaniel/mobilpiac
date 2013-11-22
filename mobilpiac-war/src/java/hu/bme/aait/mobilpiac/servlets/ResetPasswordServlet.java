@@ -7,12 +7,11 @@
 package hu.bme.aait.mobilpiac.servlets;
 
 import hu.bme.aait.mobilpiac.beans.UserSessionBean;
-import hu.bme.aait.mobilpiac.entities.Users;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,40 +21,29 @@ import org.json.simple.JSONObject;
  *
  * @author Daniel
  */
-public class LoginServlet extends HttpServlet {
+public class ResetPasswordServlet extends HttpServlet {
 
     @EJB
     UserSessionBean us;
     
-    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            Users u = us.login(request.getParameter("login_name"), request.getParameter("password"));
+        try (PrintWriter out = response.getWriter()) {       
+            List<String> resultList = us.resetPassword(request.getParameter("login_name"), request.getParameter("email"),request.getParameter("new_password"));
             JSONObject obj = new JSONObject();
-            if(u != null)
+            obj.put("message",resultList.get(0));
+            if(resultList.get(1).equals("true"))
             {
-                int d = request.getParameter("stay_login").equals("true") ? 24*7 : 1;
-                Cookie cookie1 = new Cookie("login_name", u.getLoginName());
-                cookie1.setMaxAge(60 * 60 * d); //1 hour
-                response.addCookie(cookie1);
-                Cookie cookie2 = new Cookie("password", u.getPassword());
-                cookie2.setMaxAge(60 * 60 * d); //1 hour
-                response.addCookie(cookie2);
-                obj.put("message","Sikeresen bejelentkezett, mint "+u.getLoginName()+".");
                 obj.put("result",true);
             }
             else
             {
-                obj.put("message","Nem sikerült a bejelentkezés.");
                 obj.put("result",false);
             }
-            
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             out.print(obj);
-
         }
     }
 

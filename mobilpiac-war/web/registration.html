@@ -16,7 +16,7 @@
             </div>
             <div class="navbar-collapse collapse">
                 <div class="navbar-right navbar-form">
-                    <a href="signin.html" class="btn btn-default">Bejelentkezés</a>
+                    <a id="logbtn" href="signin.html" class="btn btn-default">Bejelentkezés</a>
                 </div>
             </div>
         </div>
@@ -82,6 +82,7 @@
     <!-- /container -->
 
     <script src="lib/jquery-2.0.3.min.js"></script>
+    <script src="lib/jquery.cookie.js"></script>
     <script src="lib/knockout-3.0.0.js"></script>
     <script src="lib/bootstrap/js/bootstrap.min.js"></script>
     <script>
@@ -115,7 +116,7 @@
                         alert(data.message);
                         if (data.result)
                         {
-                            //document.location.href="index.html";
+                            document.location.href="index.html";
                         }
                     });
                 }
@@ -324,6 +325,47 @@ var MD5 = function (string) {
 
     return temp.toLowerCase();
 };
+    </script>
+    <script>
+         $("#logbtn").click(function(event){
+            if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined){
+                event.preventDefault();
+                $.ajax({
+                    url: "/mobilpiac-war/LogoutServlet",
+                    type: "get",
+                    dataType: "json"
+                }).success(function(data) {
+                    alert(data.message);
+                    if (data.result)
+                    {
+                        document.location.href="index.html";
+                    }
+                }); 
+            }
+         });
+    </script>
+    <script>
+        $( document ).ready(function() {
+            if ($.cookie("login_name") === undefined || $.cookie("password") === undefined){
+                $("#logbtn").html("Bejelentkezés");
+                $("#logbtn").attr("href","signin.html");
+                
+            }else{
+                $("#logbtn").html("Kijelentkezés");
+                $("#logbtn").attr("href","#");
+                
+            }     
+        });
+
+        $( window ).load(function() {
+           /* if ($.cookie("login_name") === undefined || $.cookie("password") === undefined){
+                $("#logbtn").html("Bejelentkezés");
+                $("#logbtn").attr("href","signin.html");
+            }else{
+                $("#logbtn").html("Kijelentkezés");
+                $("#logbtn").attr("href","#");
+            }*/
+        });
     </script>
 </body>
 
