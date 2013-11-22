@@ -72,4 +72,59 @@ public class UserSessionBean {
         return jarray;
     }
     
+    public Users login(String loginName, String password){
+        Users user = null;
+        List<Users> usersList = em.createQuery("SELECT u FROM Users u").getResultList();
+        for(Users u:usersList)
+        {
+            if(u.getLoginName().equals(loginName) && u.getPassword().equals(password))
+            {
+                user = u;
+            }
+        }
+        return user;
+    }
+    
+    public String registration(String loginName, String password, String emailAddress)
+    {
+        if(loginName != null && loginName.length()>3)
+        {
+            if(password != null && loginName.length()>3)
+            {
+                if(emailAddress != null && emailAddress.length()>3 && emailAddress.contains("@"))
+                {
+                    em.createQuery("SELECT ");
+                    
+                    
+                    em.getTransaction().begin();
+
+                    Users user = new Users();
+                    user.setLoginName(loginName);
+                    user.setPassword(password);
+                    user.setEmailAddress(emailAddress);
+
+                    em.persist(user);
+
+                    em.getTransaction().commit();
+                    return "";
+                    
+                    
+                    
+                }
+                else
+                {
+                    return "Az email címnek legalább 4 karakterből kell állnia és tartalmaznia kell a @karaktert.";
+                }
+            }
+            else
+            {
+                return "A jelszónak legalább 4 karakterből kell állnia.";
+            }
+        }
+        else
+        {
+            return "A felhasználónévnek legalább 4 karakterből kell állnia.";
+        }
+    }
+    
 }
