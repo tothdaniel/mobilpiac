@@ -31,7 +31,10 @@ public class ListAdsServlet extends HttpServlet {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             JSONObject json = new JSONObject();
-            json.put("advertisements",as.listALlAds());
+            
+            
+            
+            json.put("advertisements",as.listAllAds());
             out.print(json);
         }
     }

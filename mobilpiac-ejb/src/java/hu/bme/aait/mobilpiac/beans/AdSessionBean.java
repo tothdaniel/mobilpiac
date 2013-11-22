@@ -53,7 +53,7 @@ public class AdSessionBean {
         return obj;
     }
     
-    public JSONArray listALlAds(){
+    public JSONArray listAllAds(JSONObject obj){
         List<Advertisement> adsList = em.createQuery("SELECT a FROM Advertisement a").getResultList();
         JSONArray jarray = new JSONArray();
         for(Advertisement a:adsList)
