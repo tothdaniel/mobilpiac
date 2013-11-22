@@ -42,7 +42,7 @@
                             <ul data-bind="foreach: mobileNetworks, visible: mobileNetworks().length > 0">
                                 <li>
                                     <label>
-                                        <input type="checkbox" name="manufacturer" data-bind="attr:{value: id}"> <span data-bind="html: network_name"></span>
+                                        <input type="checkbox" name="mobileNetwork" data-bind="attr:{value: id, checked: checked, click: $root.CategoryChange}"> <span data-bind="html: network_name"></span>
                                     </label>
                                 </li>
                             </ul>
@@ -62,7 +62,7 @@
                             <ul style="height: 70px; overflow: auto;" data-bind="foreach: sims, visible: sims().length > 0">
                                 <li>
                                     <label>
-                                        <input type="checkbox" name="manufacturer" data-bind="attr:{value: id}"><span data-bind="html: sim_type"></span>
+                                        <input type="checkbox" name="sim" data-bind="attr:{value: id}"><span data-bind="html: sim_type"></span>
                                     </label>
                                 </li>
                             </ul>
@@ -110,6 +110,7 @@
     <script src="lib/bootstrap/js/bootstrap.min.js"></script>
     <script src="lib/slider/js/bootstrap-slider.js"></script>
     <script>
+        var price;
 	$(function(){
 		var priceChange = function() {
 			var newPrice = price.getValue();
@@ -118,8 +119,8 @@
 		};
 		var priceFormat = function(price) {
 			return price+" Ft";
-		}
-		var price = $('#price').slider({formater:priceFormat}).on('slide', priceChange).data('slider');
+		};
+		price = $('#price').slider({formater:priceFormat}).on('slide', priceChange).data('slider');
 	});
         var Mobile = function(data) {
             this.actual_price = ko.observable(data.actual_price);
@@ -153,6 +154,7 @@
         var MobileNetwork = function(data) {
             this.id = ko.observable(data.id);
             this.network_name = ko.observable(data.network_name);
+            this.checked = ko.observable(data.checked);
         };
         
         var Manufacturer = function(data) {
@@ -174,16 +176,7 @@
             self.sims = ko.observableArray([]);
 
             // Operations
-            $.ajax({
-                url: "/mobilpiac-war/ListAdsServlet",
-                type: "get",
-                dataType: "json"
-            }).success(function(data) {
-                for(key in data.advertisements)
-                {
-                    self.mobiles.push(new Mobile(data.advertisements[key]));
-                }   
-            });
+            getAds("", this);
             
             $.ajax({
                 url: "/mobilpiac-war/ListMobileNetworksServlet",
@@ -191,7 +184,7 @@
                 dataType: "json"
             }).success(function(data) {
                 for(key in data.mobile_networks)
-                {
+                {                 
                     self.mobileNetworks.push(new MobileNetwork(data.mobile_networks[key]));
                 }   
             });
@@ -217,11 +210,43 @@
                     self.manufacturers.push(new Manufacturer(data.manufacturers[key]));
                 }   
             });
-            
-            
+
         }
         
-        //$("#").click(function())
+        var model = new ViewModel();
+        
+        $("#filter").click(function(){
+            var newPrice = price.getValue();
+            var filter = {
+                minPrice: newPrice[0],
+                maxPrice: newPrice[1],
+                mobile_networks: getIds("mobileNetwork"),
+                manufacturers: getIds("manufacturer"),
+                sims: getIds("sim")          
+            };
+            getAds(JSON.stringify(filter), model);
+        });
+        
+        function getIds(name) {
+            var ids = $("input[name='"+name+"']:checked").map(function(){
+                return $(this).val();
+            }).get();
+            return ids;
+        }
+        
+        function getAds(filter, self) {
+            $.ajax({
+                url: "/mobilpiac-war/ListAdsServlet",
+                type: "get",
+                dataType: "json",
+                data: filter
+            }).success(function(data) {
+                for(key in data.advertisements)
+                {
+                    self.mobiles.push(new Mobile(data.advertisements[key]));
+                }   
+            });
+        }
 
         ko.applyBindings(new ViewModel());
     </script>
