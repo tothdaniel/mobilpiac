@@ -110,7 +110,7 @@
                         url: "/mobilpiac-war/RegistrationServlet",
                         type: "get",
                         dataType: "json",
-                        data: {json : registration }
+                        data: registration
                     }).success(function(data) {
                         alert(data.message);
                         if (data.result)
