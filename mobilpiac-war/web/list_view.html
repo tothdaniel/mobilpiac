@@ -218,8 +218,8 @@
         $("#filter").click(function(){
             var newPrice = price.getValue();
             var filter = {
-                minPrice: newPrice[0],
-                maxPrice: newPrice[1],
+                min_price: newPrice[0],
+                max_price: newPrice[1],
                 mobile_networks: getIds("mobileNetwork"),
                 manufacturers: getIds("manufacturer"),
                 sims: getIds("sim")          
