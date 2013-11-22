@@ -33,28 +33,7 @@ public class ListAdsServlet extends HttpServlet {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             JSONObject json = new JSONObject();
-            List<String> filters = new ArrayList<String>();
-            if(request.getParameter("min_price") != null)
-            {
-               filters.add(request.getParameter("min_price"));
-            }
-            if(request.getParameter("max_price") != null)
-            {
-               filters.add(request.getParameter("max_price"));
-            }
-            if(request.getParameter("mobile_networks") != null)
-            {
-               filters.add(request.getParameter("mobile_networks"));
-            }
-            if(request.getParameter("manufacturers") != null)
-            {
-               filters.add(request.getParameter("manufacturers"));
-            }
-            if(request.getParameter("sims") != null)
-            {
-               filters.add(request.getParameter("sims"));
-            }
-            json.put("advertisements",as.listAllAds(filters));
+            json.put("advertisements",as.listAllAds(request.getParameter("json")));
             out.print(json);
         }
     }

@@ -7,12 +7,11 @@
 package hu.bme.aait.mobilpiac.servlets;
 
 import hu.bme.aait.mobilpiac.beans.UserSessionBean;
-import hu.bme.aait.mobilpiac.entities.Users;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,7 +33,16 @@ public class RegistrationServlet extends HttpServlet {
             JSONObject obj = new JSONObject();
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-            obj.put("result",us.registration(request.getParameter("login_name"), request.getParameter("password"),request.getParameter("email_address")));
+            List<String> s = us.registration(request.getParameter("login_name"), request.getParameter("password"),request.getParameter("email_address"));
+            obj.put("message",s.get(0));
+            if (s.get(1).equals("true"))
+            {
+                obj.put("result", true);
+            }
+            else
+            {
+                obj.put("result", false);
+            }
             out.print(obj);
 
         }
