@@ -21,10 +21,6 @@
         <servlet-class>hu.bme.aait.mobilpiac.servlets.ListManufacturersServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ListAdsServlet</servlet-name>
-        <servlet-class>hu.bme.aait.mobilpiac.servlets.ListAdsServlet</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>hu.bme.aait.mobilpiac.servlets.LoginServlet</servlet-class>
     </servlet>
@@ -39,6 +35,10 @@
     <servlet>
         <servlet-name>ResetPasswordServlet</servlet-name>
         <servlet-class>hu.bme.aait.mobilpiac.servlets.ResetPasswordServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListAdsServlet</servlet-name>
+        <servlet-class>hu.bme.aait.mobilpiac.servlets.ListAdsServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ListUsersServlet</servlet-name>
@@ -61,10 +61,6 @@
         <url-pattern>/ListManufacturersServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ListAdsServlet</servlet-name>
-        <url-pattern>/ListAdsServlet</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginServlet</url-pattern>
     </servlet-mapping>
@@ -79,6 +75,10 @@
     <servlet-mapping>
         <servlet-name>ResetPasswordServlet</servlet-name>
         <url-pattern>/ResetPasswordServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListAdsServlet</servlet-name>
+        <url-pattern>/ListAdsServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
