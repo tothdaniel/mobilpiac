@@ -33,7 +33,7 @@ public class RegistrationServlet extends HttpServlet {
             JSONObject obj = new JSONObject();
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-            List<String> s = us.registration(request.getParameter("login_name"), request.getParameter("password"),request.getParameter("email_address"));
+            List<String> s = us.registration(request.getParameter("login_name"), request.getParameter("password"),request.getParameter("email"));
             obj.put("message",s.get(0));
             if (s.get(1).equals("true"))
             {

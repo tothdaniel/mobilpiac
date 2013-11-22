@@ -103,6 +103,7 @@ public class UserSessionBean {
                        {
                            resultList.add("Ez a felhasználónév már regisztrálva van");
                            resultList.add("false");
+                           return resultList;
                        }
                     }
                     
@@ -123,7 +124,7 @@ public class UserSessionBean {
                     em.getTransaction().commit();
                     resultList.add("Sikeresen regisztrált.");
                     resultList.add("true");
-                    
+                    return resultList;
                     
                     
                 }
@@ -131,20 +132,22 @@ public class UserSessionBean {
                 {
                     resultList.add("Az email címnek legalább 4 karakterből kell állnia és tartalmaznia kell a @karaktert.");
                     resultList.add("false");
+                    return resultList;
                 }
             }
             else
             {
                 resultList.add("A jelszónak legalább 4 karakterből kell állnia.");
                 resultList.add("false");
+                return resultList;
             }
         }
         else
         {
             resultList.add("A felhasználónévnek legalább 4 karakterből kell állnia.");
             resultList.add("false");
+            return resultList;
         }
-        return resultList;
     }
     
 }
