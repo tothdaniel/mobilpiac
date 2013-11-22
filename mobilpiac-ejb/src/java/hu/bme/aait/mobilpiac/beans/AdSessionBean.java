@@ -53,11 +53,16 @@ public class AdSessionBean {
         return obj;
     }
     
-    public JSONArray listAllAds(JSONObject obj){
+    public JSONArray listAllAds(List<String> filters){
         List<Advertisement> adsList = em.createQuery("SELECT a FROM Advertisement a").getResultList();
         JSONArray jarray = new JSONArray();
         for(Advertisement a:adsList)
         {
+            int minPrice = Integer.parseInt(filters.get(0));
+            int maxPrice = Integer.parseInt(filters.get(1));
+            
+            if(((a.getMinPrice()+a.getLastBid()*1000) > minPrice) && ((a.getMinPrice()+a.getLastBid()*1000) < maxPrice)
+                    )
             jarray.add(getJSONObjectWithLowDetails(a));
         }
         return jarray;

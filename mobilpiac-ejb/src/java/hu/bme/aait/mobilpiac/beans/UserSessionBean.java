@@ -9,6 +9,8 @@ package hu.bme.aait.mobilpiac.beans;
 import hu.bme.aait.mobilpiac.entities.Users;
 import java.math.BigInteger;
 import java.security.MessageDigest;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
@@ -85,8 +87,9 @@ public class UserSessionBean {
         return user;
     }
     
-    public String registration(String loginName, String password, String emailAddress)
+    public List<String> registration(String loginName, String password, String emailAddress)
     {
+        List<String> resultList = new ArrayList<String>();
         if(loginName != null && loginName.length()>3)
         {
             if(password != null && loginName.length()>3)
@@ -98,7 +101,8 @@ public class UserSessionBean {
                     {
                        if(u.getLoginName().equals(loginName))
                        {
-                           return "Ez a felhasználónév már regisztrálva van";
+                           resultList.add("Ez a felhasználónév már regisztrálva van");
+                           resultList.add("false");
                        }
                     }
                     
@@ -108,29 +112,39 @@ public class UserSessionBean {
                     user.setLoginName(loginName);
                     user.setPassword(password);
                     user.setEmailAddress(emailAddress);
-
+                    short enabled = 1;
+                    user.setEnabled(enabled);
+                    user.setLastVisited(new Date());
+                    user.setRegistrationDate(new Date());
+                    //TODO role kell?
+                    
                     em.persist(user);
 
                     em.getTransaction().commit();
-                    return "Sikeresen regisztrált.";
+                    resultList.add("Sikeresen regisztrált.");
+                    resultList.add("true");
                     
                     
                     
                 }
                 else
                 {
-                    return "Az email címnek legalább 4 karakterből kell állnia és tartalmaznia kell a @karaktert.";
+                    resultList.add("Az email címnek legalább 4 karakterből kell állnia és tartalmaznia kell a @karaktert.");
+                    resultList.add("false");
                 }
             }
             else
             {
-                return "A jelszónak legalább 4 karakterből kell állnia.";
+                resultList.add("A jelszónak legalább 4 karakterből kell állnia.");
+                resultList.add("false");
             }
         }
         else
         {
-            return "A felhasználónévnek legalább 4 karakterből kell állnia.";
+            resultList.add("A felhasználónévnek legalább 4 karakterből kell állnia.");
+            resultList.add("false");
         }
+        return resultList;
     }
     
 }

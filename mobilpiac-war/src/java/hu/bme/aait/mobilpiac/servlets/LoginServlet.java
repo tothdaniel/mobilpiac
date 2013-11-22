@@ -43,11 +43,13 @@ public class LoginServlet extends HttpServlet {
                 Cookie cookie2 = new Cookie("password", u.getPassword());
                 cookie2.setMaxAge(60 * 60 * d); //1 hour
                 response.addCookie(cookie2);
-                obj.put("result","Sikeresen bejelentkezett, mint "+u.getLoginName()+".");
+                obj.put("message","Sikeresen bejelentkezett, mint "+u.getLoginName()+".");
+                obj.put("result",true);
             }
             else
             {
-                obj.put("result","Nem sikerült a bejelentkezés.");
+                obj.put("message","Nem sikerült a bejelentkezés.");
+                obj.put("result",false);
             }
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");

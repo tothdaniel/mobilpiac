@@ -9,6 +9,8 @@ package hu.bme.aait.mobilpiac.servlets;
 import hu.bme.aait.mobilpiac.beans.AdSessionBean;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -31,10 +33,28 @@ public class ListAdsServlet extends HttpServlet {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             JSONObject json = new JSONObject();
-            
-            
-            
-            json.put("advertisements",as.listAllAds());
+            List<String> filters = new ArrayList<String>();
+            if(request.getParameter("min_price") != null)
+            {
+               filters.add(request.getParameter("min_price"));
+            }
+            if(request.getParameter("max_price") != null)
+            {
+               filters.add(request.getParameter("max_price"));
+            }
+            if(request.getParameter("mobile_networks") != null)
+            {
+               filters.add(request.getParameter("mobile_networks"));
+            }
+            if(request.getParameter("manufacturers") != null)
+            {
+               filters.add(request.getParameter("manufacturers"));
+            }
+            if(request.getParameter("sims") != null)
+            {
+               filters.add(request.getParameter("sims"));
+            }
+            json.put("advertisements",as.listAllAds(filters));
             out.print(json);
         }
     }
