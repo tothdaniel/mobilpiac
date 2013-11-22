@@ -33,9 +33,9 @@
                 <div class="text-center">
                 	<div class="thumbnail">
                             <h4 style="margin-top: 5px;">Ár</h4>
-                            <input type="text" class="col-sm-10" data-slider-min="10000" data-slider-max="100000" data-slider-step="1000" data-slider-value="[80000,100000]" id="price">
+                            <input type="text" class="col-sm-10" data-slider-min="1000" data-slider-max="100000" data-slider-step="1000" data-slider-value="[1000,100000]" id="price">
                             <div class="clearfix"></div>
-                            <b><span id="minprice">80000</span> Ft - <span id="maxprice">100000</span> Ft</b>
+                            <b><span id="minprice">1000</span> Ft - <span id="maxprice">100000</span> Ft</b>
                 	</div>
                 	<div class="thumbnail multiple-choice">
                             <h4 style="margin-top: 5px;">Szolgáltató</h4>
@@ -121,134 +121,135 @@
 			return price+" Ft";
 		};
 		price = $('#price').slider({formater:priceFormat}).on('slide', priceChange).data('slider');
-	});
-        var Mobile = function(data) {
-            this.actual_price = ko.observable(data.actual_price);
-            this.published = ko.observable(data.published);
-            this.seller_user = ko.observable(data.seller_user);
-            this.price = ko.observable(data.price);
-            this.image_url = ko.observable(data.image_url);
-            this.title = ko.computed(function() {
-                return data.manufacturer + " " + data.type_name;
-            }, this);
-            this.os = ko.computed(function() {
-                return data.os_name + " " + data.os_version;
-            }, this);
-            this.screen = ko.computed(function() {
-                return data.res_x + "x" + data.res_y + " (" + data.dpi + " dpi)";
-            }, this);
-            this.processor = ko.computed(function() {
-                return data.processor_clock + " Mhz (" + data.processor_number_of_cores + " mag)";
-            }, this);
-            this.ram = ko.computed(function() {
-                return data.ram + " GB RAM";
-            }, this);
-            this.rom = ko.computed(function() {
-                return data.rom + " GB Háttértár";
-            }, this);
-            this.rear_camera = ko.computed(function() {
-                return data.rear_camera + " Mpx kamera";
-            }, this);
-        };
-        
-        var MobileNetwork = function(data) {
-            this.id = ko.observable(data.id);
-            this.network_name = ko.observable(data.network_name);
-            this.checked = ko.observable(data.checked);
-        };
-        
-        var Manufacturer = function(data) {
-            this.id = ko.observable(data.id);
-            this.manufacturer_name = ko.observable(data.manufacturer_name);
-        };
-        
-        var Sim = function(data) {
-            this.id = ko.observable(data.id);
-            this.sim_type = ko.observable(data.sim_type);
-        };
+	
+                var Mobile = function(data) {
+                    this.actual_price = ko.observable(data.actual_price);
+                    this.published = ko.observable(data.published);
+                    this.seller_user = ko.observable(data.seller_user);
+                    this.price = ko.observable(data.price);
+                    this.image_url = ko.observable(data.image_url);
+                    this.title = ko.computed(function() {
+                        return data.manufacturer + " " + data.type_name;
+                    }, this);
+                    this.os = ko.computed(function() {
+                        return data.os_name + " " + data.os_version;
+                    }, this);
+                    this.screen = ko.computed(function() {
+                        return data.res_x + "x" + data.res_y + " (" + data.dpi + " dpi)";
+                    }, this);
+                    this.processor = ko.computed(function() {
+                        return data.processor_clock + " Mhz (" + data.processor_number_of_cores + " mag)";
+                    }, this);
+                    this.ram = ko.computed(function() {
+                        return data.ram + " GB RAM";
+                    }, this);
+                    this.rom = ko.computed(function() {
+                        return data.rom + " GB Háttértár";
+                    }, this);
+                    this.rear_camera = ko.computed(function() {
+                        return data.rear_camera + " Mpx kamera";
+                    }, this);
+                };
 
-        function ViewModel() {
-            // Data
-            var self = this;
-            self.mobiles = ko.observableArray([]);
-            self.mobileNetworks = ko.observableArray([]);
-            self.manufacturers = ko.observableArray([]);
-            self.sims = ko.observableArray([]);
+                var MobileNetwork = function(data) {
+                    this.id = ko.observable(data.id);
+                    this.network_name = ko.observable(data.network_name);
+                    this.checked = ko.observable(data.checked);
+                };
 
-            // Operations
-            getAds("", this);
-            
-            $.ajax({
-                url: "/mobilpiac-war/ListMobileNetworksServlet",
-                type: "get",
-                dataType: "json"
-            }).success(function(data) {
-                for(key in data.mobile_networks)
-                {                 
-                    self.mobileNetworks.push(new MobileNetwork(data.mobile_networks[key]));
-                }   
-            });
-            
-            $.ajax({
-                url: "/mobilpiac-war/ListSimsServlet",
-                type: "get",
-                dataType: "json"
-            }).success(function(data) {
-                for(key in data.sims)
-                {
-                    self.sims.push(new Sim(data.sims[key]));
-                }   
-            });
-            
-            $.ajax({
-                url: "/mobilpiac-war/ListManufacturersServlet",
-                type: "get",
-                dataType: "json"
-            }).success(function(data) {
-                for(key in data.manufacturers)
-                {
-                    self.manufacturers.push(new Manufacturer(data.manufacturers[key]));
-                }   
-            });
+                var Manufacturer = function(data) {
+                    this.id = ko.observable(data.id);
+                    this.manufacturer_name = ko.observable(data.manufacturer_name);
+                };
 
-        }
-        
-        var model = new ViewModel();
-        
-        $("#filter").click(function(){
-            var newPrice = price.getValue();
-            var filter = {
-                min_price: newPrice[0],
-                max_price: newPrice[1],
-                mobile_networks: getIds("mobileNetwork"),
-                manufacturers: getIds("manufacturer"),
-                sims: getIds("sim")          
-            };
-            getAds(JSON.stringify(filter), model);
+                var Sim = function(data) {
+                    this.id = ko.observable(data.id);
+                    this.sim_type = ko.observable(data.sim_type);
+                };
+
+                function ViewModel() {
+                    // Data
+                    var self = this;
+                    self.mobiles = ko.observableArray([]);
+                    self.mobileNetworks = ko.observableArray([]);
+                    self.manufacturers = ko.observableArray([]);
+                    self.sims = ko.observableArray([]);
+
+                    // Operations
+                    $.ajax({
+                        url: "/mobilpiac-war/ListMobileNetworksServlet",
+                        type: "get",
+                        dataType: "json"
+                    }).success(function(data) {
+                        for(key in data.mobile_networks)
+                        {                 
+                            self.mobileNetworks.push(new MobileNetwork(data.mobile_networks[key]));
+                        }   
+                    });
+
+                    $.ajax({
+                        url: "/mobilpiac-war/ListSimsServlet",
+                        type: "get",
+                        dataType: "json"
+                    }).success(function(data) {
+                        for(key in data.sims)
+                        {
+                            self.sims.push(new Sim(data.sims[key]));
+                        }   
+                    });
+
+                    $.ajax({
+                        url: "/mobilpiac-war/ListManufacturersServlet",
+                        type: "get",
+                        dataType: "json"
+                    }).success(function(data) {
+                        for(key in data.manufacturers)
+                        {
+                            self.manufacturers.push(new Manufacturer(data.manufacturers[key]));
+                        }   
+                    });
+
+                    self.getAds = function(filter) {
+                        $.ajax({
+                            url: "/mobilpiac-war/ListAdsServlet",
+                            type: "get",
+                            dataType: "json",
+                            data: {json:filter}
+                        }).success(function(data) {
+                            self.mobiles.removeAll();
+                            for(key in data.advertisements)
+                            {         
+                                self.mobiles.push(new Mobile(data.advertisements[key]));
+                            }  
+                        });
+                    };
+
+                    $("#filter").click(function(){
+                        var newPrice = price.getValue();
+                        var filter = {
+                            min_price: newPrice[0],
+                            max_price: newPrice[1],
+                            mobile_networks: getIds("mobileNetwork"),
+                            manufacturers: getIds("manufacturer"),
+                            sims: getIds("sim")          
+                        };
+                        self.getAds(JSON.stringify(filter));
+                    });
+
+                    $("#filter").click();
+
+                    return self;
+                }
+
+                function getIds(name) {
+                    var ids = $("input[name='"+name+"']:checked").map(function(){
+                        return $(this).val();
+                    }).get();
+                    return ids;
+                }
+
+                ko.applyBindings(new ViewModel());
         });
-        
-        function getIds(name) {
-            var ids = $("input[name='"+name+"']:checked").map(function(){
-                return $(this).val();
-            }).get();
-            return ids;
-        }
-        
-        function getAds(filter, self) {
-            $.ajax({
-                url: "/mobilpiac-war/ListAdsServlet",
-                type: "get",
-                dataType: "json",
-                data: {json:filter}
-            }).success(function(data) {
-                for(key in data.advertisements)
-                {
-                    self.mobiles.push(new Mobile(data.advertisements[key]));
-                }   
-            });
-        }
-
-        ko.applyBindings(new ViewModel());
     </script>
 </body>
 
