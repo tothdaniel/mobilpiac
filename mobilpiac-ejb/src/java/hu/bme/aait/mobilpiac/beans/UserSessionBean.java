@@ -93,8 +93,14 @@ public class UserSessionBean {
             {
                 if(emailAddress != null && emailAddress.length()>3 && emailAddress.contains("@"))
                 {
-                    em.createQuery("SELECT ");
-                    
+                    List<Users> users = em.createQuery("SELECT u FROM Users u").getResultList();
+                    for(Users u:users)
+                    {
+                       if(u.getLoginName().equals(loginName))
+                       {
+                           return "Ez a felhasználónév már regisztrálva van";
+                       }
+                    }
                     
                     em.getTransaction().begin();
 
@@ -106,7 +112,7 @@ public class UserSessionBean {
                     em.persist(user);
 
                     em.getTransaction().commit();
-                    return "";
+                    return "Sikeresen regisztrált.";
                     
                     
                     

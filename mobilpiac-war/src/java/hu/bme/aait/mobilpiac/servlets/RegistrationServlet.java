@@ -31,25 +31,10 @@ public class RegistrationServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            Users u = us.login(request.getParameter("login_name"), request.getParameter("password"));
             JSONObject obj = new JSONObject();
-            if(u != null)
-            {
-                int d = request.getParameter("stay_login").equals("true") ? 24*7 : 1;
-                Cookie cookie1 = new Cookie("login_name", u.getLoginName());
-                cookie1.setMaxAge(60 * 60 * d); //1 hour
-                response.addCookie(cookie1);
-                Cookie cookie2 = new Cookie("password", u.getPassword());
-                cookie2.setMaxAge(60 * 60 * d); //1 hour
-                response.addCookie(cookie2);
-                obj.put("result","You logged in successfully as "+u.getLoginName()+".");
-            }
-            else
-            {
-                obj.put("result","Login was unsuccessful.");
-            }
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
+            obj.put("result",us.registration(request.getParameter("login_name"), request.getParameter("password"),request.getParameter("email_address")));
             out.print(obj);
 
         }
