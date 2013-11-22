@@ -19,7 +19,7 @@
             <div class="navbar-collapse collapse">
                 <div class="navbar-right navbar-form">
                     <a href="new_ad.html" class="btn btn-default">Új telefon feladás</a>
-                    <a href="index.html" class="btn btn-default">Kijelentkezés</a>
+                    <a href="#" id="logout" class="btn btn-default">Kijelentkezés</a>
                 </div>
             </div>
         </div>
@@ -174,17 +174,20 @@
     <script src="lib/bootstrap/js/bootstrap.min.js"></script>
     <script src="lib/slider/js/bootstrap-slider.js"></script>
     <script>
-	$(function(){
-		var priceChange = function() {
-			var newPrice = price.getValue();
-			$("#minprice").text(newPrice[0]);
-			$("#maxprice").text(newPrice[1]);
-		};
-		var priceFormat = function(price) {
-			return price+" Ft";
-		}
-		var price = $('#price').slider({formater:priceFormat}).on('slide', priceChange).data('slider');
-	});
+         $("#logout").click(function(event){
+            event.preventDefault();
+            $.ajax({
+                url: "/mobilpiac-war/LogoutServlet",
+                type: "get",
+                dataType: "json"
+            }).success(function(data) {
+                alert(data.message);
+                if (data.result)
+                {
+                    document.location.href="index.html";
+                }
+            }); 
+         });
     </script>
 </body>
 
