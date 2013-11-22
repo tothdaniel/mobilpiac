@@ -39,7 +39,7 @@ public class LogoutServlet extends HttpServlet {
             Cookie cookie2 = new Cookie("password", "");
             cookie2.setMaxAge(0);
             response.addCookie(cookie2);
-            obj.put("message","Sikeresen kijelentkezés!");
+            obj.put("message","Sikeres kijelentkezés!");
             obj.put("result",true);
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
