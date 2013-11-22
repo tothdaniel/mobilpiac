@@ -57,14 +57,13 @@ public class AdSessionBean {
         return obj;
     }
     
-    public JSONArray listAllAds(String jsonFilter){
+    public JSONArray listAllAds(org.json.JSONObject jobj){
         List<Advertisement> adsList = em.createQuery("SELECT a FROM Advertisement a").getResultList();
         JSONArray jarray = new JSONArray();
-        
-        //org.json.JSONObject jobj = new org.json.JSONObject(jsonFilter);
-        //int minPrice = jobj.getInt("min_price");
-        //int maxPrice = jobj.getInt("max_price");
-        /*org.json.JSONArray mobileNetworks = jobj.getJSONArray("mobile_networks");
+
+        int minPrice = jobj.getInt("min_price");
+        int maxPrice = jobj.getInt("max_price");
+        org.json.JSONArray mobileNetworks = jobj.getJSONArray("mobile_networks");
         List<Integer> mobileNetworkList = new ArrayList<Integer>();
         for (int i = 0; i < mobileNetworks.length(); i++) {
             mobileNetworkList.add(Integer.parseInt(mobileNetworks.get(i).toString()));
@@ -95,19 +94,18 @@ public class AdSessionBean {
         for (int i = 0; i < sims.length(); i++) {
             simList.add(Integer.parseInt(sims.get(i).toString()));
         }
-        if(manufacturerList.isEmpty())
+        if(simList.isEmpty())
         {
             List<Sim> mnList = em.createQuery("SELECT s FROM Sim s").getResultList();
             for(Sim s:mnList)
             {
                 simList.add(Integer.parseInt(s.getId().toString()));
             }
-        }*/
+        }
         
         for(Advertisement a:adsList)
         {
-            jarray.add(getJSONObjectWithLowDetails(a));
-            /*if((a.getMinPrice()+a.getLastBid()*1000) >= minPrice && (a.getMinPrice()+a.getLastBid()*1000) <= maxPrice)
+            if((a.getMinPrice()+a.getLastBid()*1000) >= minPrice && (a.getMinPrice()+a.getLastBid()*1000) <= maxPrice)
             {
                 for(int mn:mobileNetworkList)
                 {
@@ -115,7 +113,7 @@ public class AdSessionBean {
                     {
                         for(int mf:manufacturerList)
                         {
-                            if(mn == a.getFkPhoneType().getFkManufacturer().getId())
+                            if(mf == a.getFkPhoneType().getFkManufacturer().getId())
                             {
                                 for(int sim:simList)
                                 {
@@ -128,7 +126,7 @@ public class AdSessionBean {
                         }
                     }
                 }
-            }*/
+            }
         }
         return jarray;
     }

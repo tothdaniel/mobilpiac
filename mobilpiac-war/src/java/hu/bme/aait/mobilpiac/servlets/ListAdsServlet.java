@@ -9,8 +9,6 @@ package hu.bme.aait.mobilpiac.servlets;
 import hu.bme.aait.mobilpiac.beans.AdSessionBean;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -32,8 +30,10 @@ public class ListAdsServlet extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
+            
+            org.json.JSONObject obj = new org.json.JSONObject(request.getParameter("json"));
             JSONObject json = new JSONObject();
-            json.put("advertisements",as.listAllAds(request.getParameter("json")));
+            json.put("advertisements",as.listAllAds(obj));
             out.print(json);
         }
     }
