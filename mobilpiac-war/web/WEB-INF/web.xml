@@ -52,6 +52,10 @@
         <servlet-name>PhoneTypeHighDetailServlet</servlet-name>
         <servlet-class>hu.bme.aait.mobilpiac.servlets.PhoneTypeHighDetailServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ListOperationSystemsServlet</servlet-name>
+        <servlet-class>hu.bme.aait.mobilpiac.servlets.ListOperationSystemsServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ListUsersServlet</servlet-name>
         <url-pattern>/ListUsersServlet</url-pattern>
@@ -103,6 +107,10 @@
     <servlet-mapping>
         <servlet-name>PhoneTypeHighDetailServlet</servlet-name>
         <url-pattern>/PhoneTypeHighDetailServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListOperationSystemsServlet</servlet-name>
+        <url-pattern>/ListOperationSystemsServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

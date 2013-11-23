@@ -10,6 +10,7 @@ import hu.bme.aait.mobilpiac.entities.Advertisement;
 import hu.bme.aait.mobilpiac.entities.Bids;
 import hu.bme.aait.mobilpiac.entities.Manufacturer;
 import hu.bme.aait.mobilpiac.entities.MobileNetwork;
+import hu.bme.aait.mobilpiac.entities.OperationSystem;
 import hu.bme.aait.mobilpiac.entities.PhoneType;
 import hu.bme.aait.mobilpiac.entities.Sim;
 import java.text.Format;
@@ -175,8 +176,7 @@ public class MobileSessionBean {
         }
         return jarray;
     }
-    
-    
+      
     public JSONArray listSimTypes(){
         List<Sim> simsList = em.createQuery("SELECT s FROM Sim s").getResultList();
         JSONArray jarray = new JSONArray();
@@ -185,6 +185,19 @@ public class MobileSessionBean {
             JSONObject obj = new JSONObject();
             obj.put("id", s.getId());
             obj.put("sim_type", s.getSimType());
+            jarray.add(obj);
+        }
+        return jarray;
+    }
+    
+    public JSONArray listOperationSystems(){
+    List<OperationSystem> osList = em.createQuery("SELECT o FROM OperationSystem o").getResultList();
+        JSONArray jarray = new JSONArray();
+        for(OperationSystem o:osList)
+        {
+            JSONObject obj = new JSONObject();
+            obj.put("id", o.getId());
+            obj.put("os_name", o.getOsName());
             jarray.add(obj);
         }
         return jarray;

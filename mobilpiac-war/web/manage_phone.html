@@ -35,13 +35,10 @@
                     <div class="text-center">
                         <div class="thumbnail admin-phone-list">
                             <h4 style="margin-top: 5px;">Telefonípusok</h4>
-                            
-                            <ul>
-                                <li><a class="btn btn-default">Nexus 4</a></li>
-                                <li><a class="btn btn-default">ZTE Grand X in</a></li>
-                                <li><a class="btn btn-default">Nexus 4</a></li>
+                            <ul data-bind="foreach: mobiles, visible: mobiles().length > 0">
+                                <li><a data-bind="html: title" class="btn btn-default"></a></li>
                             </ul>
-                            
+
 
                             <a class="btn btn-primary">Új telefontípus</a>
                         </div>	
@@ -64,17 +61,16 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Gyártó:</label>
                             <div class="col-sm-9">
-                                <select class="form-control">
-                                    <option>LG</option>
-                                    <option>ZTE</option>
+                                <select data-bind="foreach: manufacturers, visible: manufacturers().length > 0" class="form-control">
+                                    <option data-bind="html: manufacturer_name"></option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Operációs rendszer:</label>
                             <div class="col-sm-5">
-                                <select class="form-control">
-                                    <option>Android</option>
+                                <select data-bind="foreach: operationsystems, visible: operationsystems().length > 0" class="form-control">
+                                    <option data-bind="html: os_name"></option>
                                 </select>
                             </div>
                             <div class="col-sm-4">
@@ -110,10 +106,8 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Memóriakártya foglalat:</label>
                             <div class="col-sm-9">
-                                <select class="form-control">
-                                    <option>SIM</option>
-                                    <option>micro SIM</option>
-                                    <option>mini SIM</option>
+                                <select data-bind="foreach: sims, visible: sims().length > 0" class="form-control">
+                                    <option data-bind="html: sim_type"></option>
                                 </select>
                             </div>
                         </div>
@@ -177,38 +171,112 @@
 
         <script src="lib/jquery-2.0.3.min.js"></script>
         <script src="lib/jquery.cookie.js"></script>
+        <script src="lib/knockout-3.0.0.js"></script>
         <script src="lib/bootstrap/js/bootstrap.min.js"></script>
         <script src="lib/slider/js/bootstrap-slider.js"></script>
         <script>
             var Mobile = function(data) {
-            var priceFormat = function(price) {
-                return price+" Ft";
+                this.actual_price = ko.observable(data.actual_price);
+                this.published = ko.observable(data.published);
+                this.seller_user = ko.observable(data.seller_user);
+                this.price = ko.observable(data.price);
+                this.image_url = ko.observable(data.image_url);
+                this.title = ko.computed(function() {
+                    return data.manufacturer + " " + data.type_name;
+                }, this);
+                this.manufacturer = ko.observable(data.manufacturer);
+                this.type_name = ko.observable(data.type_name);
+                this.os = ko.computed(function() {
+                    return data.os_name + " " + data.os_version;
+                }, this);
+                this.screen = ko.computed(function() {
+                    return data.res_x + "x" + data.res_y + " (" + data.dpi + " dpi)";
+                }, this);
+                this.processor = ko.computed(function() {
+                    return data.processor_clock + " Mhz (" + data.processor_number_of_cores + " mag)";
+                }, this);
+                this.ram = ko.computed(function() {
+                    return data.ram + " MB RAM";
+                }, this);
+                this.rom = ko.computed(function() {
+                    return data.rom + " GB Háttértár";
+                }, this);
+                this.rear_camera = ko.computed(function() {
+                    return data.rear_camera + " Mpx kamera";
+                }, this);
             };
-            this.image_url = ko.observable(data.image_url);
-            this.title = ko.computed(function() {
-                return data.manufacturer + " " + data.type_name;
-            }, this);
-            this.cheapest_price = ko.observable(priceFormat(data.cheapest_price));
-        };
 
-        var MobileModel = function() {
-            // Data
-            var self = this;
-            self.mobiles = ko.observableArray([]);
-           
-            $.ajax({
-                url: "/mobilpiac-war/ListMobilesServlet",
-                type: "get",
-                dataType: "json"
-            }).success(function(data) {
-                for(key in data.mobiles)
-                {
-                    self.mobiles.push(new Mobile(data.mobiles[key]));
-                }   
-            });
-        };     
+            var Manufacturer = function(data) {
+                this.id = ko.observable(data.id);
+                this.manufacturer_name = ko.observable(data.manufacturer_name);
+            };
 
-        ko.applyBindings(new MobileModel());
+            var Sim = function(data) {
+                this.id = ko.observable(data.id);
+                this.sim_type = ko.observable(data.sim_type);
+            };
+            
+            var OperationSystem = function(data) {
+                this.id = ko.observable(data.id);
+                this.os_name = ko.observable(data.os_name);
+            };
+
+            function ViewModel() {
+                // Data
+                var self = this;
+                self.mobiles = ko.observableArray([]);
+                self.manufacturers = ko.observableArray([]);
+                self.sims = ko.observableArray([]);
+                self.operationsystems = ko.observableArray([]);
+
+                // Operations
+                 $.ajax({
+                    url: "/mobilpiac-war/ListMobilesServlet",
+                    type: "get",
+                    dataType: "json"
+                }).success(function(data) {
+                    for (key in data.mobiles)
+                    {
+                        self.mobiles.push(new Mobile(data.mobiles[key]));
+                    }
+                });
+                
+                $.ajax({
+                    url: "/mobilpiac-war/ListSimsServlet",
+                    type: "get",
+                    dataType: "json"
+                }).success(function(data) {
+                    for (key in data.sims)
+                    {
+                        self.sims.push(new Sim(data.sims[key]));
+                    }
+                });
+
+                $.ajax({
+                    url: "/mobilpiac-war/ListManufacturersServlet",
+                    type: "get",
+                    dataType: "json"
+                }).success(function(data) {
+                    for (key in data.manufacturers)
+                    {
+                        self.manufacturers.push(new Manufacturer(data.manufacturers[key]));
+                    }
+                });
+                
+                $.ajax({
+                    url: "/mobilpiac-war/ListOperationSystemsServlet",
+                    type: "get",
+                    dataType: "json"
+                }).success(function(data) {
+                    for (key in data.operationsystems)
+                    {
+                        self.operationsystems.push(new OperationSystem(data.operationsystems[key]));
+                    }
+                });
+                
+            }
+
+            ko.applyBindings(new ViewModel());
         </script>   
         <script>
             $("#logbtn").click(function(event) {
@@ -274,9 +342,6 @@
                     dataType: "json",
                     data: id
                 }).success(function(data) {
-                    //TODO gondolom itt fogsz majd valahogy adatkotogetni, a data egy JSONObject,
-                    //az MobileSessionBean getJSONObject(String id) metodusaban latod, mi van neki
-                    //ez egy konkret tipus, amit modositani akarunk
                 });
 
             });
