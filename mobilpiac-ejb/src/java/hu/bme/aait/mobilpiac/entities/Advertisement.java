@@ -8,6 +8,7 @@ package hu.bme.aait.mobilpiac.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,11 +19,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -36,7 +39,6 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Advertisement.findById", query = "SELECT a FROM Advertisement a WHERE a.id = :id"),
     @NamedQuery(name = "Advertisement.findByDescription", query = "SELECT a FROM Advertisement a WHERE a.description = :description"),
     @NamedQuery(name = "Advertisement.findByFinished", query = "SELECT a FROM Advertisement a WHERE a.finished = :finished"),
-    @NamedQuery(name = "Advertisement.findByLastBid", query = "SELECT a FROM Advertisement a WHERE a.lastBid = :lastBid"),
     @NamedQuery(name = "Advertisement.findByMinPrice", query = "SELECT a FROM Advertisement a WHERE a.minPrice = :minPrice"),
     @NamedQuery(name = "Advertisement.findByPublished", query = "SELECT a FROM Advertisement a WHERE a.published = :published")})
 public class Advertisement implements Serializable {
@@ -52,16 +54,11 @@ public class Advertisement implements Serializable {
     @Size(max = 255)
     @Column(name = "FINISHED")
     private String finished;
-    @Column(name = "LAST_BID")
-    private Short lastBid;
     @Column(name = "MIN_PRICE")
     private Integer minPrice;
     @Column(name = "PUBLISHED")
     @Temporal(TemporalType.TIMESTAMP)
     private Date published;
-    @JoinColumn(name = "FK_BIDDER_USER", referencedColumnName = "ID")
-    @ManyToOne
-    private Users fkBidderUser;
     @JoinColumn(name = "FK_USER", referencedColumnName = "ID")
     @ManyToOne
     private Users fkUser;
@@ -71,6 +68,8 @@ public class Advertisement implements Serializable {
     @JoinColumn(name = "FK_NETWORK_LOCK", referencedColumnName = "ID")
     @ManyToOne
     private MobileNetwork fkNetworkLock;
+    @OneToMany(mappedBy = "advertisementId")
+    private List<Bids> bidsList;
 
     public Advertisement() {
     }
@@ -103,14 +102,6 @@ public class Advertisement implements Serializable {
         this.finished = finished;
     }
 
-    public Short getLastBid() {
-        return lastBid;
-    }
-
-    public void setLastBid(Short lastBid) {
-        this.lastBid = lastBid;
-    }
-
     public Integer getMinPrice() {
         return minPrice;
     }
@@ -125,14 +116,6 @@ public class Advertisement implements Serializable {
 
     public void setPublished(Date published) {
         this.published = published;
-    }
-
-    public Users getFkBidderUser() {
-        return fkBidderUser;
-    }
-
-    public void setFkBidderUser(Users fkBidderUser) {
-        this.fkBidderUser = fkBidderUser;
     }
 
     public Users getFkUser() {
@@ -157,6 +140,15 @@ public class Advertisement implements Serializable {
 
     public void setFkNetworkLock(MobileNetwork fkNetworkLock) {
         this.fkNetworkLock = fkNetworkLock;
+    }
+
+    @XmlTransient
+    public List<Bids> getBidsList() {
+        return bidsList;
+    }
+
+    public void setBidsList(List<Bids> bidsList) {
+        this.bidsList = bidsList;
     }
 
     @Override

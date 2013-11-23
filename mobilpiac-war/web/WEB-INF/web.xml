@@ -44,6 +44,14 @@
         <servlet-name>CheckAdminServlet</servlet-name>
         <servlet-class>hu.bme.aait.mobilpiac.servlets.CheckAdminServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AdHighDetailServlet</servlet-name>
+        <servlet-class>hu.bme.aait.mobilpiac.servlets.AdHighDetailServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>PhoneTypeHighDetailServlet</servlet-name>
+        <servlet-class>hu.bme.aait.mobilpiac.servlets.PhoneTypeHighDetailServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ListUsersServlet</servlet-name>
         <url-pattern>/ListUsersServlet</url-pattern>
@@ -87,6 +95,14 @@
     <servlet-mapping>
         <servlet-name>CheckAdminServlet</servlet-name>
         <url-pattern>/CheckAdminServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdHighDetailServlet</servlet-name>
+        <url-pattern>/AdHighDetailServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PhoneTypeHighDetailServlet</servlet-name>
+        <url-pattern>/PhoneTypeHighDetailServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

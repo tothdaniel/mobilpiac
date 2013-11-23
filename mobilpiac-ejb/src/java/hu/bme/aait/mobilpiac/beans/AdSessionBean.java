@@ -7,6 +7,7 @@
 package hu.bme.aait.mobilpiac.beans;
 
 import hu.bme.aait.mobilpiac.entities.Advertisement;
+import hu.bme.aait.mobilpiac.entities.Bids;
 import hu.bme.aait.mobilpiac.entities.Manufacturer;
 import hu.bme.aait.mobilpiac.entities.MobileNetwork;
 import hu.bme.aait.mobilpiac.entities.Sim;
@@ -32,7 +33,7 @@ public class AdSessionBean {
     @PersistenceContext
     EntityManager em;
     
-    public JSONObject getJSONObjectWithLowDetails(Advertisement a) {
+    public JSONObject getJSONObjectWithLowDetails(Advertisement a,int actPrice) {
         JSONObject obj = new JSONObject();
         obj.put("id", a.getId());
         obj.put("type_name", a.getFkPhoneType().getTypeName());
@@ -48,8 +49,7 @@ public class AdSessionBean {
         obj.put("rom", a.getFkPhoneType().getRom());
         obj.put("res_x", a.getFkPhoneType().getResX());
         obj.put("res_y", a.getFkPhoneType().getResY());
-        int actual_price = a.getMinPrice()+a.getLastBid()*1000;
-        obj.put("actual_price", actual_price);
+        obj.put("actual_price", actPrice);
         obj.put("seller_user",a.getFkUser().getLoginName());
         Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String published = formatter.format(a.getPublished());
@@ -57,17 +57,68 @@ public class AdSessionBean {
         return obj;
     }
     
+    public JSONObject getJSONObject(String id) {
+        List<Advertisement> adList = em.createQuery("SELECT a FROM Advertisement a WHERE a.id="+id).getResultList();
+        Advertisement a =adList.get(0);
+        
+        List<Bids> bidList = em.createQuery("SELECT b FROM Bids b WHERE b.advertisementId.id ="+a.getId()).getResultList();
+        int actPrice = a.getMinPrice();
+        for (Bids b : bidList) {
+            if (b.getPrice() > actPrice) {
+                actPrice = b.getPrice();
+            }
+        }
+        
+        JSONObject obj = new JSONObject();
+        obj.put("id", a.getId());
+        obj.put("description", a.getDescription());
+        obj.put("type_name", a.getFkPhoneType().getTypeName());
+        obj.put("manufacturer", a.getFkPhoneType().getFkManufacturer().getManufacturerName());
+        obj.put("os_version", a.getFkPhoneType().getFkOsVersion().getVersionName());
+        obj.put("os_name", a.getFkPhoneType().getFkOsVersion().getFkOs().getOsName());
+        obj.put("processor_clock", a.getFkPhoneType().getFkProcessor().getClock());
+        obj.put("processor_number_of_cores", a.getFkPhoneType().getFkProcessor().getNumberOfCores());
+        obj.put("rear_camera", a.getFkPhoneType().getRearCamera());
+        obj.put("front_camera", a.getFkPhoneType().getFrontCamera());
+        if(a.getFkPhoneType().getMicrosdEnabled() == 1){
+            obj.put("microsd_enabled", "bővíthető");
+        }else{
+            obj.put("microsd_enabled", "nem bővíthető");
+        }
+        Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String published = formatter.format(a.getFkPhoneType().getPublished());
+        obj.put("phone_published",published);
+        obj.put("image_url", a.getFkPhoneType().getImageUrl());
+        obj.put("published", a.getFkPhoneType().getPublished());
+        obj.put("ram", a.getFkPhoneType().getRam());
+        obj.put("rom", a.getFkPhoneType().getRom());
+        obj.put("res_x", a.getFkPhoneType().getResX());
+        obj.put("res_y", a.getFkPhoneType().getResY());
+        obj.put("gpu",a.getFkPhoneType().getFkGpu().getGpuName());
+        obj.put("display_inches",a.getFkPhoneType().getDisplayInches());
+        obj.put("dpi",a.getFkPhoneType().getDpi());
+        obj.put("processor_family",a.getFkPhoneType().getFkProcessor().getFamily());
+        obj.put("processor_chipset",a.getFkPhoneType().getFkProcessor().getChipset());
+        obj.put("sim_type", a.getFkPhoneType().getFkSim().getSimType()); 
+        obj.put("actual_price", actPrice);
+        obj.put("seller_user",a.getFkUser().getLoginName());
+        Format formatter2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String published2 = formatter.format(a.getPublished());
+        obj.put("published",published2);
+        return obj;
+    }
+    
     public JSONArray listAllAds(org.json.JSONObject jobj){
         List<Advertisement> adsList = em.createQuery(
             "SELECT a FROM Advertisement a WHERE a.finished = 0 "
           + "ORDER BY a.fkPhoneType.fkManufacturer.manufacturerName,"
-          + "a.fkPhoneType.typeName,a.minPrice+a.lastBid*1000").getResultList();
+          + "a.fkPhoneType.typeName").getResultList();
         JSONArray jarray = new JSONArray();
 
         int minPrice = jobj.getInt("min_price");
         int maxPrice = jobj.getInt("max_price");
         org.json.JSONArray mobileNetworks = jobj.getJSONArray("mobile_networks");
-        List<Integer> mobileNetworkList = new ArrayList<Integer>();
+        List<Integer> mobileNetworkList = new ArrayList<>();
         for (int i = 0; i < mobileNetworks.length(); i++) {
             mobileNetworkList.add(Integer.parseInt(mobileNetworks.get(i).toString()));
         }
@@ -80,7 +131,7 @@ public class AdSessionBean {
             }
         }
         org.json.JSONArray manufacturers = jobj.getJSONArray("manufacturers");
-        List<Integer> manufacturerList = new ArrayList<Integer>();
+        List<Integer> manufacturerList = new ArrayList<>();
         for (int i = 0; i < manufacturers.length(); i++) {
             manufacturerList.add(Integer.parseInt(manufacturers.get(i).toString()));
         }
@@ -93,7 +144,7 @@ public class AdSessionBean {
             }
         }
         org.json.JSONArray sims = jobj.getJSONArray("sims");
-        List<Integer> simList = new ArrayList<Integer>();
+        List<Integer> simList = new ArrayList<>();
         for (int i = 0; i < sims.length(); i++) {
             simList.add(Integer.parseInt(sims.get(i).toString()));
         }
@@ -108,7 +159,15 @@ public class AdSessionBean {
         
         for(Advertisement a:adsList)
         {
-            if((a.getMinPrice()+a.getLastBid()*1000) >= minPrice && (a.getMinPrice()+a.getLastBid()*1000) <= maxPrice)
+            List<Bids> bidList = em.createQuery("SELECT b FROM Bids b WHERE b.advertisementId.id ="+a.getId()).getResultList();
+            int actPrice = a.getMinPrice();
+            for (Bids b : bidList) {
+                if (b.getPrice() > actPrice) {
+                    actPrice = b.getPrice();
+                }
+            }
+            
+            if(actPrice >= minPrice && actPrice <= maxPrice)
             {
                 for(int mn:mobileNetworkList)
                 {
@@ -122,7 +181,7 @@ public class AdSessionBean {
                                 {
                                     if(sim == a.getFkPhoneType().getFkSim().getId())
                                     {
-                                        jarray.add(getJSONObjectWithLowDetails(a));
+                                        jarray.add(getJSONObjectWithLowDetails(a,actPrice));
                                     }
                                 }
                             }

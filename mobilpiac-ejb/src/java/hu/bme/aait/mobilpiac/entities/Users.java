@@ -70,10 +70,10 @@ public class Users implements Serializable {
     @JoinColumn(name = "FK_ROLE_ID", referencedColumnName = "ID")
     @ManyToOne
     private Role fkRoleId;
-    @OneToMany(mappedBy = "fkBidderUser")
-    private List<Advertisement> advertisementList;
     @OneToMany(mappedBy = "fkUser")
-    private List<Advertisement> advertisementList1;
+    private List<Advertisement> advertisementList;
+    @OneToMany(mappedBy = "bidderUserId")
+    private List<Bids> bidsList;
 
     public Users() {
     }
@@ -156,12 +156,12 @@ public class Users implements Serializable {
     }
 
     @XmlTransient
-    public List<Advertisement> getAdvertisementList1() {
-        return advertisementList1;
+    public List<Bids> getBidsList() {
+        return bidsList;
     }
 
-    public void setAdvertisementList1(List<Advertisement> advertisementList1) {
-        this.advertisementList1 = advertisementList1;
+    public void setBidsList(List<Bids> bidsList) {
+        this.bidsList = bidsList;
     }
 
     @Override

@@ -182,9 +182,23 @@
                     {
                         $("#managebtn").css('visibility', 'visible');
                     }
-                });  
-                
-            }     
+                });          
+            }
+            
+            var id = {
+                //TODO Peti: ide kell bekotnod az id-t, ez a statikus 1 csak teszteleshez van
+                id : 1
+            };
+            $.ajax({
+                url: "/mobilpiac-war/AdHighDetailServlet",
+                type: "get",
+                dataType: "json",
+                data: id
+            }).success(function(data) {                  
+                //TODO gondolom itt fogsz majd valahogy adatkotogetni, a data egy JSONObject,
+                //az AdSessionBean getJSONObject(String id) metodusaban latod, mi van neki
+            });    
+            
         });
     </script>
 </body>
