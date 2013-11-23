@@ -94,20 +94,26 @@ public class MobileSessionBean {
             + " ORDER BY P.fkManufacturer.manufacturerName,p.typeName"
         ).getResultList();
         JSONArray jarray = new JSONArray();
+        int cntr = 0;
         for(PhoneType p:phonesList)
         {
-            List<Advertisement> advertisementList = em.createQuery("SELECT "
-            + "a FROM Advertisement a WHERE a.fkPhoneType.id="+p.getId()
-            ).getResultList();
-            int cheapest = 1000000;
-            for(Advertisement a:advertisementList)
+            //az elso 12-t listazza csak ki, ezek a legnezettebbek
+            if(cntr<12)
             {
-                if(a.getMinPrice()+a.getLastBid()*1000 < cheapest)
+                List<Advertisement> advertisementList = em.createQuery("SELECT "
+                + "a FROM Advertisement a WHERE a.fkPhoneType.id="+p.getId()
+                ).getResultList();
+                int cheapest = 1000000;
+                for(Advertisement a:advertisementList)
                 {
-                    cheapest = a.getMinPrice()+a.getLastBid()*1000;
+                    if(a.getMinPrice()+a.getLastBid()*1000 < cheapest)
+                    {
+                        cheapest = a.getMinPrice()+a.getLastBid()*1000;
+                    }
                 }
+                jarray.add(getJSONObject(p,cheapest));
+                cntr++;
             }
-            jarray.add(getJSONObject(p,cheapest));
         }
         return jarray;
     }
