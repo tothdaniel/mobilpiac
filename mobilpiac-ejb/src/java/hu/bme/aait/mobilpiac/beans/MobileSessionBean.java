@@ -6,6 +6,7 @@
 
 package hu.bme.aait.mobilpiac.beans;
 
+import hu.bme.aait.mobilpiac.entities.Advertisement;
 import hu.bme.aait.mobilpiac.entities.Manufacturer;
 import hu.bme.aait.mobilpiac.entities.MobileNetwork;
 import hu.bme.aait.mobilpiac.entities.PhoneType;
@@ -52,7 +53,7 @@ public class MobileSessionBean {
         return obj;
     }
 
-    public JSONObject getJSONObject(PhoneType p) {
+    public JSONObject getJSONObject(PhoneType p, int cheapest) {
         JSONObject obj = new JSONObject();
         obj.put("id", p.getId());
         obj.put("type_name", p.getTypeName());
@@ -77,15 +78,36 @@ public class MobileSessionBean {
         obj.put("rom", p.getRom());
         obj.put("res_x", p.getResX());
         obj.put("res_y", p.getResY());
+        if(cheapest != 1000000)
+        {
+            obj.put("cheapest_price",""+cheapest);
+        }
+        else
+        {
+            obj.put("cheapest_price","N/A");
+        }
         return obj;
     }
     
     public JSONArray listAllMobiles(){
-        List<PhoneType> phonesList = em.createQuery("SELECT p FROM PhoneType p").getResultList();
+        List<PhoneType> phonesList = em.createQuery("SELECT p FROM PhoneType p"    
+            + " ORDER BY P.fkManufacturer.manufacturerName,p.typeName"
+        ).getResultList();
         JSONArray jarray = new JSONArray();
         for(PhoneType p:phonesList)
         {
-            jarray.add(getJSONObject(p));
+            List<Advertisement> advertisementList = em.createQuery("SELECT "
+            + "a FROM Advertisement a WHERE a.fkPhoneType.id="+p.getId()
+            ).getResultList();
+            int cheapest = 1000000;
+            for(Advertisement a:advertisementList)
+            {
+                if(a.getMinPrice()+a.getLastBid()*1000 < cheapest)
+                {
+                    cheapest = a.getMinPrice()+a.getLastBid()*1000;
+                }
+            }
+            jarray.add(getJSONObject(p,cheapest));
         }
         return jarray;
     }

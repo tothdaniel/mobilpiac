@@ -17,9 +17,11 @@
             </div>
             <div class="navbar-collapse collapse">
                 <div class="navbar-right navbar-form">
-                    <a class="btn btn-default">Telefontípusok menedzselése</a>
-                    <a href="new_ad.html" class="btn btn-default">Új hirdetés feladása</a>
-                    <a class="btn btn-default">Kijelentkezés</a>
+                    <a id="managebtn" style="visibility: hidden;" class="btn btn-default">Telefontípusok menedzselése</a>
+                    <a id="newadbtn" class="btn btn-default">Hirdetés feladása</a>
+                    <a id="listbtn" href="list_view.html" class="btn btn-default">Listanézet</a>
+                    <a id="regbtn" href="registration.html" class="btn btn-default">Regisztráció</a>
+                    <a id="logbtn" href="signin.html" class="btn btn-default">Bejelentkezés</a>
                 </div>
             </div>
         </div>
@@ -94,7 +96,97 @@
     <!-- /container -->
 
     <script src="lib/jquery-2.0.3.min.js"></script>
+    <script src="lib/jquery.cookie.js"></script>
     <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+    <script>
+         $("#logbtn").click(function(event){
+            if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined){
+                event.preventDefault();
+                $.ajax({
+                    url: "/mobilpiac-war/LogoutServlet",
+                    type: "get",
+                    dataType: "json"
+                }).success(function(data) {
+                    alert(data.message);
+                    if (data.result)
+                    {
+                        document.location.href="index.html";
+                    }
+                }); 
+            }
+         });
+         
+         $("#managebtn").click(function(event){
+            if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined){
+                event.preventDefault();
+                var auth = {
+                    login_name : $.cookie("login_name"),
+                    password : $.cookie("password")
+                };
+                $.ajax({
+                    url: "/mobilpiac-war/CheckAdminServlet",
+                    type: "get",
+                    dataType: "json",
+                    data: auth
+                }).success(function(data) {                  
+                    if (!data.result)
+                    {
+                        alert(data.message);
+                    }
+                    else
+                    {
+                        document.location.href="manage_phone.html";
+                    }
+                });  
+            }else{
+                alert("Ehhez a funkcióhoz be kell jelentkeznie.");
+            }
+         });
+         $("#newadbtn").click(function(event){
+            if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined){
+                event.preventDefault();
+                document.location.href="new_ad.html"; 
+            }else{
+                alert("Ehhez a funkcióhoz be kell jelentkeznie.");
+            }
+         });
+         
+    </script>
+    <script>
+        $( document ).ready(function() {
+            if ($.cookie("login_name") === undefined || $.cookie("password") === undefined){
+                $("#logbtn").html("Bejelentkezés");
+                $("#logbtn").attr("href","signin.html");
+                $("#managebtn").hide();
+                $("#newadbtn").hide();
+            }else{
+                $("#logbtn").html("Kijelentkezés");
+                $("#logbtn").attr("href","#");
+                $("#regbtn").hide();
+                $("#login_name").html($.cookie("login_name"));
+                var auth = {
+                    login_name : $.cookie("login_name"),
+                    password : $.cookie("password")
+                };
+                $.ajax({
+                    url: "/mobilpiac-war/CheckAdminServlet",
+                    type: "get",
+                    dataType: "json",
+                    data: auth
+                }).success(function(data) {                  
+                    if (!data.result)
+                    {
+                        $("#managebtn").css('visibility', 'hidden');
+                    }
+                    else
+                    {
+                        $("#managebtn").css('visibility', 'visible');
+                    }
+                });  
+                
+            }     
+        });
+    </script>
 </body>
 
 </html>

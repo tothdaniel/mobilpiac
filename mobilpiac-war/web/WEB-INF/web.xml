@@ -40,6 +40,10 @@
         <servlet-name>ListAdsServlet</servlet-name>
         <servlet-class>hu.bme.aait.mobilpiac.servlets.ListAdsServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CheckAdminServlet</servlet-name>
+        <servlet-class>hu.bme.aait.mobilpiac.servlets.CheckAdminServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ListUsersServlet</servlet-name>
         <url-pattern>/ListUsersServlet</url-pattern>
@@ -79,6 +83,10 @@
     <servlet-mapping>
         <servlet-name>ListAdsServlet</servlet-name>
         <url-pattern>/ListAdsServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CheckAdminServlet</servlet-name>
+        <url-pattern>/CheckAdminServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

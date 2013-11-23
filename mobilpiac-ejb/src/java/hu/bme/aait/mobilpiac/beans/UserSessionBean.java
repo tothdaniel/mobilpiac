@@ -66,6 +66,20 @@ public class UserSessionBean {
         return obj;
     }
     
+    public Boolean checkAdmin(String loginName, String password){
+        List<Users> usersList = em.createQuery("SELECT u FROM Users u").getResultList();
+        for(Users u:usersList)
+        {
+            if (u.getLoginName().equals(loginName) && u.getPassword().equals(password)) {
+                if(u.getFkRoleId().getRoleName().equals("admin"))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
     public JSONArray listAllUsers(){
         List<Users> usersList = em.createQuery("SELECT users FROM Users users").getResultList();
         JSONArray jarray = new JSONArray();

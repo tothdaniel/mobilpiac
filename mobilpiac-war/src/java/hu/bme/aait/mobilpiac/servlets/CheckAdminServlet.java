@@ -7,12 +7,10 @@
 package hu.bme.aait.mobilpiac.servlets;
 
 import hu.bme.aait.mobilpiac.beans.UserSessionBean;
-import hu.bme.aait.mobilpiac.entities.Users;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,40 +20,29 @@ import org.json.simple.JSONObject;
  *
  * @author Daniel
  */
-public class LoginServlet extends HttpServlet {
+public class CheckAdminServlet extends HttpServlet {
 
     @EJB
     UserSessionBean us;
-    
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            Users u = us.login(request.getParameter("login_name"), request.getParameter("password"));
             JSONObject obj = new JSONObject();
-            if(u != null)
+            if(us.checkAdmin(request.getParameter("login_name"), request.getParameter("password")))
             {
-                int d = request.getParameter("stay_login").equals("true") ? 24*7 : 1;
-                Cookie cookie1 = new Cookie("login_name", u.getLoginName());
-                cookie1.setMaxAge(60 * 60 * d); //1 hour
-                response.addCookie(cookie1);
-                Cookie cookie2 = new Cookie("password", u.getPassword());
-                cookie2.setMaxAge(60 * 60 * d); //1 hour
-                response.addCookie(cookie2);
-                obj.put("message","Sikeresen bejelentkezett, mint "+u.getLoginName()+".");
+                obj.put("message","Belépés engedélyezve.");
                 obj.put("result",true);
             }
             else
             {
-                obj.put("message","Hibás felhasználónév/jelszó.");
+                obj.put("message","Ide csak az adminisztrátor léphet be.");
                 obj.put("result",false);
             }
-            
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             out.print(obj);
-
         }
     }
 

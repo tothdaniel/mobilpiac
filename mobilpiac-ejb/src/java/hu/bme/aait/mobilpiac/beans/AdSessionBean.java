@@ -58,7 +58,10 @@ public class AdSessionBean {
     }
     
     public JSONArray listAllAds(org.json.JSONObject jobj){
-        List<Advertisement> adsList = em.createQuery("SELECT a FROM Advertisement a ORDER BY a.fkPhoneType.fkManufacturer.manufacturerName,a.fkPhoneType.typeName").getResultList();
+        List<Advertisement> adsList = em.createQuery(
+            "SELECT a FROM Advertisement a WHERE a.finished = 0 "
+          + "ORDER BY a.fkPhoneType.fkManufacturer.manufacturerName,"
+          + "a.fkPhoneType.typeName,a.minPrice+a.lastBid*1000").getResultList();
         JSONArray jarray = new JSONArray();
 
         int minPrice = jobj.getInt("min_price");

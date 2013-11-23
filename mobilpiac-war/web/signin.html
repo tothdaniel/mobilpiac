@@ -16,6 +16,7 @@
             </div>
             <div class="navbar-collapse collapse">
                 <div class="navbar-right navbar-form">
+                    <a id="listbtn" href="list_view.html" class="btn btn-default">Listanézet</a>
                     <a href="registration.html" class="btn btn-default">Regisztráció</a>
                 </div>
             </div>
@@ -299,6 +300,28 @@
     return temp.toLowerCase();
 };
      </script>
+     <script>
+        $( document ).ready(function() {
+            if ($.cookie("login_name") === undefined || $.cookie("password") === undefined){
+                $("#logbtn").html("Bejelentkezés");
+                $("#logbtn").attr("href","signin.html");
+                
+            }else{
+                alert("Ön már bejelentkezett. Amennyiben másik felhasználóval kíván bejelentkezni, előbb jelentkezzen ki az aktuálissal!");
+                document.location.href="index.html";
+            }     
+        });
+
+        $( window ).load(function() {
+           /* if ($.cookie("login_name") === undefined || $.cookie("password") === undefined){
+                $("#logbtn").html("Bejelentkezés");
+                $("#logbtn").attr("href","signin.html");
+            }else{
+                $("#logbtn").html("Kijelentkezés");
+                $("#logbtn").attr("href","#");
+            }*/
+        });
+    </script>
 </body>
 
 </html>

@@ -18,7 +18,9 @@
             </div>
             <div class="navbar-collapse collapse">
                 <div class="navbar-right navbar-form">
-                    <a href="registration.html" class="btn btn-default">Regisztráció</a>
+                    <a id="managebtn" style="visibility: hidden;" class="btn btn-default">Telefontípusok menedzselése</a>
+                    <a id="newadbtn" class="btn btn-default">Hirdetés feladása</a>
+                    <a id="regbtn" href="registration.html" class="btn btn-default">Regisztráció</a>
                     <a id="logbtn" href="signin.html" class="btn btn-default">Bejelentkezés</a>
                 </div>
             </div>
@@ -76,21 +78,23 @@
                 <div class="row" data-bind="foreach: mobiles, visible: mobiles().length > 0">
                     <div class="thumbnail">
                         <div class="row">
+                            <a id="phoneviewbtn" href="phone_view.html">
                                 <h3 data-bind="html: title" class="col-xs-4" style="margin-top: 10px;"></h3>
-                                <h3 class="col-xs-push-2 col-xs-5" style="margin-top: 10px; text-align: right;">
-                                    Aktuális ár: <span data-bind="html: actual_price"></span> Ft
-                                </h3>
-                                <div class="clearfix"></div>
-                                <img data-bind="attr:{src: image_url}" style="width:50px;float:left;position:relative;margin-left: 16px;margin-right: 5px;">
-                                <div data-bind="html: os" class="col-xs-5 thumbnail" style="margin-right: 5px;"></div>
-                                <div data-bind="html: rom" class="col-xs-5 thumbnail" style="margin-right: 5px;"></div>
-                                <div data-bind="html: screen" class="col-xs-5 thumbnail" style="margin-right: 5px;"></div>
-                                <div data-bind="html: ram" class="col-xs-5 thumbnail" style="margin-right: 5px;"></div>
-                                <div data-bind="html: processor" class="col-xs-5 thumbnail" style="margin-right: 5px;"></div>
-                                <div data-bind="html: rear_camera" class="col-xs-5 thumbnail" style="margin-right: 5px;"></div>
-                                <div class="clearfix"></div>
-                                <div class="col-xs-4" style="margin-right: 5px;">Feladva: <span data-bind="html: published">2013-06-06 18:18:18</span></div>
-                                <div class="col-xs-push-3 col-xs-4" style="margin-right: 5px;text-align: right;">Feladó: <span data-bind="html: seller_user">Én</span></div>
+                            </a>
+                            <h3 class="col-xs-push-2 col-xs-5" style="margin-top: 10px; text-align: right;">
+                                Aktuális ár: <span data-bind="html: actual_price"></span> Ft
+                            </h3>
+                            <div class="clearfix"></div>
+                            <img data-bind="attr:{src: image_url}" style="width:50px;float:left;position:relative;margin-left: 16px;margin-right: 5px;">
+                            <div data-bind="html: os" class="col-xs-5 thumbnail" style="margin-right: 5px;"></div>
+                            <div data-bind="html: rom" class="col-xs-5 thumbnail" style="margin-right: 5px;"></div>
+                            <div data-bind="html: screen" class="col-xs-5 thumbnail" style="margin-right: 5px;"></div>
+                            <div data-bind="html: ram" class="col-xs-5 thumbnail" style="margin-right: 5px;"></div>
+                            <div data-bind="html: processor" class="col-xs-5 thumbnail" style="margin-right: 5px;"></div>
+                            <div data-bind="html: rear_camera" class="col-xs-5 thumbnail" style="margin-right: 5px;"></div>
+                            <div class="clearfix"></div>
+                            <div class="col-xs-4" style="margin-right: 5px;">Feladva: <span data-bind="html: published">2013-06-06 18:18:18</span></div>
+                            <div class="col-xs-push-3 col-xs-4" style="margin-right: 5px;text-align: right;">Feladó: <span data-bind="html: seller_user">Én</span></div>
                         </div>
                     </div>					
                 </div>
@@ -142,7 +146,7 @@
                         return data.processor_clock + " Mhz (" + data.processor_number_of_cores + " mag)";
                     }, this);
                     this.ram = ko.computed(function() {
-                        return data.ram + " GB RAM";
+                        return data.ram + " MB RAM";
                     }, this);
                     this.rom = ko.computed(function() {
                         return data.rom + " GB Háttértár";
@@ -252,44 +256,93 @@
                 ko.applyBindings(new ViewModel());
         });
     </script>
-    <script>
-     $("#logbtn").click(function(event){
-        if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined){
-            event.preventDefault();
-            $.ajax({
-                url: "/mobilpiac-war/LogoutServlet",
-                type: "get",
-                dataType: "json"
-            }).success(function(data) {
-                alert(data.message);
-                if (data.result)
-                {
-                    document.location.href="index.html";
-                }
-            }); 
-        }
-     });
+     <script>
+         $("#logbtn").click(function(event){
+            if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined){
+                event.preventDefault();
+                $.ajax({
+                    url: "/mobilpiac-war/LogoutServlet",
+                    type: "get",
+                    dataType: "json"
+                }).success(function(data) {
+                    alert(data.message);
+                    if (data.result)
+                    {
+                        document.location.href="index.html";
+                    }
+                }); 
+            }
+         });
+         
+         $("#managebtn").click(function(event){
+            if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined){
+                event.preventDefault();
+                var auth = {
+                    login_name : $.cookie("login_name"),
+                    password : $.cookie("password")
+                };
+                $.ajax({
+                    url: "/mobilpiac-war/CheckAdminServlet",
+                    type: "get",
+                    dataType: "json",
+                    data: auth
+                }).success(function(data) {                  
+                    if (!data.result)
+                    {
+                        alert(data.message);
+                    }
+                    else
+                    {
+                        document.location.href="manage_phone.html";
+                    }
+                });  
+            }else{
+                alert("Ehhez a funkcióhoz be kell jelentkeznie.");
+            }
+         });
+         $("#newadbtn").click(function(event){
+            if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined){
+                event.preventDefault();
+                document.location.href="new_ad.html"; 
+            }else{
+                alert("Ehhez a funkcióhoz be kell jelentkeznie.");
+            }
+         });
+         
     </script>
     <script>
         $( document ).ready(function() {
             if ($.cookie("login_name") === undefined || $.cookie("password") === undefined){
                 $("#logbtn").html("Bejelentkezés");
                 $("#logbtn").attr("href","signin.html");
+                $("#managebtn").hide();
+                $("#newadbtn").hide();
             }else{
                 $("#logbtn").html("Kijelentkezés");
                 $("#logbtn").attr("href","#");
+                $("#regbtn").hide();
+                $("#login_name").html($.cookie("login_name"));
+                var auth = {
+                    login_name : $.cookie("login_name"),
+                    password : $.cookie("password")
+                };
+                $.ajax({
+                    url: "/mobilpiac-war/CheckAdminServlet",
+                    type: "get",
+                    dataType: "json",
+                    data: auth
+                }).success(function(data) {                  
+                    if (!data.result)
+                    {
+                        $("#managebtn").css('visibility', 'hidden');
+                    }
+                    else
+                    {
+                        $("#managebtn").css('visibility', 'visible');
+                    }
+                });  
                 
             }     
-        });
-
-        $( window ).load(function() {
-           /* if ($.cookie("login_name") === undefined || $.cookie("password") === undefined){
-                $("#logbtn").html("Bejelentkezés");
-                $("#logbtn").attr("href","signin.html");
-            }else{
-                $("#logbtn").html("Kijelentkezés");
-                $("#logbtn").attr("href","#");
-            }*/
         });
     </script>
 </body>

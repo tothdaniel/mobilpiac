@@ -16,6 +16,8 @@
             </div>
             <div class="navbar-collapse collapse">
                 <div class="navbar-right navbar-form">
+                    <a id="listbtn" href="list_view.html" class="btn btn-default">Listanézet</a>
+                    <a id="regbtn" href="registration.html" class="btn btn-default">Regisztráció</a>
                     <a id="logbtn" href="signin.html" class="btn btn-default">Bejelentkezés</a>
                 </div>
             </div>
@@ -351,9 +353,8 @@ var MD5 = function (string) {
                 $("#logbtn").attr("href","signin.html");
                 
             }else{
-                $("#logbtn").html("Kijelentkezés");
-                $("#logbtn").attr("href","#");
-                
+                alert("Ön már bejelentkezett egy másik felhasználóval. Először jelentkezzen ki új felhasználó regisztrálásához");
+                document.location.href="index.html";
             }     
         });
 
