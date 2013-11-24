@@ -19,6 +19,7 @@ import hu.bme.aait.mobilpiac.entities.Processor;
 import hu.bme.aait.mobilpiac.entities.Sim;
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
@@ -281,5 +282,34 @@ public class MobileSessionBean {
             jarray.add(obj);
         }
         return jarray;
+    }
+    
+    public List<String> addOperationSystem(String json)
+    {
+        List<String> result = new ArrayList<>();
+        org.json.JSONObject jobj = new org.json.JSONObject(json);
+        OperationSystem os = new OperationSystem();
+        
+        if(jobj.getString("os_name") == null || jobj.getString("os_name").isEmpty())
+        {
+            result.add("false");
+            result.add("A hozzáadandó operációs rendszer nevét nem adta meg.");
+            return result;
+        }
+        
+        List<OperationSystem> osList = em.createQuery("SELECT o.osName FROM OperationSystem o WHERE o.osName="+jobj.getString("os_name")).getResultList();
+        
+        if(!osList.isEmpty())
+        {
+            result.add("false");
+            result.add("Már létezik ilyen nevű operációs rendszer.");
+            return result;
+        }
+        os.setOsName(jobj.getString("os_name"));
+        em.persist(os);
+        
+        result.add("true");
+        result.add("Sikeresen hozzáadta a " + os.getOsName() + " nevű operációs rendszert.");
+        return result;
     }
 }
