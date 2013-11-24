@@ -330,4 +330,96 @@ public class MobileSessionBean {
             return result;
         }
     }
+    
+    public List<String> addManufacturer(String json)
+    {
+        List<String> result = new ArrayList<>();
+        org.json.JSONObject jobj = new org.json.JSONObject(json);
+        
+        
+        if(jobj.getString("manufacturer_name") == null || jobj.getString("manufacturer_name").isEmpty())
+        {
+            result.add("false");
+            result.add("A hozzáadandó gyártó nevét nem adta meg.");
+            return result;
+        }
+
+        final String qstring = "SELECT m FROM Manufacturer m WHERE m.manufacturerName = :name";
+        TypedQuery<Manufacturer> query = em.createQuery(qstring,Manufacturer.class);
+        query.setParameter("name", jobj.getString("manufacturer_name"));
+        List<Manufacturer> ms = query.getResultList();
+        
+        if(!ms.isEmpty())
+        {
+            result.add("false");
+            result.add("Már létezik ilyen nevű gyártó.");
+            return result;
+        }
+        else
+        {
+            Manufacturer m = new Manufacturer();
+            Short id = em.createQuery("SELECT MAX(m.id) FROM Manufacturer m",Short.class).getSingleResult();
+            if(id==null)
+            {
+                id = 1;
+            }
+            else
+            {
+                id = id++;
+            }
+            m.setId(id);
+            m.setManufacturerName(jobj.getString("manufacturer_name"));
+            em.persist(m);
+
+            result.add("true");
+            result.add("Sikeresen hozzáadta a " + m.getManufacturerName() + " nevű gyártót.");
+            return result;
+        }
+    }
+    
+    public List<String> addGpu(String json)
+    {
+        List<String> result = new ArrayList<>();
+        org.json.JSONObject jobj = new org.json.JSONObject(json);
+        
+        
+        if(jobj.getString("gpu_name") == null || jobj.getString("gpu_name").isEmpty())
+        {
+            result.add("false");
+            result.add("A hozzáadandó GPU nevét nem adta meg.");
+            return result;
+        }
+
+        final String qstring = "SELECT g FROM Gpu g WHERE g.gpuName = :name";
+        TypedQuery<Gpu> query = em.createQuery(qstring,Gpu.class);
+        query.setParameter("name", jobj.getString("gpu_name"));
+        List<Gpu> gs = query.getResultList();
+        
+        if(!gs.isEmpty())
+        {
+            result.add("false");
+            result.add("Már létezik ilyen nevű gpu.");
+            return result;
+        }
+        else
+        {
+            Gpu g = new Gpu();
+            Long id = em.createQuery("SELECT MAX(g.id) FROM Gpu g",Long.class).getSingleResult();
+            if(id==null)
+            {
+                id = Long.parseLong("1");
+            }
+            else
+            {
+                id = id++;
+            }
+            g.setId(id);
+            g.setGpuName(jobj.getString("gpu_name"));
+            em.persist(g);
+
+            result.add("true");
+            result.add("Sikeresen hozzáadta a " + g.getGpuName() + " nevű gpu-t.");
+            return result;
+        }
+    }
 }

@@ -72,6 +72,14 @@
         <servlet-name>AddOperationSystemServlet</servlet-name>
         <servlet-class>hu.bme.aait.mobilpiac.servlets.AddOperationSystemServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AddManufacturerServlet</servlet-name>
+        <servlet-class>hu.bme.aait.mobilpiac.servlets.AddManufacturerServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddGpuServlet</servlet-name>
+        <servlet-class>hu.bme.aait.mobilpiac.servlets.AddGpuServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ListUsersServlet</servlet-name>
         <url-pattern>/ListUsersServlet</url-pattern>
@@ -143,6 +151,14 @@
     <servlet-mapping>
         <servlet-name>AddOperationSystemServlet</servlet-name>
         <url-pattern>/AddOperationSystemServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddManufacturerServlet</servlet-name>
+        <url-pattern>/AddManufacturerServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddGpuServlet</servlet-name>
+        <url-pattern>/AddGpuServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
