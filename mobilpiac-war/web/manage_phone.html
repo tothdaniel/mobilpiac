@@ -65,7 +65,22 @@
                                     <option data-bind="html: manufacturer_name"></option>
                                 </select>
                             </div>
-                            <button type="submit" class="btn btn-primary">+</button>
+                            <button type="submit" class="btn btn-primary" id="newmanufactureropen">+</button>
+                        </div>
+                        <div id="newmanufacturerbubble" class="thumbnail bubble" style="display: none;">
+                            <div class="form-group">
+                                <h3 style="margin-top: 10px; margin-left:15px;">Új gyártó hozzáadása</h3>
+                                <label class="col-sm-3 control-label">Gyártó neve:</label> 
+                                <div class="col-sm-4">
+                                    <input id="newmanufacturername" type="text" class="form-control" required autofocus="">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-push-3 col-sm-4">
+                                    <button id="newmanufacturersubnewmit" class="btn btn-primary">Mentés</button>
+                                    <button class="btn btn-danger close-bubble">Mégse</button>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Operációs rendszer:</label>
@@ -77,27 +92,49 @@
                             <div class="col-sm-1">
                                 <button type="submit" class="btn btn-primary" id="newosopen">+</button>
                             </div>
-                            
+
                             <div class="col-sm-4">
                                 <select data-bind="foreach: osversions, visible: osversions().length > 0" class="form-control">
                                     <option data-bind="html: version_name"></option>
                                 </select>
                             </div>
                             <div>
-                                <button type="submit" class="btn btn-primary">+</button>
+                                <button type="submit" class="btn btn-primary" id="newosversionopen">+</button>
                             </div>
-                            
                         </div>
                         <div id="newosbubble" class="thumbnail bubble" style="display: none;">
-                            <h3 style="margin-top: 10px;">Új operációs rendszer hozzáadása</h3>
                             <div class="form-group">
+                                <h3 style="margin-top: 10px; margin-left:15px;">Új operációs rendszer hozzáadása</h3>
                                 <label class="col-sm-3 control-label">Operációs rendszer neve:</label> 
                                 <div class="col-sm-4">
                                     <input id="newosname" type="text" class="form-control" required autofocus="">
                                 </div>
-                                <div class="clearfix"></div> <br/>
+                            </div>
+                            <div class="form-group">
                                 <div class="col-sm-push-3 col-sm-4">
                                     <button id="newossubnewmit" class="btn btn-primary">Mentés</button>
+                                    <button class="btn btn-danger close-bubble">Mégse</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="newosversionbubble" class="thumbnail bubble" style="display: none;">
+                            <h3 style="margin-top: 10px;">Új verzió hozzáadása</h3>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Operációs rendszer:</label> 
+                                <div class="col-sm-3">
+                                    <select id="osslideselect" data-bind="foreach: operationsystems, visible: operationsystems().length > 0" class="form-control">
+                                        <option data-bind="html: os_name"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Verzió neve:</label> 
+                                <div class="col-sm-4">
+                                    <input id="newosversionname" type="text" class="form-control" required autofocus="">
+                                </div>
+                                <div class="clearfix"></div> <br/>
+                                <div class="col-sm-push-3 col-sm-4">
+                                    <button id="newosversionsubnewmit" class="btn btn-primary">Mentés</button>
                                     <button class="btn btn-danger close-bubble">Mégse</button>
                                 </div>
                             </div>
@@ -109,8 +146,43 @@
                                     <option data-bind="html: chipset"></option>
                                 </select>
                             </div>
-                            <button type="submit" class="btn btn-primary">+</button>
+                            <button type="submit" class="btn btn-primary" id="newprocessoropen">+</button>
                         </div>
+
+                        <div id="newprocessorbubble" class="thumbnail bubble" style="display: none;">
+                            <div class="form-group">
+                                <h3 style="margin-top: 10px; margin-left:15px;">Új processzor hozzáadása</h3>
+                                <label class="col-sm-3 control-label">Processzor család:</label> 
+                                <div class="col-sm-4">
+                                    <input id="newprocessorfamily" type="text" class="form-control" required autofocus="">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Processzor chipset:</label> 
+                                <div class="col-sm-4">
+                                    <input id="newprocessorchipset" type="text" class="form-control" required autofocus="">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Processzor órajel (Mhz):</label> 
+                                <div class="col-sm-4">
+                                    <input id="newprocessorclock" type="text" class="form-control" required autofocus="">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Processzormagok száma:</label> 
+                                <div class="col-sm-4">
+                                    <input id="newprocessornumberofcores" type="text" class="form-control" required autofocus="">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-push-3 col-sm-4">
+                                    <button id="newprocessorsubnewmit" class="btn btn-primary">Mentés</button>
+                                    <button class="btn btn-danger close-bubble">Mégse</button>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Grafikus processzor:</label>
                             <div class="col-sm-8">
@@ -118,8 +190,25 @@
                                     <option data-bind="html: gpu_name"></option>
                                 </select>
                             </div>
-                            <button type="submit" class="btn btn-primary">+</button>
+                            <button type="submit" class="btn btn-primary" id="newgpuopen">+</button>
                         </div>
+
+                        <div id="newgpububble" class="thumbnail bubble" style="display: none;">
+                            <div class="form-group">
+                                <h3 style="margin-top: 10px; margin-left:15px;">Új GPU hozzáadása</h3>
+                                <label class="col-sm-3 control-label">GPU neve:</label> 
+                                <div class="col-sm-4">
+                                    <input id="newgpuname" type="text" class="form-control" required autofocus="">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-push-3 col-sm-4">
+                                    <button id="newgpusubnewmit" class="btn btn-primary">Mentés</button>
+                                    <button class="btn btn-danger close-bubble">Mégse</button>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Sim kártya típus:</label>
                             <div class="col-sm-8">
@@ -127,8 +216,25 @@
                                     <option data-bind="html: sim_type"></option>
                                 </select>
                             </div>
-                            <button type="submit" class="btn btn-primary">+</button>
+                            <button type="submit" class="btn btn-primary" id="newsimopen">+</button>
                         </div>
+
+                        <div id="newsimbubble" class="thumbnail bubble" style="display: none;">
+                            <div class="form-group">
+                                <h3 style="margin-top: 10px; margin-left:15px;">Új SIM típus hozzáadása</h3>
+                                <label class="col-sm-3 control-label">Típus neve:</label> 
+                                <div class="col-sm-4">
+                                    <input id="newsimname" type="text" class="form-control" required autofocus="">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-push-3 col-sm-4">
+                                    <button id="newsimsubnewmit" class="btn btn-primary">Mentés</button>
+                                    <button class="btn btn-danger close-bubble">Mégse</button>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <label class="col-sm-3 control-label">microSD foglalat:</label>
                             <div class="col-sm-8">
@@ -242,22 +348,22 @@
                 this.id = ko.observable(data.id);
                 this.sim_type = ko.observable(data.sim_type);
             };
-            
+
             var Gpu = function(data) {
                 this.id = ko.observable(data.id);
                 this.gpu_name = ko.observable(data.gpu_name);
             };
-            
+
             var OperationSystem = function(data) {
                 this.id = ko.observable(data.id);
                 this.os_name = ko.observable(data.os_name);
             };
-            
+
             var OsVersion = function(data) {
                 this.id = ko.observable(data.id);
                 this.version_name = ko.observable(data.version_name);
             };
-            
+
             var Processor = function(data) {
                 this.id = ko.observable(data.id);
                 this.chipset = ko.observable(data.chipset);
@@ -275,7 +381,7 @@
                 self.processors = ko.observableArray([]);
 
                 // Operations
-                 $.ajax({
+                $.ajax({
                     url: "/mobilpiac-war/ListMobilesServlet",
                     type: "get",
                     dataType: "json"
@@ -285,7 +391,7 @@
                         self.mobiles.push(new Mobile(data.mobiles[key]));
                     }
                 });
-                
+
                 $.ajax({
                     url: "/mobilpiac-war/ListSimsServlet",
                     type: "get",
@@ -296,7 +402,7 @@
                         self.sims.push(new Sim(data.sims[key]));
                     }
                 });
-                
+
                 $.ajax({
                     url: "/mobilpiac-war/ListGpusServlet",
                     type: "get",
@@ -318,7 +424,7 @@
                         self.manufacturers.push(new Manufacturer(data.manufacturers[key]));
                     }
                 });
-                
+
                 $.ajax({
                     url: "/mobilpiac-war/ListOperationSystemsServlet",
                     type: "get",
@@ -329,16 +435,16 @@
                         self.operationsystems.push(new OperationSystem(data.operationsystems[key]));
                     }
                 });
-                
+
                 var os = {
-                    operation_system: $("#osselect").val()  
+                    operation_system: $("#osselect").val()
                 };
-                
+
                 $.ajax({
                     url: "/mobilpiac-war/ListOsVersionsServlet",
                     type: "get",
                     dataType: "json",
-                    data: {json:JSON.stringify(os)}
+                    data: {json: JSON.stringify(os)}
                 }).success(function(data) {
                     self.osversions.removeAll();
                     for (key in data.osversions)
@@ -346,7 +452,7 @@
                         self.osversions.push(new OsVersion(data.osversions[key]));
                     }
                 });
-                
+
                 $.ajax({
                     url: "/mobilpiac-war/ListProcessorsServlet",
                     type: "get",
@@ -358,28 +464,76 @@
                     }
                 });
                 //ezzel frissul a verziolista, alapbol az Androidot tolti be
-                $("#osselect").change(function(event){
-                        event.preventDefault();
-                        var os = {
-                            operation_system: $("#osselect").val()
-                        };
-                        $.ajax({
-                            url: "/mobilpiac-war/ListOsVersionsServlet",
-                            type: "get",
-                            dataType: "json",
-                            data: {json:JSON.stringify(os)}
-                        }).success(function(data) {
-                            self.osversions.removeAll();
-                            for (key in data.osversions)
-                            {
-                                self.osversions.push(new OsVersion(data.osversions[key]));
-                            }
-                        }); 
-                 });
-                 $(".close-bubble").click(function() {$(this).parents(".bubble").slideUp()});
-                 $("#newosopen").click(function() {$("#newosbubble").slideToggle();});
-                 
-                
+                $("#osselect").change(function(event) {
+                    event.preventDefault();
+                    var os = {
+                        operation_system: $("#osselect").val()
+                    };
+                    $.ajax({
+                        url: "/mobilpiac-war/ListOsVersionsServlet",
+                        type: "get",
+                        dataType: "json",
+                        data: {json: JSON.stringify(os)}
+                    }).success(function(data) {
+                        self.osversions.removeAll();
+                        for (key in data.osversions)
+                        {
+                            self.osversions.push(new OsVersion(data.osversions[key]));
+                        }
+                    });
+                });
+                $(".close-bubble").click(function() {
+                    $(this).parents(".bubble").slideUp();
+                });
+                $("#newosopen").click(function()
+                {
+                    $("#newosversionbubble").slideUp();
+                    $("#newgpububble").slideUp();
+                    $("#newprocessorbubble").slideUp();
+                    $("#newsimbubble").slideUp();
+                    $("#newmanufacturerbubble").slideUp();
+                    $("#newosbubble").slideToggle();
+                });
+                $("#newosversionopen").click(function() {
+                    $("#newosbubble").slideUp();
+                    $("#newgpububble").slideUp();
+                    $("#newprocessorbubble").slideUp();
+                    $("#newsimbubble").slideUp();
+                    $("#newmanufacturerbubble").slideUp();
+                    $("#newosversionbubble").slideToggle();
+                });
+                $("#newsimopen").click(function() {
+                    $("#newosbubble").slideUp();
+                    $("#newgpububble").slideUp();
+                    $("#newprocessorbubble").slideUp();
+                    $("#newosbubble").slideUp();
+                    $("#newmanufacturerbubble").slideUp();
+                    $("#newsimbubble").slideToggle();
+                });
+                $("#newprocessoropen").click(function() {
+                    $("#newosbubble").slideUp();
+                    $("#newgpububble").slideUp();
+                    $("#newsimbubble").slideUp();
+                    $("#newosversionbubble").slideUp();
+                    $("#newmanufacturerbubble").slideUp();
+                    $("#newprocessorbubble").slideToggle();
+                });
+                $("#newgpuopen").click(function() {
+                    $("#newosbubble").slideUp();
+                    $("#newsimbubble").slideUp();
+                    $("#newprocessorbubble").slideUp();
+                    $("#newosversionbubble").slideUp();
+                    $("#newmanufacturerbubble").slideUp();
+                    $("#newgpububble").slideToggle();
+                });
+                $("#newmanufactureropen").click(function() {
+                    $("#newosbubble").slideUp();
+                    $("#newsimbubble").slideUp();
+                    $("#newgpububble").slideUp();
+                    $("#newosversionbubble").slideUp();
+                    $("#newprocessorbubble").slideUp();
+                    $("#newmanufacturerbubble").slideToggle();
+                });
             }
 
             ko.applyBindings(new ViewModel());
@@ -410,19 +564,24 @@
                     alert("Ehhez a funkcióhoz be kell jelentkeznie.");
                 }
             });
-            
+
             $("#newossubnewmit").click(function(event) {
-                    event.preventDefault();
-                    
+                event.preventDefault();
+                if($("#newosname").val().size() === 0)
+                {
+                    alert("Nem adta meg az új operációs rendszer nevét.");
+                }
+                else
+                {
                     var os = {
                         os_name: $("#newosname").val()
                     };
-                    
+
                     $.ajax({
                         url: "/mobilpiac-war/AddOperationSystemServlet",
                         type: "get",
                         dataType: "json",
-                        data: {json:JSON.stringify(os)}
+                        data: {json: JSON.stringify(os)}
                     }).success(function(data) {
                         alert(data.message);
                         if (data.result)
@@ -430,7 +589,117 @@
                             $("#newosbubble").slideToggle();
                         }
                     });
+                }
             });
+            
+            $("#newmanufacturersubnewmit").click(function(event) {
+                event.preventDefault();
+                var manufacturer = {
+                    manufacturer_name: $("#newmanufacturername").val()
+                };
+
+                $.ajax({
+                    url: "/mobilpiac-war/AddManufacturerServlet",
+                    type: "get",
+                    dataType: "json",
+                    data: {json: JSON.stringify(manufacturer)}
+                }).success(function(data) {
+                    alert(data.message);
+                    if (data.result)
+                    {
+                        $("#newmanufacturerbubble").slideToggle();
+                    }
+                });
+            });
+            
+            $("#newosversionsubnewmit").click(function(event) {
+                event.preventDefault();
+
+                var osversion = {
+                    os_name: $("#osslideselect").val(),
+                    os_version: $("#newosversionname").val()
+                };
+
+                $.ajax({
+                    url: "/mobilpiac-war/AddOsVersionServlet",
+                    type: "get",
+                    dataType: "json",
+                    data: {json: JSON.stringify(osversion)}
+                }).success(function(data) {
+                    alert(data.message);
+                    if (data.result)
+                    {
+                        $("#newosversionbubble").slideToggle();
+                    }
+                });
+            });
+            
+            $("#newgpusubnewmit").click(function(event) {
+                event.preventDefault();
+
+                var gpu = {
+                    gpu_name: $("#newgpuname").val()
+                };
+
+                $.ajax({
+                    url: "/mobilpiac-war/AddGpuServlet",
+                    type: "get",
+                    dataType: "json",
+                    data: {json: JSON.stringify(gpu)}
+                }).success(function(data) {
+                    alert(data.message);
+                    if (data.result)
+                    {
+                        $("#newgpububble").slideToggle();
+                    }
+                });
+            });
+            
+            $("#newsimsubnewmit").click(function(event) {
+                event.preventDefault();
+
+                var sim = {
+                    sim_type: $("#newsimname").val()
+                };
+
+                $.ajax({
+                    url: "/mobilpiac-war/AddSimServlet",
+                    type: "get",
+                    dataType: "json",
+                    data: {json: JSON.stringify(gpu)}
+                }).success(function(data) {
+                    alert(data.message);
+                    if (data.result)
+                    {
+                        $("#newsimbubble").slideToggle();
+                    }
+                });
+            });
+            
+            $("#newprocessorsubnewmit").click(function(event) {
+                event.preventDefault();
+
+                var processor = {
+                    chipset: $("#newprocessorchipset").val(),
+                    family: $("#newprocessorfamily").val(),
+                    clock: $("#newprocessorclock").val(),
+                    number_of_cores: $("#newprocessornumberofcores").val()
+                };
+
+                $.ajax({
+                    url: "/mobilpiac-war/AddProcessorServlet",
+                    type: "get",
+                    dataType: "json",
+                    data: {json: JSON.stringify(processor)}
+                }).success(function(data) {
+                    alert(data.message);
+                    if (data.result)
+                    {
+                        $("#newsimbubble").slideToggle();
+                    }
+                });
+            });
+            
         </script>
         <script>
             $(document).ready(function() {
@@ -472,7 +741,7 @@
                 });
 
             });
-            
+
             $(document).ready(function() {
                 /* if ($.cookie("login_name") === undefined || $.cookie("password") === undefined){
                  $("#logbtn").html("Bejelentkezés");
