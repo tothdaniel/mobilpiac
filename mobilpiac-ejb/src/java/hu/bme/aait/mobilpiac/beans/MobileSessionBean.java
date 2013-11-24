@@ -100,6 +100,7 @@ public class MobileSessionBean {
         obj.put("dpi", p.getDpi());
         obj.put("gpu", p.getFkGpu().getGpuName());
         obj.put("manufacturer", p.getFkManufacturer().getManufacturerName());
+        obj.put("manufacturer_id", p.getFkManufacturer().getId());
         obj.put("os_version", p.getFkOsVersion().getVersionName());
         obj.put("os_name", p.getFkOsVersion().getFkOs().getOsName());
         obj.put("processor_family", p.getFkProcessor().getFamily());

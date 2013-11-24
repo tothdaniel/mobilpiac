@@ -44,7 +44,7 @@
                             <ul data-bind="foreach: mobileNetworks, visible: mobileNetworks().length > 0">
                                 <li>
                                     <label>
-                                        <input type="checkbox" name="mobileNetwork" data-bind="attr:{value: id, checked: checked, click: $root.CategoryChange}"> <span data-bind="html: network_name"></span>
+                                        <input type="checkbox" name="mobileNetwork" data-bind="attr:{value: id, checked: checked}"> <span data-bind="html: network_name"></span>
                                     </label>
                                 </li>
                             </ul>
@@ -54,7 +54,7 @@
                             <ul data-bind="foreach: manufacturers, visible: manufacturers().length > 0">
                                 <li>
                                     <label>
-                                        <input type="checkbox" name="manufacturer" data-bind="attr:{value: id}"> <span data-bind="html: manufacturer_name"></span>
+                                        <input type="checkbox" name="manufacturer" data-bind="attr:{value: id, checked: checked}"> <span data-bind="html: manufacturer_name"></span>
                                     </label>
                                 </li>
                             </ul>
@@ -64,7 +64,7 @@
                             <ul style="height: 70px; overflow: auto;" data-bind="foreach: sims, visible: sims().length > 0">
                                 <li>
                                     <label>
-                                        <input type="checkbox" name="sim" data-bind="attr:{value: id}"><span data-bind="html: sim_type"></span>
+                                        <input type="checkbox" name="sim" data-bind="attr:{value: id, checked: checked}"><span data-bind="html: sim_type"></span>
                                     </label>
                                 </li>
                             </ul>
@@ -129,6 +129,7 @@
     <script src="lib/slider/js/bootstrap-slider.js"></script>
     <script>
         var price;
+        var firstFilter = true;
 	$(function(){
 		var priceChange = function() {
 			var newPrice = price.getValue();
@@ -181,11 +182,13 @@
                 var Manufacturer = function(data) {
                     this.id = ko.observable(data.id);
                     this.manufacturer_name = ko.observable(data.manufacturer_name);
+                    this.checked = ko.observable(data.checked);
                 };
 
                 var Sim = function(data) {
                     this.id = ko.observable(data.id);
                     this.sim_type = ko.observable(data.sim_type);
+                    this.checked = ko.observable(data.checked);
                 };
 
                 function ViewModel() {
@@ -237,6 +240,7 @@
                     }).success(function(data) {
                         for(key in data.mobile_networks)
                         {                 
+                            data.mobile_networks[key].checked = false;                    
                             self.mobileNetworks.push(new MobileNetwork(data.mobile_networks[key]));
                         }   
                     });
@@ -248,6 +252,7 @@
                     }).success(function(data) {
                         for(key in data.sims)
                         {
+                            data.sims[key].checked = false;   
                             self.sims.push(new Sim(data.sims[key]));
                         }   
                     });
@@ -259,6 +264,11 @@
                     }).success(function(data) {
                         for(key in data.manufacturers)
                         {
+                            data.manufacturers[key].checked = false;
+                            if (getURLParameter("manufacturer") == data.manufacturers[key].id)
+                            {
+                                data.manufacturers[key].checked = true;
+                            }
                             self.manufacturers.push(new Manufacturer(data.manufacturers[key]));
                         }   
                     });
@@ -287,8 +297,13 @@
                             manufacturers: getIds("manufacturer"),
                             sims: getIds("sim")          
                         };
+                        if (firstFilter && getURLParameter("manufacturer") != 'null')
+                        {
+                            filter.manufacturers.push(getURLParameter("manufacturer"));
+                        }
                         self.pageIndex(0);
                         self.getAds(JSON.stringify(filter));
+                        firstFilter = false;
                     });
 
                     $("#filter").click();
@@ -304,6 +319,12 @@
                 }
 
                 ko.applyBindings(new ViewModel());
+                
+                function getURLParameter(name) {
+                    return decodeURI(
+                        (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]
+                    );
+                }
         });
     </script>
      <script>

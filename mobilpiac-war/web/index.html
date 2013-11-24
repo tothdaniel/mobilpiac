@@ -46,15 +46,19 @@
             <div class="col-xs-8 col-sm-9 col-md-10 col-lg-10">
                 <div class="row" data-bind="foreach: mobiles, visible: mobiles().length > 0">
                     <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
-                        <div class="thumbnail">
-                            <img data-bind="attr:{src: image_url, alt: title}" style="width:100px;">
-                            <div class="caption text-center" style="padding-bottom: 0px;padding-top: 0px;">
-                                <label style="font-size: 130%;" data-bind="html: title"></label>
+                        <a data-bind="attr: {href:link_url}">
+                            <div class="thumbnail">
+
+                                    <img data-bind="attr:{src: image_url, alt: title}" style="width:100px;">
+                                    <div class="caption text-center" style="padding-bottom: 0px;padding-top: 0px;">
+
+                                            <label style="font-size: 130%;" data-bind="html: title"></label>
+                                    </div>
+                                    <div class="caption text-center" style="padding-bottom: 0px;padding-top: 0px;">
+                                        <label style="font-size: 140%;" data-bind="html: cheapest_price"></label>
+                                    </div>
                             </div>
-                            <div class="caption text-center" style="padding-bottom: 0px;padding-top: 0px;">
-                                <label style="font-size: 140%;" data-bind="html: cheapest_price"></label>
-                            </div>
-                        </div>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -80,6 +84,9 @@
             this.image_url = ko.observable(data.image_url);
             this.title = ko.computed(function() {
                 return data.manufacturer + " " + data.type_name;
+            }, this);
+            this.link_url = ko.computed(function() {
+                return "list_view.html?manufacturer="+data.manufacturer_id;
             }, this);
             this.cheapest_price = ko.observable(priceFormat(data.cheapest_price));
         };
