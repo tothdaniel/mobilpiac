@@ -12,7 +12,6 @@ import hu.bme.aait.mobilpiac.entities.Gpu;
 import hu.bme.aait.mobilpiac.entities.Manufacturer;
 import hu.bme.aait.mobilpiac.entities.MobileNetwork;
 import hu.bme.aait.mobilpiac.entities.OperationSystem;
-import static hu.bme.aait.mobilpiac.entities.OperationSystem_.osName;
 import hu.bme.aait.mobilpiac.entities.OsVersion;
 import hu.bme.aait.mobilpiac.entities.PhoneType;
 import hu.bme.aait.mobilpiac.entities.Processor;
@@ -25,6 +24,7 @@ import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -288,7 +288,7 @@ public class MobileSessionBean {
     {
         List<String> result = new ArrayList<>();
         org.json.JSONObject jobj = new org.json.JSONObject(json);
-        OperationSystem os = new OperationSystem();
+        
         
         if(jobj.getString("os_name") == null || jobj.getString("os_name").isEmpty())
         {
@@ -296,20 +296,38 @@ public class MobileSessionBean {
             result.add("A hozzáadandó operációs rendszer nevét nem adta meg.");
             return result;
         }
+
+        final String qstring = "SELECT o FROM OperationSystem o WHERE o.osName = :name";
+        TypedQuery<OperationSystem> query = em.createQuery(qstring,OperationSystem.class);
+        query.setParameter("name", jobj.getString("os_name"));
+        List<OperationSystem> tos = query.getResultList();
         
-        List<OperationSystem> osList = em.createQuery("SELECT o.osName FROM OperationSystem o WHERE o.osName="+jobj.getString("os_name")).getResultList();
-        
-        if(!osList.isEmpty())
+        if(!tos.isEmpty())
         {
             result.add("false");
             result.add("Már létezik ilyen nevű operációs rendszer.");
             return result;
         }
-        os.setOsName(jobj.getString("os_name"));
-        em.persist(os);
-        
-        result.add("true");
-        result.add("Sikeresen hozzáadta a " + os.getOsName() + " nevű operációs rendszert.");
-        return result;
+        else
+        {
+            OperationSystem os = new OperationSystem();
+            
+            Short id = em.createQuery("SELECT MAX(o.id) FROM OperationSystem o",Short.class).getSingleResult();
+            if(id==null)
+            {
+                id = 1;
+            }
+            else
+            {
+                id = id++;
+            }
+            os.setId(id);
+            os.setOsName(jobj.getString("os_name"));
+            em.persist(os);
+
+            result.add("true");
+            result.add("Sikeresen hozzáadta a " + os.getOsName() + " nevű operációs rendszert.");
+            return result;
+        }
     }
 }

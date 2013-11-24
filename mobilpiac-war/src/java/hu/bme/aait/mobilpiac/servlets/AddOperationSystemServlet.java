@@ -32,7 +32,14 @@ public class AddOperationSystemServlet extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             List<String> result = ms.addOperationSystem(request.getParameter("json"));
             JSONObject jobj = new JSONObject();
-            jobj.put("result",result.get(0));
+            if(result.get(0).equals("true"))
+            {
+                jobj.put("result",true);
+            }
+            else
+            {
+                jobj.put("result",false);
+            }
             jobj.put("message", result.get(1));
             out.print(jobj);
         }

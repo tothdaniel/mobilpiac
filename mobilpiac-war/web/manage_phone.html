@@ -89,16 +89,16 @@
                             
                         </div>
                         <div id="newosbubble" class="thumbnail bubble" style="display: none;">
-                            <h3 style="margin-top: 10px;">Új operációs rendszer</h3>
+                            <h3 style="margin-top: 10px;">Új operációs rendszer hozzáadása</h3>
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">Operációs rendszer:</label> 
+                                <label class="col-sm-3 control-label">Operációs rendszer neve:</label> 
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control" required autofocus="">
+                                    <input id="newosname" type="text" class="form-control" required autofocus="">
                                 </div>
                                 <div class="clearfix"></div> <br/>
                                 <div class="col-sm-push-3 col-sm-4">
-                                    <button id="newossubmit" class="btn btn-primary">Mentés</button>
-                                    <button class="btn btn-primary close-bubble">Mégse</button>
+                                    <button id="newossubnewmit" class="btn btn-primary">Mentés</button>
+                                    <button class="btn btn-danger close-bubble">Mégse</button>
                                 </div>
                             </div>
                         </div>
@@ -409,6 +409,27 @@
                 } else {
                     alert("Ehhez a funkcióhoz be kell jelentkeznie.");
                 }
+            });
+            
+            $("#newossubnewmit").click(function(event) {
+                    event.preventDefault();
+                    
+                    var os = {
+                        os_name: $("#newosname").val()
+                    };
+                    
+                    $.ajax({
+                        url: "/mobilpiac-war/AddOperationSystemServlet",
+                        type: "get",
+                        dataType: "json",
+                        data: {json:JSON.stringify(os)}
+                    }).success(function(data) {
+                        alert(data.message);
+                        if (data.result)
+                        {
+                            $("#newosbubble").slideToggle();
+                        }
+                    });
             });
         </script>
         <script>
