@@ -32,12 +32,12 @@
 
     <div class="container">
 
-        <div class="row">
+        <div class="row" data-bind="foreach: ad">
             <div class="col-xs-4 col-sm-3 col-md-2 col-lg-2 fixpadding text-center">
                 <div class="thumbnail">
-                    <img alt="Nexus 4" src="img/nexus-4.jpeg" style="width:120px;">
+                    <img data-bind="attr: {src: image_url, alt: title}" style="width:120px;">
                     <div class="caption text-center">
-                        <h3>Nexus 4</h3>
+                        <h3 data-bind="html: title"></h3>
                     </div>
                 </div>
                 <img src="img/banner-ad-160x600.gif" />
@@ -46,21 +46,18 @@
                 <div class="thumbnail" style="min-height:100px;">
                     <div class="row" style="margin-top:25px;">
                         <div class="col-md-2">
-                            <h4 style="margin-top:5px;">Licitálás</h4>
+                            <h4 style="margin-top:5px;">Licitálás:</h4>
                         </div>
                         <div class="col-md-4">
                             <div class="row thumbnail">
-                                Aktuális összeg: 56 000 Ft
+                                Aktuális összeg: <span data-bind="html: actual_price"></span> Ft
                             </div>
                         </div>
                         <div class="col-md-5 col-md-push-1">
                             <div class="row">
                                 <div class="col-md-6">
                                     <select class="form-control">
-                                        <option value="57000">57 000 Ft</option>
-                                        <option value="58000">58 000 Ft</option>
-                                        <option value="59000">59 000 Ft</option>
-                                        <option value="60000">60 000 Ft</option>
+                                        <option value="57000" data-bind="html: next_price_ft, value: next_price"></option>
                                     </select>
                                 </div>
                                 <div class="col-md-6">
@@ -68,20 +65,23 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="clearfix"></div><br/>
+                        <h4 class="col-md-2">Feladó:</h4>
+                        <div class="col-md-4" style="margin-top: 8px;padding-left: 0px;" data-bind="html: seller_user"></div>
+                        <h4 class="col-md-3">Feladás ideje:</h4>
+                        <div class="col-md-3" style="margin-top: 8px;" data-bind="html: published"></div>
+                        <div class="clearfix"></div><br/>
+                        <h4 class="col-md-2">Leírás:</h4>
+                        <div class="col-md-12" data-bind="html: description">
+                        </div>
                     </div>
                 </div>
-	            <div class="row">
+	            <div class="row" data-bind="foreach: mobile_specification">
 	                <div class="col-md-6">
-	                    <div class="thumbnail">Processzor</div>
-	                </div>
-	                <div class="col-md-6">
-	                    <div class="thumbnail">Kijelző</div>
-	                </div>
-	                 <div class="col-md-6">
-	                    <div class="thumbnail">Felbontás</div>
-	                </div>
-	                 <div class="col-md-6">
-	                    <div class="thumbnail">Stb</div>
+                            <div class="thumbnail">
+                                <b data-bind="html: name"></b> 
+                                <span data-bind="html: value"></span>
+                            </div>
 	                </div>
 	            </div>
             </div>
@@ -97,7 +97,110 @@
 
     <script src="lib/jquery-2.0.3.min.js"></script>
     <script src="lib/jquery.cookie.js"></script>
+    <script src="lib/knockout-3.0.0.js"></script>
     <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+    <script>
+            var Ad = function(data) {
+                this.actual_price = ko.observable(data.actual_price);
+                this.next_price = ko.computed(function() {
+                    return data.actual_price + 1000;
+                }, this);
+                this.next_price_ft = ko.computed(function() {
+                    return (data.actual_price + 1000) + " Ft";
+                }, this);
+                this.published = ko.observable(data.published);
+                this.seller_user = ko.observable(data.seller_user);
+                this.price = ko.observable(data.price);
+                this.image_url = ko.observable(data.image_url);
+                this.description = ko.observable(data.description);
+                this.title = ko.computed(function() {
+                    return data.manufacturer + " " + data.type_name;
+                }, this);
+                this.mobile_specification = ko.observableArray([]);
+                this.mobile_specification.push({
+                    name: "Gyártó: ",
+                    value: data.manufacturer
+                });
+                this.mobile_specification.push({
+                    name: "Típus neve: ",
+                    value: data.type_name
+                });
+                this.mobile_specification.push({
+                    name: "Operációs rendszer: ",
+                    value: data.os_name + " " + data.os_version
+                });
+                this.mobile_specification.push({
+                    name: "Képernyő mérete: ",
+                    value: data.display_inches + "\""
+                });
+                this.mobile_specification.push({
+                    name: "Felbontás: ",
+                    value: data.res_x + "x" + data.res_y + " (" + data.dpi + " dpi)"
+                });
+                this.mobile_specification.push({
+                    name: "Processzor: ",
+                    value: data.processor_chipset
+                });
+                this.mobile_specification.push({
+                    name: "Processzor: ",
+                    value: data.processor_clock + " Mhz (" + data.processor_number_of_cores + " mag)"
+                });
+                this.mobile_specification.push({
+                    name: "Grafikus processzor: ",
+                    value: data.gpu
+                });
+                this.mobile_specification.push({
+                    name: "RAM: ",
+                    value: data.ram + " MB RAM"
+                });
+                this.mobile_specification.push({
+                    name: "ROM: ",
+                    value: data.rom + " GB Háttértár"
+                });
+                this.mobile_specification.push({
+                    name: "Elülső kamera: ",
+                    value: data.rear_camera + " Mpx kamera"
+                });
+                this.mobile_specification.push({
+                    name: "Hátsó kamera: ",
+                    value: data.rear_camera + " Mpx kamera"
+                });
+                this.mobile_specification.push({
+                    name: "SIM típus: ",
+                    value: data.sim_type
+                });
+                this.mobile_specification.push({
+                    name: "MicroSD bővíthetőség: ",
+                    value: data.microsd_enabled
+                });
+            };
+            
+            function ViewModel() {
+                // Data
+                var self = this;
+                self.ad = ko.observableArray([]);
+
+                // Operations
+                $.ajax({
+                    url: "/mobilpiac-war/AdHighDetailServlet",
+                    type: "get",
+                    dataType: "json",
+                    data: { id : getURLParameter("phone_id")}
+                }).success(function(data) {                 
+                    //TODO gondolom itt fogsz majd valahogy adatkotogetni, a data egy JSONObject,
+                    //az AdSessionBean getJSONObject(String id) metodusaban latod, mi van neki
+                    self.ad.push(new Ad(data));
+                }); 
+            }
+
+            ko.applyBindings(new ViewModel());
+            
+            function getURLParameter(name) {
+                return decodeURI(
+                    (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]
+                );
+            }
+    </script>
     <script>
          $("#logbtn").click(function(event){
             if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined){
@@ -184,21 +287,7 @@
                     }
                 });          
             }
-            
-            var id = {
-                //TODO Peti: ide kell bekotnod az id-t, ez a statikus 1 csak teszteleshez van
-                id : 1
-            };
-            $.ajax({
-                url: "/mobilpiac-war/AdHighDetailServlet",
-                type: "get",
-                dataType: "json",
-                data: id
-            }).success(function(data) {                  
-                //TODO gondolom itt fogsz majd valahogy adatkotogetni, a data egy JSONObject,
-                //az AdSessionBean getJSONObject(String id) metodusaban latod, mi van neki
-            });    
-            
+  
         });
     </script>
 </body>
