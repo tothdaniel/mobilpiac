@@ -482,6 +482,255 @@
                         }
                     });
                 });
+
+
+
+
+                $("#newossubnewmit").click(function(event) {
+                    event.preventDefault();
+                    if (!$("#newosname").val())
+                    {
+                        alert("A hozzáadandó operációs rendszer nevét nem adta meg.");
+                    }
+                    else
+                    {
+                        var os = {
+                            os_name: $("#newosname").val()
+                        };
+
+                        $.ajax({
+                            url: "/mobilpiac-war/AddOperationSystemServlet",
+                            type: "get",
+                            dataType: "json",
+                            data: {json: JSON.stringify(os)}
+                        }).success(function(data) {
+                            alert(data.message);
+                            if (data.result)
+                            {
+                                $.ajax({
+                                    url: "/mobilpiac-war/ListOperationSystemsServlet",
+                                    type: "get",
+                                    dataType: "json"
+                                }).success(function(data) {
+                                    self.operationsystems.removeAll();
+                                    for (key in data.operationsystems)
+                                    {
+                                        self.operationsystems.push(new OperationSystem(data.operationsystems[key]));
+                                    }
+                                });
+                                $("#newosbubble").slideToggle();
+                            }
+                        });
+                    }
+                });
+
+                $("#newmanufacturersubnewmit").click(function(event) {
+                    event.preventDefault();
+                    if (!$("#newmanufacturername").val())
+                    {
+                        alert("A hozzáadandó gyártó nevét nem adta meg.");
+                    }
+                    else
+                    {
+                        var manufacturer = {
+                            manufacturer_name: $("#newmanufacturername").val()
+                        };
+
+                        $.ajax({
+                            url: "/mobilpiac-war/AddManufacturerServlet",
+                            type: "get",
+                            dataType: "json",
+                            data: {json: JSON.stringify(manufacturer)}
+                        }).success(function(data) {
+                            alert(data.message);
+                            if (data.result)
+                            {
+                                $.ajax({
+                                    url: "/mobilpiac-war/ListManufacturersServlet",
+                                    type: "get",
+                                    dataType: "json"
+                                }).success(function(data) {
+                                    self.manufacturers.removeAll();
+                                    for (key in data.manufacturers)
+                                    {
+                                        self.manufacturers.push(new Manufacturer(data.manufacturers[key]));
+                                    }
+                                });
+                                $("#newmanufacturerbubble").slideToggle();
+                            }
+                        });
+                    }
+                });
+
+                $("#newosversionsubnewmit").click(function(event) {
+                    event.preventDefault();
+                    if (!$("#newosversionname").val())
+                    {
+                        alert("A hozzáadandó verzió nevét nem adta meg.");
+                    }
+                    else
+                    {
+                        var osversion = {
+                            os_name: $("#osslideselect").val(),
+                            os_version: $("#newosversionname").val()
+                        };
+
+                        $.ajax({
+                            url: "/mobilpiac-war/AddOsVersionServlet",
+                            type: "get",
+                            dataType: "json",
+                            data: {json: JSON.stringify(osversion)}
+                        }).success(function(data) {
+                            alert(data.message);
+                            if (data.result)
+                            {
+                                $.ajax({
+                                    url: "/mobilpiac-war/ListOsVersionsServlet",
+                                    type: "get",
+                                    dataType: "json"
+                                }).success(function(data) {
+                                    self.osversions.removeAll();
+                                    for (key in data.osversions)
+                                    {
+                                        self.osversions.push(new OsVersion(data.osversions[key]));
+                                    }
+                                });
+                                $("#newosversionbubble").slideToggle();
+                            }
+                        });
+                    }
+                });
+
+                $("#newgpusubnewmit").click(function(event) {
+                    event.preventDefault();
+                    if (!$("#newgpuname").val())
+                    {
+                        alert("A hozzáadandó gpu nevét nem adta meg.");
+                    }
+                    else
+                    {
+                        var gpu = {
+                            gpu_name: $("#newgpuname").val()
+                        };
+
+                        $.ajax({
+                            url: "/mobilpiac-war/AddGpuServlet",
+                            type: "get",
+                            dataType: "json",
+                            data: {json: JSON.stringify(gpu)}
+                        }).success(function(data) {
+                            alert(data.message);
+                            if (data.result)
+                            {
+                                $.ajax({
+                                    url: "/mobilpiac-war/ListGpusServlet",
+                                    type: "get",
+                                    dataType: "json"
+                                }).success(function(data) {
+                                    self.gpus.removeAll();
+                                    for (key in data.gpus)
+                                    {
+                                        self.gpus.push(new Gpu(data.gpus[key]));
+                                    }
+                                });
+                                $("#newgpububble").slideToggle();
+                            }
+                        });
+                    }
+                });
+
+                $("#newsimsubnewmit").click(function(event) {
+                    event.preventDefault();
+                    if (!$("#newsimname").val())
+                    {
+                        alert("A hozzáadandó sim típus nevét nem adta meg.");
+                    }
+                    else
+                    {
+                        var sim = {
+                            sim_type: $("#newsimname").val()
+                        };
+
+                        $.ajax({
+                            url: "/mobilpiac-war/AddSimServlet",
+                            type: "get",
+                            dataType: "json",
+                            data: {json: JSON.stringify(sim)}
+                        }).success(function(data) {
+                            alert(data.message);
+                            if (data.result)
+                            {
+                                $.ajax({
+                                    url: "/mobilpiac-war/ListSimsServlet",
+                                    type: "get",
+                                    dataType: "json"
+                                }).success(function(data) {
+                                    self.sims.removeAll();
+                                    for (key in data.sims)
+                                    {
+                                        self.sims.push(new Sim(data.sims[key]));
+                                    }
+                                });
+                                $("#newsimbubble").slideToggle();
+                            }
+                        });
+                    }
+                });
+
+                $("#newprocessorsubnewmit").click(function(event) {
+                    event.preventDefault();
+                    if (!$("#newprocessorchipset").val() || !$("#newprocessorfamily").val() || !$("#newprocessorclock").val() || !$("#newprocessornumberofcores").val())
+                    {
+                        alert("Minden mezőt kötelező megadnia.");
+                    }
+                    else
+                    {
+                        var intRegex = /^\d+$/;
+                        if (!intRegex.test($("#newprocessorclock").val()) || !intRegex.test($("#newprocessornumberofcores").val()))
+                        {
+                            alert("Az órajelnek és a magok számának egész számnak kell lennie.");
+                        }
+                        else
+                        {
+                            var processor = {
+                                chipset: $("#newprocessorchipset").val(),
+                                family: $("#newprocessorfamily").val(),
+                                clock: $("#newprocessorclock").val(),
+                                number_of_cores: $("#newprocessornumberofcores").val()
+                            };
+
+                            $.ajax({
+                                url: "/mobilpiac-war/AddProcessorServlet",
+                                type: "get",
+                                dataType: "json",
+                                data: {json: JSON.stringify(processor)}
+                            }).success(function(data) {
+                                alert(data.message);
+                                if (data.result)
+                                {
+                                    $.ajax({
+                                        url: "/mobilpiac-war/ListProcessorsServlet",
+                                        type: "get",
+                                        dataType: "json"
+                                    }).success(function(data) {
+                                        self.processors.removeAll();
+                                        for (key in data.processors)
+                                        {
+                                            self.processors.push(new Processor(data.processors[key]));
+                                        }
+                                    });
+                                    $("#newprocessorbubble").slideToggle();
+                                }
+                            });
+                        }
+                    }
+
+                });
+
+
+
+
+
                 $(".close-bubble").click(function() {
                     $(this).parents(".bubble").slideUp();
                 });
@@ -564,142 +813,6 @@
                     alert("Ehhez a funkcióhoz be kell jelentkeznie.");
                 }
             });
-
-            $("#newossubnewmit").click(function(event) {
-                event.preventDefault();
-                if($("#newosname").val().size() === 0)
-                {
-                    alert("Nem adta meg az új operációs rendszer nevét.");
-                }
-                else
-                {
-                    var os = {
-                        os_name: $("#newosname").val()
-                    };
-
-                    $.ajax({
-                        url: "/mobilpiac-war/AddOperationSystemServlet",
-                        type: "get",
-                        dataType: "json",
-                        data: {json: JSON.stringify(os)}
-                    }).success(function(data) {
-                        alert(data.message);
-                        if (data.result)
-                        {
-                            $("#newosbubble").slideToggle();
-                        }
-                    });
-                }
-            });
-            
-            $("#newmanufacturersubnewmit").click(function(event) {
-                event.preventDefault();
-                var manufacturer = {
-                    manufacturer_name: $("#newmanufacturername").val()
-                };
-
-                $.ajax({
-                    url: "/mobilpiac-war/AddManufacturerServlet",
-                    type: "get",
-                    dataType: "json",
-                    data: {json: JSON.stringify(manufacturer)}
-                }).success(function(data) {
-                    alert(data.message);
-                    if (data.result)
-                    {
-                        $("#newmanufacturerbubble").slideToggle();
-                    }
-                });
-            });
-            
-            $("#newosversionsubnewmit").click(function(event) {
-                event.preventDefault();
-
-                var osversion = {
-                    os_name: $("#osslideselect").val(),
-                    os_version: $("#newosversionname").val()
-                };
-
-                $.ajax({
-                    url: "/mobilpiac-war/AddOsVersionServlet",
-                    type: "get",
-                    dataType: "json",
-                    data: {json: JSON.stringify(osversion)}
-                }).success(function(data) {
-                    alert(data.message);
-                    if (data.result)
-                    {
-                        $("#newosversionbubble").slideToggle();
-                    }
-                });
-            });
-            
-            $("#newgpusubnewmit").click(function(event) {
-                event.preventDefault();
-
-                var gpu = {
-                    gpu_name: $("#newgpuname").val()
-                };
-
-                $.ajax({
-                    url: "/mobilpiac-war/AddGpuServlet",
-                    type: "get",
-                    dataType: "json",
-                    data: {json: JSON.stringify(gpu)}
-                }).success(function(data) {
-                    alert(data.message);
-                    if (data.result)
-                    {
-                        $("#newgpububble").slideToggle();
-                    }
-                });
-            });
-            
-            $("#newsimsubnewmit").click(function(event) {
-                event.preventDefault();
-
-                var sim = {
-                    sim_type: $("#newsimname").val()
-                };
-
-                $.ajax({
-                    url: "/mobilpiac-war/AddSimServlet",
-                    type: "get",
-                    dataType: "json",
-                    data: {json: JSON.stringify(gpu)}
-                }).success(function(data) {
-                    alert(data.message);
-                    if (data.result)
-                    {
-                        $("#newsimbubble").slideToggle();
-                    }
-                });
-            });
-            
-            $("#newprocessorsubnewmit").click(function(event) {
-                event.preventDefault();
-
-                var processor = {
-                    chipset: $("#newprocessorchipset").val(),
-                    family: $("#newprocessorfamily").val(),
-                    clock: $("#newprocessorclock").val(),
-                    number_of_cores: $("#newprocessornumberofcores").val()
-                };
-
-                $.ajax({
-                    url: "/mobilpiac-war/AddProcessorServlet",
-                    type: "get",
-                    dataType: "json",
-                    data: {json: JSON.stringify(processor)}
-                }).success(function(data) {
-                    alert(data.message);
-                    if (data.result)
-                    {
-                        $("#newsimbubble").slideToggle();
-                    }
-                });
-            });
-            
         </script>
         <script>
             $(document).ready(function() {

@@ -80,6 +80,18 @@
         <servlet-name>AddGpuServlet</servlet-name>
         <servlet-class>hu.bme.aait.mobilpiac.servlets.AddGpuServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AddSimServlet</servlet-name>
+        <servlet-class>hu.bme.aait.mobilpiac.servlets.AddSimServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddProcessorServlet</servlet-name>
+        <servlet-class>hu.bme.aait.mobilpiac.servlets.AddProcessorServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddOsVersionServlet</servlet-name>
+        <servlet-class>hu.bme.aait.mobilpiac.servlets.AddOsVersionServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ListUsersServlet</servlet-name>
         <url-pattern>/ListUsersServlet</url-pattern>
@@ -159,6 +171,18 @@
     <servlet-mapping>
         <servlet-name>AddGpuServlet</servlet-name>
         <url-pattern>/AddGpuServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddSimServlet</servlet-name>
+        <url-pattern>/AddSimServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddProcessorServlet</servlet-name>
+        <url-pattern>/AddProcessorServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddOsVersionServlet</servlet-name>
+        <url-pattern>/AddOsVersionServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
