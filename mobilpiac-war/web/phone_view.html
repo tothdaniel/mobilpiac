@@ -54,7 +54,7 @@
                                     <input class="form-control" data-bind="html: next_price_ft, value: next_price" readonly="">
                                 </div>
                                 <div class="col-md-6">
-                                    <button type="button" class="form-control btn-md btn-primary">Licitálok</button>
+                                    <button data-bind="click: $parent.newbid" class="form-control btn-md btn-primary bidbutton">Licitálok</button>
                                 </div>
                             </div>
                         </div>
@@ -166,12 +166,35 @@
                     name: "MicroSD bővíthetőség: ",
                     value: data.microsd_enabled
                 });
+                this.function
             };
             
             function ViewModel() {
                 // Data
                 var self = this;
                 self.ad = ko.observableArray([]);
+                
+                self.newbid = function() {
+                    if ($.cookie("login_name") !== undefined)
+                    {
+                        $.ajax({
+                            url: "/mobilpiac-war/", // TODO
+                            type: "get",
+                            dataType: "json",
+                            data: {
+                                ad_id : getURLParameter("phone_id"),
+                                bid_price: self.ad()[0].next_price(),
+                                bid_user: $.cookie("login_name")
+                            }
+                        }).success(function(data) {                
+                            //TODO Mi legyen sikeres vagy nem sikeres licit esetén
+                        });
+                    }
+                    else {
+                        alert("Nincs jogod licitálni! Jelentkezz be!");
+                    }
+                };
+                
 
                 // Operations
                 $.ajax({
