@@ -287,6 +287,7 @@
                             manufacturers: getIds("manufacturer"),
                             sims: getIds("sim")          
                         };
+                        self.pageIndex(0);
                         self.getAds(JSON.stringify(filter));
                     });
 
