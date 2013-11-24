@@ -20,9 +20,8 @@ import org.json.simple.JSONObject;
  *
  * @author Daniel
  */
-public class ListOperationSystemsServlet extends HttpServlet {
+public class ListProcessorsServlet extends HttpServlet {
 
- 
     @EJB
     MobileSessionBean ms;
     
@@ -33,7 +32,7 @@ public class ListOperationSystemsServlet extends HttpServlet {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             JSONObject json = new JSONObject();
-            json.put("operationsystems",ms.listOperationSystems());
+            json.put("processors",ms.listProcessors());
             out.print(json);
         }
     }

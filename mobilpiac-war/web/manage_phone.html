@@ -54,108 +54,121 @@
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Típus neve:</label>
-                            <div class="col-sm-9">
+                            <div class="col-sm-8">
                                 <input type="text" class="form-control" required autofocus="">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Gyártó:</label>
-                            <div class="col-sm-9">
+                            <div class="col-sm-8">
                                 <select data-bind="foreach: manufacturers, visible: manufacturers().length > 0" class="form-control">
                                     <option data-bind="html: manufacturer_name"></option>
                                 </select>
                             </div>
+                            <button type="submit" class="btn btn-primary">+</button>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Operációs rendszer:</label>
-                            <div class="col-sm-5">
-                                <select data-bind="foreach: operationsystems, visible: operationsystems().length > 0" class="form-control">
+                            <div class="col-sm-3">
+                                <select id="osselect" data-bind="foreach: operationsystems, visible: operationsystems().length > 0" class="form-control">
                                     <option data-bind="html: os_name"></option>
                                 </select>
                             </div>
+                            <div class="col-sm-1">
+                                <button type="submit" class="btn btn-primary">+</button>
+                            </div>
+                            
                             <div class="col-sm-4">
-                                <select class="form-control">
-                                    <option>v4.2</option>
+                                <select data-bind="foreach: osversions, visible: osversions().length > 0" class="form-control">
+                                    <option data-bind="html: version_name"></option>
                                 </select>
                             </div>
+                            <div>
+                                <button type="submit" class="btn btn-primary">+</button>
+                            </div>
+                            
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Processzor:</label>
-                            <div class="col-sm-9">
-                                <select class="form-control">
-                                    <option>Qualcomm</option>
+                            <div class="col-sm-8">
+                                <select data-bind="foreach: processors, visible: processors().length > 0" class="form-control">
+                                    <option data-bind="html: chipset"></option>
                                 </select>
                             </div>
+                            <button type="submit" class="btn btn-primary">+</button>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Grafikus processzor:</label>
-                            <div class="col-sm-9">
-                                <select class="form-control">
-                                    <option>Qualcomm</option>
+                            <div class="col-sm-8">
+                                <select data-bind="foreach: gpus, visible: gpus().length > 0" class="form-control">
+                                    <option data-bind="html: gpu_name"></option>
                                 </select>
                             </div>
+                            <button type="submit" class="btn btn-primary">+</button>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Sim kártya típus:</label>
-                            <div class="col-sm-9">
-                                <select class="form-control">
-                                    <option>Qualcomm</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">Memóriakártya foglalat:</label>
-                            <div class="col-sm-9">
+                            <div class="col-sm-8">
                                 <select data-bind="foreach: sims, visible: sims().length > 0" class="form-control">
                                     <option data-bind="html: sim_type"></option>
                                 </select>
                             </div>
+                            <button type="submit" class="btn btn-primary">+</button>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">RAM mérete:</label>
-                            <div class="col-sm-9">
+                            <label class="col-sm-3 control-label">microSD foglalat:</label>
+                            <div class="col-sm-8">
+                                <select class="form-control">
+                                    <option>Van</option>
+                                    <option>Nincs</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">RAM mérete (Mb):</label>
+                            <div class="col-sm-8">
                                 <input type="text" class="form-control" required autofocus="">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">ROM mérete:</label>
-                            <div class="col-sm-9">
+                            <label class="col-sm-3 control-label">ROM mérete (Gb):</label>
+                            <div class="col-sm-8">
                                 <input type="text" class="form-control" required autofocus="">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Felbontás:</label>
-                            <div class="col-sm-4">
+                            <div class="col-sm-3">
                                 <input type="text" class="form-control" required autofocus="">
                             </div>
-                            <b class="col-sm-1 text-center" style="margin-top:5px;">
+                            <b class="col-sm-2 text-center" style="margin-top:5px;">
                                 x
                             </b>
-                            <div class="col-sm-4">
+                            <div class="col-sm-3">
                                 <input type="text" class="form-control" required autofocus="">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Képpontsűrűség:</label>
-                            <div class="col-sm-9">
+                            <div class="col-sm-8">
                                 <input type="text" class="form-control" required autofocus="">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Kijelző mérete:</label>
-                            <div class="col-sm-9">
+                            <div class="col-sm-8">
                                 <input type="text" class="form-control" required autofocus="">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">Kamera:</label>
-                            <div class="col-sm-9">
+                            <label class="col-sm-3 control-label">Kamera (Mpixel):</label>
+                            <div class="col-sm-8">
                                 <input type="text" class="form-control" required autofocus="">
                             </div>
                         </div>
                         <div class="form-group text-center">
                             <button type="submit" class="btn btn-primary">Adatlap mentése</button>
-                            <button type="reset" class="btn bnt-default">Változtatások elvetése</button>
+                            <button type="reset" class="btn btn-danger">Törlés</button>
                         </div>
                     </div>
                 </div>
@@ -216,9 +229,24 @@
                 this.sim_type = ko.observable(data.sim_type);
             };
             
+            var Gpu = function(data) {
+                this.id = ko.observable(data.id);
+                this.gpu_name = ko.observable(data.gpu_name);
+            };
+            
             var OperationSystem = function(data) {
                 this.id = ko.observable(data.id);
                 this.os_name = ko.observable(data.os_name);
+            };
+            
+            var OsVersion = function(data) {
+                this.id = ko.observable(data.id);
+                this.version_name = ko.observable(data.version_name);
+            };
+            
+            var Processor = function(data) {
+                this.id = ko.observable(data.id);
+                this.chipset = ko.observable(data.chipset);
             };
 
             function ViewModel() {
@@ -227,7 +255,10 @@
                 self.mobiles = ko.observableArray([]);
                 self.manufacturers = ko.observableArray([]);
                 self.sims = ko.observableArray([]);
+                self.gpus = ko.observableArray([]);
                 self.operationsystems = ko.observableArray([]);
+                self.osversions = ko.observableArray([]);
+                self.processors = ko.observableArray([]);
 
                 // Operations
                  $.ajax({
@@ -249,6 +280,17 @@
                     for (key in data.sims)
                     {
                         self.sims.push(new Sim(data.sims[key]));
+                    }
+                });
+                
+                $.ajax({
+                    url: "/mobilpiac-war/ListGpusServlet",
+                    type: "get",
+                    dataType: "json"
+                }).success(function(data) {
+                    for (key in data.gpus)
+                    {
+                        self.gpus.push(new Gpu(data.gpus[key]));
                     }
                 });
 
@@ -273,6 +315,53 @@
                         self.operationsystems.push(new OperationSystem(data.operationsystems[key]));
                     }
                 });
+                
+                var os = {
+                    operation_system: $("#osselect").val()  
+                };
+                
+                $.ajax({
+                    url: "/mobilpiac-war/ListOsVersionsServlet",
+                    type: "get",
+                    dataType: "json",
+                    data: {json:JSON.stringify(os)}
+                }).success(function(data) {
+                    self.osversions.removeAll();
+                    for (key in data.osversions)
+                    {
+                        self.osversions.push(new OsVersion(data.osversions[key]));
+                    }
+                });
+                
+                $.ajax({
+                    url: "/mobilpiac-war/ListProcessorsServlet",
+                    type: "get",
+                    dataType: "json"
+                }).success(function(data) {
+                    for (key in data.processors)
+                    {
+                        self.processors.push(new Processor(data.processors[key]));
+                    }
+                });
+                //ezzel frissul a verziolista, alapbol az Androidot tolti be
+                $("#osselect").change(function(event){
+                        event.preventDefault();
+                        var os = {
+                            operation_system: $("#osselect").val()
+                        };
+                        $.ajax({
+                            url: "/mobilpiac-war/ListOsVersionsServlet",
+                            type: "get",
+                            dataType: "json",
+                            data: {json:JSON.stringify(os)}
+                        }).success(function(data) {
+                            self.osversions.removeAll();
+                            for (key in data.osversions)
+                            {
+                                self.osversions.push(new OsVersion(data.osversions[key]));
+                            }
+                        }); 
+                 });
                 
             }
 

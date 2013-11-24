@@ -8,10 +8,14 @@ package hu.bme.aait.mobilpiac.beans;
 
 import hu.bme.aait.mobilpiac.entities.Advertisement;
 import hu.bme.aait.mobilpiac.entities.Bids;
+import hu.bme.aait.mobilpiac.entities.Gpu;
 import hu.bme.aait.mobilpiac.entities.Manufacturer;
 import hu.bme.aait.mobilpiac.entities.MobileNetwork;
 import hu.bme.aait.mobilpiac.entities.OperationSystem;
+import static hu.bme.aait.mobilpiac.entities.OperationSystem_.osName;
+import hu.bme.aait.mobilpiac.entities.OsVersion;
 import hu.bme.aait.mobilpiac.entities.PhoneType;
+import hu.bme.aait.mobilpiac.entities.Processor;
 import hu.bme.aait.mobilpiac.entities.Sim;
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -190,6 +194,19 @@ public class MobileSessionBean {
         return jarray;
     }
     
+    public JSONArray listGpus(){
+        List<Gpu> gpusList = em.createQuery("SELECT g FROM Gpu g ORDER BY g.gpuName").getResultList();
+        JSONArray jarray = new JSONArray();
+        for(Gpu g:gpusList)
+        {
+            JSONObject obj = new JSONObject();
+            obj.put("id", g.getId());
+            obj.put("gpu_name", g.getGpuName());
+            jarray.add(obj);
+        }
+        return jarray;
+    }
+    
     public JSONArray listOperationSystems(){
     List<OperationSystem> osList = em.createQuery("SELECT o FROM OperationSystem o").getResultList();
         JSONArray jarray = new JSONArray();
@@ -198,6 +215,56 @@ public class MobileSessionBean {
             JSONObject obj = new JSONObject();
             obj.put("id", o.getId());
             obj.put("os_name", o.getOsName());
+            jarray.add(obj);
+        }
+        return jarray;
+    }
+    
+    public JSONArray listOsVersions(String jobj){
+        org.json.JSONObject myobj = new org.json.JSONObject(jobj);
+        List<OperationSystem> oList = em.createQuery("SELECT o FROM OperationSystem o").getResultList();
+        JSONArray jarray = new JSONArray();
+        
+        OperationSystem os = null;
+        for(OperationSystem o:oList)
+        {
+            if(o.getOsName().equals(myobj.get("operation_system")))
+            {
+                os = o;
+            }
+        }
+        if(os == null)
+        {
+            List<OsVersion> osvList = em.createQuery("SELECT o FROM OsVersion o WHERE o.fkOs.id=1 ORDER BY o.versionName").getResultList();
+            for(OsVersion osv:osvList)
+            {
+                JSONObject obj = new JSONObject();
+                obj.put("id", osv.getId());
+                obj.put("version_name", osv.getVersionName());
+                jarray.add(obj);
+            }
+        }
+        else
+        {
+            for(OsVersion osv:os.getOsVersionList())
+            {
+                JSONObject obj = new JSONObject();
+                obj.put("id", osv.getId());
+                obj.put("version_name", osv.getVersionName());
+                jarray.add(obj);
+            }
+        }
+        return jarray;
+    }
+    
+    public JSONArray listProcessors(){
+        List<Processor> pList = em.createQuery("SELECT p FROM Processor p").getResultList();
+        JSONArray jarray = new JSONArray();
+        for(Processor p:pList)
+        {
+            JSONObject obj = new JSONObject();
+            obj.put("id", p.getId());
+            obj.put("chipset", p.getChipset());
             jarray.add(obj);
         }
         return jarray;

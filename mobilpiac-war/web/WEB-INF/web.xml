@@ -56,6 +56,18 @@
         <servlet-name>ListOperationSystemsServlet</servlet-name>
         <servlet-class>hu.bme.aait.mobilpiac.servlets.ListOperationSystemsServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ListProcessorsServlet</servlet-name>
+        <servlet-class>hu.bme.aait.mobilpiac.servlets.ListProcessorsServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListOsVersionsServlet</servlet-name>
+        <servlet-class>hu.bme.aait.mobilpiac.servlets.ListOsVersionsServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListGpusServlet</servlet-name>
+        <servlet-class>hu.bme.aait.mobilpiac.servlets.ListGpusServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ListUsersServlet</servlet-name>
         <url-pattern>/ListUsersServlet</url-pattern>
@@ -111,6 +123,18 @@
     <servlet-mapping>
         <servlet-name>ListOperationSystemsServlet</servlet-name>
         <url-pattern>/ListOperationSystemsServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListProcessorsServlet</servlet-name>
+        <url-pattern>/ListProcessorsServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListOsVersionsServlet</servlet-name>
+        <url-pattern>/ListOsVersionsServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListGpusServlet</servlet-name>
+        <url-pattern>/ListGpusServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
