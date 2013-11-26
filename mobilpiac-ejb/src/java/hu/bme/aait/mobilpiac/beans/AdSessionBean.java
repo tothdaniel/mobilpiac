@@ -19,6 +19,7 @@ import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -58,10 +59,14 @@ public class AdSessionBean {
     }
     
     public JSONObject getJSONObject(String id) {
-        List<Advertisement> adList = em.createQuery("SELECT a FROM Advertisement a WHERE a.id="+id).getResultList();
-        Advertisement a =adList.get(0);
         
-        List<Bids> bidList = em.createQuery("SELECT b FROM Bids b WHERE b.advertisementId.id ="+a.getId()).getResultList();
+        TypedQuery<Advertisement> query = em.createQuery("SELECT a FROM Advertisement a WHERE a.id = :pid", Advertisement.class);
+        query.setParameter("pid", Long.parseLong(id));        
+        Advertisement a = query.getSingleResult();
+
+        TypedQuery<Bids> query2 = em.createQuery("SELECT b FROM Bids b WHERE b.advertisementId.id = :pid", Bids.class);
+        query2.setParameter("pid", Long.parseLong(id));
+        List<Bids> bidList = query2.getResultList();
         int actPrice = a.getMinPrice();
         for (Bids b : bidList) {
             if (b.getPrice() > actPrice) {
@@ -159,14 +164,18 @@ public class AdSessionBean {
         
         for(Advertisement a:adsList)
         {
-            List<Bids> bidList = em.createQuery("SELECT b FROM Bids b WHERE b.advertisementId.id ="+a.getId()).getResultList();
+            //a tovabbi szureseket nem jpql-ben, hanem entitasonkent vegzem, nem akartam egy listaval (for... or)
+            //osszehasonlitani
+            TypedQuery<Bids> query = em.createQuery("SELECT b FROM Bids b WHERE b.advertisementId.id = :id", Bids.class);
+            query.setParameter("id", a.getId());
+            List<Bids> bidList = query.getResultList();
             int actPrice = a.getMinPrice();
             for (Bids b : bidList) {
                 if (b.getPrice() > actPrice) {
                     actPrice = b.getPrice();
                 }
             }
-            
+            //aktualis ar beleesik-e az intervallumba
             if(actPrice >= minPrice && actPrice <= maxPrice)
             {
                 for(int mn:mobileNetworkList)

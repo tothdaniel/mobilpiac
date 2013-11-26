@@ -15,6 +15,7 @@ import hu.bme.aait.mobilpiac.entities.OsVersion;
 import hu.bme.aait.mobilpiac.entities.PhoneType;
 import hu.bme.aait.mobilpiac.entities.Processor;
 import hu.bme.aait.mobilpiac.entities.Sim;
+import hu.bme.aait.mobilpiac.entities.Users;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -65,8 +66,9 @@ public class MobileSessionBean {
     }
 
     public JSONObject getJSONObject(String id) {
-        List<PhoneType> phoneList = em.createQuery("SELECT p FROM PhoneType p WHERE p.id=" + id).getResultList();
-        PhoneType p = phoneList.get(0);
+        TypedQuery<PhoneType> query = em.createQuery("SELECT p FROM PhoneType p WHERE p.id = :pid", PhoneType.class);
+        query.setParameter("pid", Long.parseLong(id));
+        PhoneType p = query.getSingleResult();
 
         JSONObject obj = new JSONObject();
         obj.put("id", p.getId());
@@ -140,13 +142,16 @@ public class MobileSessionBean {
         for (PhoneType p : phonesList) {
             //az elso 12-t listazza csak ki, ezek a legnezettebbek
             if (cntr < 12) {
-                List<Advertisement> advertisementList = em.createQuery("SELECT "
-                        + "a FROM Advertisement a WHERE a.fkPhoneType.id=" + p.getId()
-                ).getResultList();
+                TypedQuery<Advertisement> query = em.createQuery("SELECT a FROM Advertisement a WHERE a.fkPhoneType.id = :pid", Advertisement.class);
+                query.setParameter("pid", p.getId());
+                List<Advertisement> advertisementList = query.getResultList();
+                
                 int cheapest = 1000000;
                 for (Advertisement a : advertisementList) {
-                    List<Bids> bidList = em.createQuery("SELECT b FROM Bids b WHERE b.advertisementId.fkPhoneType.id =" + p.getId()).getResultList();
-
+                    TypedQuery<Bids> query2 = em.createQuery("SELECT b FROM Bids b WHERE b.advertisementId.fkPhoneType.id = :pid", Bids.class);
+                    query2.setParameter("pid", p.getId());
+                    List<Bids> bidList = query2.getResultList();
+                    
                     int actPrice = a.getMinPrice();
                     for (Bids b : bidList) {
                         if (b.getPrice() > actPrice) {
