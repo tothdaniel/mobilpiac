@@ -1,45 +1,45 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-    <title>MobilPiactér</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta charset="utf-8"> 
-    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link href="lib/slider/css/slider.css" rel="stylesheet" media="screen">
-    <link href="css/style.css" rel="stylesheet" media="screen">
-</head>
+    <head>
+        <title>MobilPiactér</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="utf-8"> 
+        <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="lib/slider/css/slider.css" rel="stylesheet" media="screen">
+        <link href="css/style.css" rel="stylesheet" media="screen">
+    </head>
 
-<body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <a href="index.html" class="navbar-brand">MobilPiactér</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <div class="navbar-right navbar-form">
-                    <a id="managebtn" style="visibility: hidden;" class="btn btn-default">Telefontípusok menedzselése</a>
-                    <a id="newadbtn" class="btn btn-default">Hirdetés feladása</a>
-                    <a id="regbtn" href="registration.html" class="btn btn-default">Regisztráció</a>
-                    <a id="logbtn" href="signin.html" class="btn btn-default">Bejelentkezés</a>
+    <body>
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <a href="index.html" class="navbar-brand">MobilPiactér</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <div class="navbar-right navbar-form">
+                        <a id="managebtn" style="visibility: hidden;" class="btn btn-default">Telefontípusok menedzselése</a>
+                        <a id="newadbtn" class="btn btn-default">Hirdetés feladása</a>
+                        <a id="regbtn" href="registration.html" class="btn btn-default">Regisztráció</a>
+                        <a id="logbtn" href="signin.html" class="btn btn-default">Bejelentkezés</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <br/><br/><br/>
-    
-    <div class="container">
+        <br/><br/><br/>
 
-        <div class="row">
-            <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
-                <div class="text-center">
-                	<div class="thumbnail">
+        <div class="container">
+
+            <div class="row">
+                <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                    <div class="text-center">
+                        <div class="thumbnail">
                             <h4 style="margin-top: 5px;">Ár</h4>
                             <input type="text" class="col-sm-10" data-slider-min="1000" data-slider-max="100000" data-slider-step="1000" data-slider-value="[1000,100000]" id="price">
                             <div class="clearfix"></div>
                             <b><span id="minprice">1000</span> Ft - <span id="maxprice">100000</span> Ft</b>
-                	</div>
-                	<div class="thumbnail multiple-choice">
+                        </div>
+                        <div class="thumbnail multiple-choice">
                             <h4 style="margin-top: 5px;">Szolgáltató</h4>
                             <ul data-bind="foreach: mobileNetworks, visible: mobileNetworks().length > 0">
                                 <li>
@@ -48,8 +48,8 @@
                                     </label>
                                 </li>
                             </ul>
-                	</div>
-                	<div class="thumbnail multiple-choice">
+                        </div>
+                        <div class="thumbnail multiple-choice">
                             <h4 style="margin-top: 5px;">Gyártó</h4>
                             <ul data-bind="foreach: manufacturers, visible: manufacturers().length > 0">
                                 <li>
@@ -58,8 +58,8 @@
                                     </label>
                                 </li>
                             </ul>
-                	</div>
-                	<div class="thumbnail multiple-choice">
+                        </div>
+                        <div class="thumbnail multiple-choice">
                             <h4 style="margin-top: 5px;">SIM kártya típus</h4>
                             <ul style="height: 70px; overflow: auto;" data-bind="foreach: sims, visible: sims().length > 0">
                                 <li>
@@ -68,82 +68,82 @@
                                     </label>
                                 </li>
                             </ul>
-                	</div>
+                        </div>
                         <div>
                             <a href="#" id="filter" class="btn btn-primary">Szűrés</a>
                         </div>
-                </div>
-            </div>
-            <div class="col-xs-8 col-sm-9 col-md-9 col-lg-9">
-                <div class="row" data-bind="visible: mobiles().length == 0">
-                    <div class="thumbnail" style="text-align: center;height: 135px;">
-                        <br/>
-                        <h1>Nincs találat!</h1>
                     </div>
                 </div>
-                <div class="row" data-bind="foreach: pagedMobiles, visible: mobiles().length > 0">
-                    <div class="thumbnail">
-                        <div class="row">
-                            <a id="phoneviewbtn" data-bind="attr : { href : phone_view_link}">
-                                <h3 data-bind="html: title" class="col-xs-4" style="margin-top: 10px;"></h3>
-                            </a>
-                            <h3 class="col-xs-push-2 col-xs-5" style="margin-top: 10px; text-align: right;">
-                                Aktuális ár: <span data-bind="html: actual_price"></span> Ft
-                            </h3>
-                            <div class="clearfix"></div>
-                            <img data-bind="attr:{src: image_url}" style="width:50px;float:left;position:relative;margin-left: 16px;margin-right: 5px;">
-                            <div data-bind="html: os" class="col-xs-5 thumbnail" style="margin-right: 5px;"></div>
-                            <div data-bind="html: rom" class="col-xs-5 thumbnail" style="margin-right: 5px;"></div>
-                            <div data-bind="html: screen" class="col-xs-5 thumbnail" style="margin-right: 5px;"></div>
-                            <div data-bind="html: ram" class="col-xs-5 thumbnail" style="margin-right: 5px;"></div>
-                            <div data-bind="html: processor" class="col-xs-5 thumbnail" style="margin-right: 5px;"></div>
-                            <div data-bind="html: rear_camera" class="col-xs-5 thumbnail" style="margin-right: 5px;"></div>
-                            <div class="clearfix"></div>
-                            <div class="col-xs-4" style="margin-right: 5px;">Feladva: <span data-bind="html: published">2013-06-06 18:18:18</span></div>
-                            <div class="col-xs-push-3 col-xs-4" style="margin-right: 5px;text-align: right;">Feladó: <span data-bind="html: seller_user">Én</span></div>
+                <div class="col-xs-8 col-sm-9 col-md-9 col-lg-9">
+                    <div class="row" data-bind="visible: mobiles().length == 0">
+                        <div class="thumbnail" style="text-align: center;height: 135px;">
+                            <br/>
+                            <h1>Nincs találat!</h1>
                         </div>
-                    </div>					
-                </div>
-                <div class="pager" data-bind="visible: mobiles().length > 0">
-                    <ul style="display: inline;"><li data-bind="css: { disabled: pageIndex() === 0 }"><a href="#" data-bind="click: previousPage">&larr; Előző</a></li></ul>
-                    <ul style="display: inline;" data-bind="foreach: allPages">
-                        <li data-bind="css: { active: $data.pageNumber === ($root.pageIndex() + 1) }"><a href="#" data-bind="text: $data.pageNumber, click: function() { $root.moveToPage($data.pageNumber-1); }"></a></li>
-                    </ul>
-                    <ul style="display: inline;"><li data-bind="css: { disabled: pageIndex() === maxPageIndex() }"><a href="#" data-bind="click: nextPage">Következő &rarr;</a></li></ul>
+                    </div>
+                    <div class="row" data-bind="foreach: pagedMobiles, visible: mobiles().length > 0">
+                        <div class="thumbnail">
+                            <div class="row">
+                                <a id="phoneviewbtn" data-bind="attr : { href : phone_view_link}">
+                                    <h3 data-bind="html: title" class="col-xs-4" style="margin-top: 10px;"></h3>
+                                </a>
+                                <h3 class="col-xs-push-2 col-xs-5" style="margin-top: 10px; text-align: right;">
+                                    Aktuális ár: <span data-bind="html: actual_price"></span> Ft
+                                </h3>
+                                <div class="clearfix"></div>
+                                <img data-bind="attr:{src: image_url}" style="width:50px;float:left;position:relative;margin-left: 16px;margin-right: 5px;">
+                                <div data-bind="html: os" class="col-xs-5 thumbnail" style="margin-right: 5px;"></div>
+                                <div data-bind="html: rom" class="col-xs-5 thumbnail" style="margin-right: 5px;"></div>
+                                <div data-bind="html: screen" class="col-xs-5 thumbnail" style="margin-right: 5px;"></div>
+                                <div data-bind="html: ram" class="col-xs-5 thumbnail" style="margin-right: 5px;"></div>
+                                <div data-bind="html: processor" class="col-xs-5 thumbnail" style="margin-right: 5px;"></div>
+                                <div data-bind="html: rear_camera" class="col-xs-5 thumbnail" style="margin-right: 5px;"></div>
+                                <div class="clearfix"></div>
+                                <div class="col-xs-4" style="margin-right: 5px;">Feladva: <span data-bind="html: published">2013-06-06 18:18:18</span></div>
+                                <div class="col-xs-push-3 col-xs-4" style="margin-right: 5px;text-align: right;">Feladó: <span data-bind="html: seller_user">Én</span></div>
+                            </div>
+                        </div>					
+                    </div>
+                    <div class="pager" data-bind="visible: mobiles().length > 0">
+                        <ul style="display: inline;"><li data-bind="css: { disabled: pageIndex() === 0 }"><a href="#" data-bind="click: previousPage">&larr; Előző</a></li></ul>
+                        <ul style="display: inline;" data-bind="foreach: allPages">
+                            <li data-bind="css: { active: $data.pageNumber === ($root.pageIndex() + 1) }"><a href="#" data-bind="text: $data.pageNumber, click: function() { $root.moveToPage($data.pageNumber-1); }"></a></li>
+                        </ul>
+                        <ul style="display: inline;"><li data-bind="css: { disabled: pageIndex() === maxPageIndex() }"><a href="#" data-bind="click: nextPage">Következő &rarr;</a></li></ul>
+                    </div>
                 </div>
             </div>
+
+            <hr>
+
+            <footer>
+                <p>&copy; DaniPeti 2013</p>
+            </footer>
         </div>
+        <!-- /container -->
 
-        <hr>
+        <script src="lib/jquery-2.0.3.min.js"></script>
+        <script src="lib/jquery.cookie.js"></script>
+        <script src="lib/knockout-3.0.0.js"></script>
+        <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+        <script src="lib/slider/js/bootstrap-slider.js"></script>
+        <script>
+            var price;
+            var firstFilter = true;
+            $(function() {
+                var priceChange = function() {
+                    var newPrice = price.getValue();
+                    $("#minprice").text(newPrice[0]);
+                    $("#maxprice").text(newPrice[1]);
+                };
+                var priceFormat = function(price) {
+                    return price + " Ft";
+                };
+                price = $('#price').slider({formater: priceFormat}).on('slide', priceChange).data('slider');
 
-        <footer>
-            <p>&copy; DaniPeti 2013</p>
-        </footer>
-    </div>
-    <!-- /container -->
-
-    <script src="lib/jquery-2.0.3.min.js"></script>
-    <script src="lib/jquery.cookie.js"></script>
-    <script src="lib/knockout-3.0.0.js"></script>
-    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
-    <script src="lib/slider/js/bootstrap-slider.js"></script>
-    <script>
-        var price;
-        var firstFilter = true;
-	$(function(){
-		var priceChange = function() {
-			var newPrice = price.getValue();
-			$("#minprice").text(newPrice[0]);
-			$("#maxprice").text(newPrice[1]);
-		};
-		var priceFormat = function(price) {
-			return price+" Ft";
-		};
-		price = $('#price').slider({formater:priceFormat}).on('slide', priceChange).data('slider');
-	
                 var Mobile = function(data) {
                     this.phone_view_link = ko.computed(function() {
-                        return "phone_view.html?ad_id="+data.id;
+                        return "phone_view.html?ad_id=" + data.id;
                     }, this);
                     this.actual_price = ko.observable(data.actual_price);
                     this.published = ko.observable(data.published);
@@ -198,199 +198,225 @@
                     self.mobileNetworks = ko.observableArray([]);
                     self.manufacturers = ko.observableArray([]);
                     self.sims = ko.observableArray([]);
-                    
+
                     self.pageSize = ko.observable(3);
                     self.pageIndex = ko.observable(0);
-                    
-                    self.pagedMobiles = ko.dependentObservable(function () {
+
+                    self.pagedMobiles = ko.dependentObservable(function() {
                         var size = self.pageSize();
                         var start = self.pageIndex() * size;
                         return self.mobiles.slice(start, start + size);
                     });
-                    self.maxPageIndex = ko.dependentObservable(function () {
-                        return Math.ceil(self.mobiles().length/self.pageSize())-1;
+                    self.maxPageIndex = ko.dependentObservable(function() {
+                        return Math.ceil(self.mobiles().length / self.pageSize()) - 1;
                     });
-                    self.previousPage = function () {
+                    self.previousPage = function() {
                         if (self.pageIndex() > 0) {
                             self.pageIndex(self.pageIndex() - 1);
                         }
                     };
-                    self.nextPage = function () {
+                    self.nextPage = function() {
                         if (self.pageIndex() < self.maxPageIndex()) {
                             self.pageIndex(self.pageIndex() + 1);
                         }
                     };
-                    self.allPages = ko.dependentObservable(function () {
+                    self.allPages = ko.dependentObservable(function() {
                         var pages = [];
-                        for (i = 0; i <= self.maxPageIndex() ; i++) {
-                            pages.push({ pageNumber: (i + 1) });
+                        for (i = 0; i <= self.maxPageIndex(); i++) {
+                            pages.push({pageNumber: (i + 1)});
                         }
                         return pages;
                     });
-                    self.moveToPage = function (index) {
+                    self.moveToPage = function(index) {
                         self.pageIndex(index);
                     };
-                    
-                    
+
+
                     // Operations
                     $.ajax({
                         url: "/mobilpiac-war/ListMobileNetworksServlet",
                         type: "get",
                         dataType: "json"
                     }).success(function(data) {
-                        for(key in data.mobile_networks)
-                        {                 
-                            data.mobile_networks[key].checked = false;                    
+                        for (key in data.mobile_networks)
+                        {
+                            data.mobile_networks[key].checked = false;
                             self.mobileNetworks.push(new MobileNetwork(data.mobile_networks[key]));
-                        }   
-                    });
-
-                    $.ajax({
-                        url: "/mobilpiac-war/ListSimsServlet",
-                        type: "get",
-                        dataType: "json"
-                    }).success(function(data) {
-                        for(key in data.sims)
-                        {
-                            data.sims[key].checked = false;   
-                            self.sims.push(new Sim(data.sims[key]));
-                        }   
-                    });
-
-                    $.ajax({
-                        url: "/mobilpiac-war/ListManufacturersServlet",
-                        type: "get",
-                        dataType: "json"
-                    }).success(function(data) {
-                        for(key in data.manufacturers)
-                        {
-                            data.manufacturers[key].checked = false;
-                            if (getURLParameter("manufacturer") == data.manufacturers[key].id)
-                            {
-                                data.manufacturers[key].checked = true;
-                            }
-                            self.manufacturers.push(new Manufacturer(data.manufacturers[key]));
-                        }   
-                    });
-
-                    self.getAds = function(filter) {
-                        $.ajax({
-                            url: "/mobilpiac-war/ListAdsServlet",
-                            type: "get",
-                            dataType: "json",
-                            data: {json:filter}
-                        }).success(function(data) {
-                            self.mobiles.removeAll();
-                            for(key in data.advertisements)
-                            {         
-                                self.mobiles.push(new Mobile(data.advertisements[key]));
-                            }  
-                        });
-                    };
-
-                    $("#filter").click(function(){
-                        var newPrice = price.getValue();
-                        var filter = {
-                            min_price: newPrice[0],
-                            max_price: newPrice[1],
-                            mobile_networks: getIds("mobileNetwork"),
-                            manufacturers: getIds("manufacturer"),
-                            sims: getIds("sim")          
-                        };
-                        if (firstFilter && getURLParameter("manufacturer") != 'null')
-                        {
-                            filter.manufacturers.push(getURLParameter("manufacturer"));
                         }
-                        self.pageIndex(0);
-                        self.getAds(JSON.stringify(filter));
-                        firstFilter = false;
                     });
 
-                    $("#filter").click();
-
-                    return self;
-                }
-
-                function getIds(name) {
-                    var ids = $("input[name='"+name+"']:checked").map(function(){
-                        return $(this).val();
-                    }).get();
-                    return ids;
-                }
-
-                ko.applyBindings(new ViewModel());
-                
-                function getURLParameter(name) {
-                    return decodeURI(
-                        (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]
-                    );
-                }
-        });
-    </script>
-     <script>
-         $("#logbtn").click(function(event){
-            if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined){
-                
-                var auth = {
-                    login_name : $.cookie("login_name"),
-                    password : $.cookie("password")
-                };
-                $.ajax({
-                    url: "/mobilpiac-war/CheckUserServlet",
-                    type: "get",
-                    dataType: "json",
-                    data: auth
-                }).success(function(data) {                  
-                    if (data.result)
-                    {
-                        $.ajax({
-                            url: "/mobilpiac-war/LogoutServlet",
+                    $.ajax({
+                            url: "/mobilpiac-war/ListSimsServlet",
                             type: "get",
                             dataType: "json"
-                        }).success(function(data2) {
-                            alert(data2.message);
-                            //if (data2.result)
-                            //{
-                                document.location.href="index.html";
-                            //}
+                        }).success(function(data) {
+                            for(key in data.sims)
+                            {
+                                data.sims[key].checked = false;   
+                                self.sims.push(new Sim(data.sims[key]));
+                            }   
                         });
+
+                        $.ajax({
+                            url: "/mobilpiac-war/ListManufacturersServlet",
+                            type: "get",
+                            dataType: "json"
+                        }).success(function(data) {
+                            for(key in data.manufacturers)
+                            {
+                                data.manufacturers[key].checked = false;
+                                if (getURLParameter("manufacturer") == data.manufacturers[key].id)
+                                {
+                                    data.manufacturers[key].checked = true;
+                                }
+                                self.manufacturers.push(new Manufacturer(data.manufacturers[key]));
+                            }   
+                        });
+
+                        self.getAds = function(filter) {
+                            $.ajax({
+                                url: "/mobilpiac-war/ListAdsServlet",
+                                type: "get",
+                                dataType: "json",
+                                data: {json:filter}
+                            }).success(function(data) {
+                                self.mobiles.removeAll();
+                                for(key in data.advertisements)
+                                {         
+                                    self.mobiles.push(new Mobile(data.advertisements[key]));
+                                }  
+                            });
+                        };
+
+                        $("#filter").click(function(){
+                            var newPrice = price.getValue();
+                            var filter = {
+                                min_price: newPrice[0],
+                                max_price: newPrice[1],
+                                mobile_networks: getIds("mobileNetwork"),
+                                manufacturers: getIds("manufacturer"),
+                                sims: getIds("sim")          
+                            };
+                            if (firstFilter && getURLParameter("manufacturer") != 'null')
+                            {
+                                filter.manufacturers.push(getURLParameter("manufacturer"));
+                            }
+                            self.pageIndex(0);
+                            self.getAds(JSON.stringify(filter));
+                            firstFilter = false;
+                        });
+
+                        $("#filter").click();
+
+                        return self;
                     }
-                    else
-                    {
-                        alert(data);
+
+                    function getIds(name) {
+                        var ids = $("input[name='"+name+"']:checked").map(function(){
+                            return $(this).val();
+                        }).get();
+                        return ids;
                     }
-                });
-            }
-         });
+
+                    ko.applyBindings(new ViewModel());
+                
+                    function getURLParameter(name) {
+                        return decodeURI(
+                            (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]
+                        );
+                    }
+            });
+        </script>
+        <script>
+            $("#logbtn").click(function(event){
+               if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined){
+                
+                   var auth = {
+                       login_name : $.cookie("login_name"),
+                       password : $.cookie("password")
+                   };
+                   $.ajax({
+                       url: "/mobilpiac-war/CheckUserServlet",
+                       type: "get",
+                       dataType: "json",
+                       data: auth
+                   }).success(function(data) {                  
+                       if (data.result)
+                       {
+                           $.ajax({
+                               url: "/mobilpiac-war/LogoutServlet",
+                               type: "get",
+                               dataType: "json"
+                           }).success(function(data2) {
+                               alert(data2.message);
+                               //if (data2.result)
+                               //{
+                                   document.location.href="index.html";
+                               //}
+                           });
+                       }
+                       else
+                       {
+                           alert(data);
+                       }
+                   });
+               }
+            });
          
-         $("#managebtn").click(function(event){
-            if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined){
-                var auth = {
-                    login_name : $.cookie("login_name"),
-                    password : $.cookie("password")
-                };
-                $.ajax({
-                    url: "/mobilpiac-war/CheckAdminServlet",
-                    type: "get",
-                    dataType: "json",
-                    data: auth
-                }).success(function(data) {                  
-                    if (!data.result)
-                    {
-                        alert(data.message);
-                    }
-                    else
-                    {
-                        document.location.href="manage_phone.html";
-                    }
-                });  
-            }else{
-                alert("Ehhez a funkcióhoz be kell jelentkeznie.");
-            }
-         });
-         $("#newadbtn").click(function(event){
-             $("#logbtn").click(function(event){
+            $("#managebtn").click(function(event){
+               if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined){
+                   var auth = {
+                       login_name : $.cookie("login_name"),
+                       password : $.cookie("password")
+                   };
+                   $.ajax({
+                       url: "/mobilpiac-war/CheckAdminServlet",
+                       type: "get",
+                       dataType: "json",
+                       data: auth
+                   }).success(function(data) {                  
+                       if (!data.result)
+                       {
+                           alert(data.message);
+                       }
+                       else
+                       {
+                           document.location.href="manage_phone.html";
+                       }
+                   });  
+               }else{
+                   alert("Ehhez a funkcióhoz be kell jelentkeznie.");
+               }
+            });
+            $("#newadbtn").click(function(event){
+                   if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined){
+                       var auth = {
+                           login_name : $.cookie("login_name"),
+                           password : $.cookie("password")
+                       };
+                       $.ajax({
+                           url: "/mobilpiac-war/CheckUserServlet",
+                           type: "get",
+                           dataType: "json",
+                           data: auth
+                       }).success(function(data) {                  
+                           if (data.result)
+                           {
+                               document.location.href="new_ad.html"; 
+                           }
+                           else
+                           {
+                               alert("Ehhez a funkcióhoz be kell jelentkeznie.");
+                           }
+                       });
+                   }
+            });
+
+        </script>
+        <script>
+              $( document ).ready(function() {
                 if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined){
+                
                     var auth = {
                         login_name : $.cookie("login_name"),
                         password : $.cookie("password")
@@ -403,78 +429,49 @@
                     }).success(function(data) {                  
                         if (data.result)
                         {
-                            document.location.href="new_ad.html"; 
+                            $("#logbtn").html("Kijelentkezés");
+                            $("#logbtn").attr("href","#");
+                            $("#regbtn").hide();
+                            $("#login_name").html($.cookie("login_name"));
+                            var auth2 = {
+                                login_name : $.cookie("login_name"),
+                                password : $.cookie("password")
+                            };
+                            $.ajax({
+                                url: "/mobilpiac-war/CheckAdminServlet",
+                                type: "get",
+                                dataType: "json",
+                                data: auth2
+                            }).success(function(data2) {                  
+                                if (!data2.result)
+                                {
+                                    $("#managebtn").css('visibility', 'hidden');
+                                }
+                                else
+                                {
+                                    $("#managebtn").css('visibility', 'visible');
+                                }
+                            });   
                         }
                         else
                         {
-                            alert("Ehhez a funkcióhoz be kell jelentkeznie.");
+                            $("#logbtn").html("Bejelentkezés");
+                            $("#logbtn").attr("href","signin.html");
+                            $("#managebtn").hide();
+                            $("#newadbtn").hide();
                         }
                     });
                 }
-             });
-         });
-         
-         
-    </script>
-    <script>
-          $( document ).ready(function() {
-            if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined){
+                else
+                {
                 
-                var auth = {
-                    login_name : $.cookie("login_name"),
-                    password : $.cookie("password")
-                };
-                $.ajax({
-                    url: "/mobilpiac-war/CheckUserServlet",
-                    type: "get",
-                    dataType: "json",
-                    data: auth
-                }).success(function(data) {                  
-                    if (data.result)
-                    {
-                        $("#logbtn").html("Kijelentkezés");
-                        $("#logbtn").attr("href","#");
-                        $("#regbtn").hide();
-                        $("#login_name").html($.cookie("login_name"));
-                        var auth2 = {
-                            login_name : $.cookie("login_name"),
-                            password : $.cookie("password")
-                        };
-                        $.ajax({
-                            url: "/mobilpiac-war/CheckAdminServlet",
-                            type: "get",
-                            dataType: "json",
-                            data: auth2
-                        }).success(function(data2) {                  
-                            if (!data2.result)
-                            {
-                                $("#managebtn").css('visibility', 'hidden');
-                            }
-                            else
-                            {
-                                $("#managebtn").css('visibility', 'visible');
-                            }
-                        });   
-                    }
-                    else
-                    {
-                        $("#logbtn").html("Bejelentkezés");
-                        $("#logbtn").attr("href","signin.html");
-                        $("#managebtn").hide();
-                        $("#newadbtn").hide();
-                    }
-                });
-            }
-            else
-            {
-                
-                $("#logbtn").html("Bejelentkezés");
-                $("#logbtn").attr("href","signin.html");
-                $("#managebtn").hide();
-                $("#newadbtn").hide();
-            }
-        });
-    </script>
-</body>
+                    $("#logbtn").html("Bejelentkezés");
+                    $("#logbtn").attr("href","signin.html");
+                    $("#managebtn").hide();
+                    $("#newadbtn").hide();
+                }
+            });
+        </script>
+    </body>
 
 </html>

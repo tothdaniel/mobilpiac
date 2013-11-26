@@ -96,6 +96,10 @@
         <servlet-name>ManagePhoneTypeServlet</servlet-name>
         <servlet-class>hu.bme.aait.mobilpiac.servlets.ManagePhoneTypeServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CheckUserServlet</servlet-name>
+        <servlet-class>hu.bme.aait.mobilpiac.servlets.CheckUserServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ListUsersServlet</servlet-name>
         <url-pattern>/ListUsersServlet</url-pattern>
@@ -191,6 +195,10 @@
     <servlet-mapping>
         <servlet-name>ManagePhoneTypeServlet</servlet-name>
         <url-pattern>/ManagePhoneTypeServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CheckUserServlet</servlet-name>
+        <url-pattern>/CheckUserServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

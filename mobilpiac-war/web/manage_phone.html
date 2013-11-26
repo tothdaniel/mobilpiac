@@ -783,19 +783,19 @@
                     $("#newprocessorbubble").slideUp();
                     $("#newmanufacturerbubble").slideToggle();
                 });
-                
+
                 $("#newtypebtn").click(function() {
                     $("#phonetypeform").slideToggle();
                 });
-                
+
                 $("#savetypebtn").click(function() {
                     $("#phonetypeform").slideUp();
                 });
-                
+
                 $("#deletetypebtn").click(function() {
                     $("#phonetypeform").slideUp();
                 });
-                
+
             }
 
             ko.applyBindings(new ViewModel());
@@ -803,39 +803,72 @@
         <script>
             $("#logbtn").click(function(event) {
                 if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined) {
-                    event.preventDefault();
+
+                    var auth = {
+                        login_name: $.cookie("login_name"),
+                        password: $.cookie("password")
+                    };
                     $.ajax({
-                        url: "/mobilpiac-war/LogoutServlet",
+                        url: "/mobilpiac-war/CheckUserServlet",
                         type: "get",
-                        dataType: "json"
+                        dataType: "json",
+                        data: auth
                     }).success(function(data) {
-                        alert(data.message);
                         if (data.result)
                         {
-                            document.location.href = "index.html";
+                            $.ajax({
+                                url: "/mobilpiac-war/LogoutServlet",
+                                type: "get",
+                                dataType: "json"
+                            }).success(function(data2) {
+                                alert(data2.message);
+                                //if (data2.result)
+                                //{
+                                document.location.href = "index.html";
+                                //}
+                            });
+                        }
+                        else
+                        {
+                            alert(data);
                         }
                     });
+                }
+                else
+                {
+                    document.location.href = "index.html";
                 }
             });
 
             $("#newadbtn").click(function(event) {
                 if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined) {
-                    event.preventDefault();
-                    document.location.href = "new_ad.html";
-                } else {
-                    alert("Ehhez a funkcióhoz be kell jelentkeznie.");
+                    var auth = {
+                        login_name: $.cookie("login_name"),
+                        password: $.cookie("password")
+                    };
+                    $.ajax({
+                        url: "/mobilpiac-war/CheckUserServlet",
+                        type: "get",
+                        dataType: "json",
+                        data: auth
+                    }).success(function(data) {
+                        if (data.result)
+                        {
+                            document.location.href = "new_ad.html";
+                        }
+                        else
+                        {
+                            alert("Ehhez a funkcióhoz be kell jelentkeznie.");
+                        }
+                    });
                 }
             });
+
         </script>
         <script>
             $(document).ready(function() {
-                if ($.cookie("login_name") === undefined || $.cookie("password") === undefined) {
-                    alert("Telefontípusok módosításához be kell jelentkeznie!");
-                    document.location.href = "index.html";
-                } else {
-                    $("#logbtn").html("Kijelentkezés");
-                    $("#logbtn").attr("href", "#");
-                    $("#regbtn").hide();
+                if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined) {
+
                     var auth = {
                         login_name: $.cookie("login_name"),
                         password: $.cookie("password")
@@ -846,36 +879,24 @@
                         dataType: "json",
                         data: auth
                     }).success(function(data) {
-                        if (!data.result)
+                        if (data.result)
                         {
-                            alert(data.message);
+                            $("#logbtn").html("Kijelentkezés");
+                            $("#logbtn").attr("href", "#");
+                            $("#regbtn").hide();
+                        }
+                        else
+                        {
+                            alert("Ehhez a funkcióhoz be kell jelentkeznie.");
                             document.location.href = "index.html";
                         }
                     });
                 }
-
-                var id = {
-                    //TODO Peti: ide kell bekotnod az id-t, ez a statikus 1 csak teszteleshez van
-                    id: 1
-                };
-                $.ajax({
-                    url: "/mobilpiac-war/PhoneTypeHighDetailServlet",
-                    type: "get",
-                    dataType: "json",
-                    data: id
-                }).success(function(data) {
-                });
-
-            });
-
-            $(document).ready(function() {
-                /* if ($.cookie("login_name") === undefined || $.cookie("password") === undefined){
-                 $("#logbtn").html("Bejelentkezés");
-                 $("#logbtn").attr("href","signin.html");
-                 }else{
-                 $("#logbtn").html("Kijelentkezés");
-                 $("#logbtn").attr("href","#");
-                 }*/
+                else
+                {
+                    alert("Ehhez a funkcióhoz be kell jelentkeznie.");
+                    document.location.href = "index.html";
+                }
             });
         </script>
     </body>

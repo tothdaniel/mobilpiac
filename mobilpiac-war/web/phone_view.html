@@ -272,40 +272,64 @@
          
     </script>
     <script>
-        $( document ).ready(function() {
-            if ($.cookie("login_name") === undefined || $.cookie("password") === undefined){
-                $("#logbtn").html("Bejelentkezés");
-                $("#logbtn").attr("href","signin.html");
-                $("#managebtn").hide();
-                $("#newadbtn").hide();
-            }else{
-                $("#logbtn").html("Kijelentkezés");
-                $("#logbtn").attr("href","#");
-                $("#regbtn").hide();
-                $("#login_name").html($.cookie("login_name"));
-                var auth = {
-                    login_name : $.cookie("login_name"),
-                    password : $.cookie("password")
-                };
-                $.ajax({
-                    url: "/mobilpiac-war/CheckAdminServlet",
-                    type: "get",
-                    dataType: "json",
-                    data: auth
-                }).success(function(data) {                  
-                    if (!data.result)
-                    {
-                        $("#managebtn").css('visibility', 'hidden');
-                    }
-                    else
-                    {
-                        $("#managebtn").css('visibility', 'visible');
-                    }
-                });          
-            }
-  
-        });
-    </script>
+              $( document ).ready(function() {
+                if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined){
+                
+                    var auth = {
+                        login_name : $.cookie("login_name"),
+                        password : $.cookie("password")
+                    };
+                    $.ajax({
+                        url: "/mobilpiac-war/CheckUserServlet",
+                        type: "get",
+                        dataType: "json",
+                        data: auth
+                    }).success(function(data) {                  
+                        if (data.result)
+                        {
+                            $("#logbtn").html("Kijelentkezés");
+                            $("#logbtn").attr("href","#");
+                            $("#regbtn").hide();
+                            $("#login_name").html($.cookie("login_name"));
+                            var auth2 = {
+                                login_name : $.cookie("login_name"),
+                                password : $.cookie("password")
+                            };
+                            $.ajax({
+                                url: "/mobilpiac-war/CheckAdminServlet",
+                                type: "get",
+                                dataType: "json",
+                                data: auth2
+                            }).success(function(data2) {                  
+                                if (!data2.result)
+                                {
+                                    $("#managebtn").css('visibility', 'hidden');
+                                }
+                                else
+                                {
+                                    $("#managebtn").css('visibility', 'visible');
+                                }
+                            });   
+                        }
+                        else
+                        {
+                            $("#logbtn").html("Bejelentkezés");
+                            $("#logbtn").attr("href","signin.html");
+                            $("#managebtn").hide();
+                            $("#newadbtn").hide();
+                        }
+                    });
+                }
+                else
+                {
+                
+                    $("#logbtn").html("Bejelentkezés");
+                    $("#logbtn").attr("href","signin.html");
+                    $("#managebtn").hide();
+                    $("#newadbtn").hide();
+                }
+            });
+        </script>
 </body>
 
 </html>

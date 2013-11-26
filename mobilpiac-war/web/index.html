@@ -2,191 +2,190 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-    <title>MobilPiactér</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta charset="utf-8"> 
-    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link href="css/style.css" rel="stylesheet" media="screen">
-</head>
+    <head>
+        <title>MobilPiactér</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="utf-8"> 
+        <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="css/style.css" rel="stylesheet" media="screen">
+    </head>
 
-<body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <a href="index.html" class="navbar-brand">MobilPiactér</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <div class="navbar-right navbar-form">
-                    <a id="managebtn" style="visibility: hidden;" class="btn btn-default">Telefontípusok menedzselése</a>
-                    <a id="newadbtn" class="btn btn-default">Hirdetés feladása</a>
-                    <a id="listbtn" href="list_view.html" class="btn btn-default">Listanézet</a>
-                    <a id="regbtn" href="registration.html" class="btn btn-default">Regisztráció</a>
-                    <a id="logbtn" href="signin.html" class="btn btn-default">Bejelentkezés</a>
+    <body>
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <a href="index.html" class="navbar-brand">MobilPiactér</a>
                 </div>
-            </div>
-        </div>
-    </div>
-    <br/>
-
-    <div class="jumbotron">
-        <div class="container">
-            <h1>Szia <label id="login_name"></label>!</h1>
-            <p>Üdvözlünk a mobilpiacon!</p>
-            <p class="gpu"></p>
-        </div>
-    </div>
-
-    <div class="container">
-
-        <div class="row">
-            <div class="col-xs-4 col-sm-3 col-md-2 col-lg-2 fixpadding">
-                <img src="img/banner-ad-160x600.gif" />
-            </div>
-            <div class="col-xs-8 col-sm-9 col-md-10 col-lg-10">
-                <div class="row" data-bind="foreach: mobiles, visible: mobiles().length > 0">
-                    <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
-                        <a data-bind="attr: {href:link_url}">
-                            <div class="thumbnail">
-
-                                    <img data-bind="attr:{src: image_url, alt: title}" style="width:100px;">
-                                    <div class="caption text-center" style="padding-bottom: 0px;padding-top: 0px;">
-
-                                            <label style="font-size: 130%;" data-bind="html: title"></label>
-                                    </div>
-                                    <div class="caption text-center" style="padding-bottom: 0px;padding-top: 0px;">
-                                        <label style="font-size: 140%;" data-bind="html: cheapest_price"></label>
-                                    </div>
-                            </div>
-                        </a>
+                <div class="navbar-collapse collapse">
+                    <div class="navbar-right navbar-form">
+                        <a id="managebtn" style="visibility: hidden;" class="btn btn-default">Telefontípusok menedzselése</a>
+                        <a id="newadbtn" class="btn btn-default">Hirdetés feladása</a>
+                        <a id="listbtn" href="list_view.html" class="btn btn-default">Listanézet</a>
+                        <a id="regbtn" href="registration.html" class="btn btn-default">Regisztráció</a>
+                        <a id="logbtn" href="signin.html" class="btn btn-default">Bejelentkezés</a>
                     </div>
                 </div>
             </div>
         </div>
+        <br/>
 
-        <hr>
+        <div class="jumbotron">
+            <div class="container">
+                <h1>Szia <label id="login_name"></label>!</h1>
+                <p>Üdvözlünk a mobilpiacon!</p>
+                <p class="gpu"></p>
+            </div>
+        </div>
 
-        <footer>
-            <p>&copy; DaniPeti 2013</p>
-        </footer>
-    </div>
-    <!-- /container -->
+        <div class="container">
 
-    <script src="lib/jquery-2.0.3.min.js"></script>
-    <script src="lib/jquery.cookie.js"></script>
-    <script src="lib/knockout-3.0.0.js"></script>
-    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
-    <script> 
-        var Mobile = function(data) {
-            var priceFormat = function(price) {
-                return price+" Ft";
-            };
-            this.image_url = ko.observable(data.image_url);
-            this.title = ko.computed(function() {
-                return data.manufacturer + " " + data.type_name;
-            }, this);
-            this.link_url = ko.computed(function() {
-                return "list_view.html?manufacturer="+data.manufacturer_id;
-            }, this);
-            this.cheapest_price = ko.observable(priceFormat(data.cheapest_price));
-        };
+            <div class="row">
+                <div class="col-xs-4 col-sm-3 col-md-2 col-lg-2 fixpadding">
+                    <img src="img/banner-ad-160x600.gif" />
+                </div>
+                <div class="col-xs-8 col-sm-9 col-md-10 col-lg-10">
+                    <div class="row" data-bind="foreach: mobiles, visible: mobiles().length > 0">
+                        <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+                            <a data-bind="attr: {href:link_url}">
+                                <div class="thumbnail">
 
-        var MobileModel = function() {
-            // Data
-            var self = this;
-            self.mobiles = ko.observableArray([]);
-           
-            $.ajax({
-                url: "/mobilpiac-war/ListMobilesServlet",
-                type: "get",
-                dataType: "json"
-            }).success(function(data) {
-                for(key in data.mobiles)
-                {
-                    self.mobiles.push(new Mobile(data.mobiles[key]));
-                }   
-            });
-        };     
+                                    <img data-bind="attr:{src: image_url, alt: title}" style="width:100px;">
+                                    <div class="caption text-center" style="padding-bottom: 0px;padding-top: 0px;">
 
-        ko.applyBindings(new MobileModel());
-    </script>
-    <script>
-         $("#logbtn").click(function(event){
-            if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined){
-                
-                var auth = {
-                    login_name : $.cookie("login_name"),
-                    password : $.cookie("password")
+                                        <label style="font-size: 130%;" data-bind="html: title"></label>
+                                    </div>
+                                    <div class="caption text-center" style="padding-bottom: 0px;padding-top: 0px;">
+                                        <label style="font-size: 140%;" data-bind="html: cheapest_price"></label>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <footer>
+                <p>&copy; DaniPeti 2013</p>
+            </footer>
+        </div>
+        <!-- /container -->
+
+        <script src="lib/jquery-2.0.3.min.js"></script>
+        <script src="lib/jquery.cookie.js"></script>
+        <script src="lib/knockout-3.0.0.js"></script>
+        <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+        <script>
+            var Mobile = function(data) {
+                var priceFormat = function(price) {
+                    return price + " Ft";
                 };
+                this.image_url = ko.observable(data.image_url);
+                this.title = ko.computed(function() {
+                    return data.manufacturer + " " + data.type_name;
+                }, this);
+                this.link_url = ko.computed(function() {
+                    return "list_view.html?manufacturer=" + data.manufacturer_id;
+                }, this);
+                this.cheapest_price = ko.observable(priceFormat(data.cheapest_price));
+            };
+
+            var MobileModel = function() {
+                // Data
+                var self = this;
+                self.mobiles = ko.observableArray([]);
+
                 $.ajax({
-                    url: "/mobilpiac-war/CheckUserServlet",
+                    url: "/mobilpiac-war/ListMobilesServlet",
                     type: "get",
-                    dataType: "json",
-                    data: auth
-                }).success(function(data) {                  
-                    if (data.result)
+                    dataType: "json"
+                }).success(function(data) {
+                    for (key in data.mobiles)
                     {
-                        $.ajax({
-                            url: "/mobilpiac-war/LogoutServlet",
-                            type: "get",
-                            dataType: "json"
-                        }).success(function(data2) {
-                            alert(data2.message);
-                            //if (data2.result)
-                            //{
-                                document.location.href="index.html";
-                            //}
-                        });
-                    }
-                    else
-                    {
-                        alert(data);
+                        self.mobiles.push(new Mobile(data.mobiles[key]));
                     }
                 });
-            }
-         });
-         
-         $("#managebtn").click(function(event){
-            if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined){
-                var auth = {
-                    login_name : $.cookie("login_name"),
-                    password : $.cookie("password")
-                };
-                $.ajax({
-                    url: "/mobilpiac-war/CheckAdminServlet",
-                    type: "get",
-                    dataType: "json",
-                    data: auth
-                }).success(function(data) {                  
-                    if (!data.result)
-                    {
-                        alert(data.message);
-                    }
-                    else
-                    {
-                        document.location.href="manage_phone.html";
-                    }
-                });  
-            }else{
-                alert("Ehhez a funkcióhoz be kell jelentkeznie.");
-            }
-         });
-         $("#newadbtn").click(function(event){
-             $("#logbtn").click(function(event){
-                if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined){
+            };
+
+            ko.applyBindings(new MobileModel());
+        </script>
+        <script>
+            $("#logbtn").click(function(event) {
+                if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined) {
+
                     var auth = {
-                        login_name : $.cookie("login_name"),
-                        password : $.cookie("password")
+                        login_name: $.cookie("login_name"),
+                        password: $.cookie("password")
                     };
                     $.ajax({
                         url: "/mobilpiac-war/CheckUserServlet",
                         type: "get",
                         dataType: "json",
                         data: auth
-                    }).success(function(data) {                  
+                    }).success(function(data) {
                         if (data.result)
                         {
-                            document.location.href="new_ad.html"; 
+                            $.ajax({
+                                url: "/mobilpiac-war/LogoutServlet",
+                                type: "get",
+                                dataType: "json"
+                            }).success(function(data2) {
+                                alert(data2.message);
+                                //if (data2.result)
+                                //{
+                                document.location.href = "index.html";
+                                //}
+                            });
+                        }
+                        else
+                        {
+                            alert(data);
+                        }
+                    });
+                }
+            });
+
+            $("#managebtn").click(function(event) {
+                if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined) {
+                    var auth = {
+                        login_name: $.cookie("login_name"),
+                        password: $.cookie("password")
+                    };
+                    $.ajax({
+                        url: "/mobilpiac-war/CheckAdminServlet",
+                        type: "get",
+                        dataType: "json",
+                        data: auth
+                    }).success(function(data) {
+                        if (!data.result)
+                        {
+                            alert(data.message);
+                        }
+                        else
+                        {
+                            document.location.href = "manage_phone.html";
+                        }
+                    });
+                } else {
+                    alert("Ehhez a funkcióhoz be kell jelentkeznie.");
+                }
+            });
+            $("#newadbtn").click(function(event) {
+                if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined) {
+                    var auth = {
+                        login_name: $.cookie("login_name"),
+                        password: $.cookie("password")
+                    };
+                    $.ajax({
+                        url: "/mobilpiac-war/CheckUserServlet",
+                        type: "get",
+                        dataType: "json",
+                        data: auth
+                    }).success(function(data) {
+                        if (data.result)
+                        {
+                            document.location.href = "new_ad.html";
                         }
                         else
                         {
@@ -194,69 +193,68 @@
                         }
                     });
                 }
-             });
-         });
-         
-    </script>
-    <script>
-        $( document ).ready(function() {
-            if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined){
-                
-                var auth = {
-                    login_name : $.cookie("login_name"),
-                    password : $.cookie("password")
-                };
-                $.ajax({
-                    url: "/mobilpiac-war/CheckUserServlet",
-                    type: "get",
-                    dataType: "json",
-                    data: auth
-                }).success(function(data) {                  
-                    if (data.result)
-                    {
-                        $("#logbtn").html("Kijelentkezés");
-                        $("#logbtn").attr("href","#");
-                        $("#regbtn").hide();
-                        $("#login_name").html($.cookie("login_name"));
-                        var auth2 = {
-                            login_name : $.cookie("login_name"),
-                            password : $.cookie("password")
-                        };
-                        $.ajax({
-                            url: "/mobilpiac-war/CheckAdminServlet",
-                            type: "get",
-                            dataType: "json",
-                            data: auth2
-                        }).success(function(data2) {                  
-                            if (!data2.result)
-                            {
-                                $("#managebtn").css('visibility', 'hidden');
-                            }
-                            else
-                            {
-                                $("#managebtn").css('visibility', 'visible');
-                            }
-                        });   
-                    }
-                    else
-                    {
-                        $("#logbtn").html("Bejelentkezés");
-                        $("#logbtn").attr("href","signin.html");
-                        $("#managebtn").hide();
-                        $("#newadbtn").hide();
-                    }
-                });
-            }
-            else
-            {
-                
-                $("#logbtn").html("Bejelentkezés");
-                $("#logbtn").attr("href","signin.html");
-                $("#managebtn").hide();
-                $("#newadbtn").hide();
-            }
-        });
-    </script>
-</body>
+            });
+
+        </script>
+        <script>
+            $(document).ready(function() {
+                if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined) {
+
+                    var auth = {
+                        login_name: $.cookie("login_name"),
+                        password: $.cookie("password")
+                    };
+                    $.ajax({
+                        url: "/mobilpiac-war/CheckUserServlet",
+                        type: "get",
+                        dataType: "json",
+                        data: auth
+                    }).success(function(data) {
+                        if (data.result)
+                        {
+                            $("#logbtn").html("Kijelentkezés");
+                            $("#logbtn").attr("href", "#");
+                            $("#regbtn").hide();
+                            $("#login_name").html($.cookie("login_name"));
+                            var auth2 = {
+                                login_name: $.cookie("login_name"),
+                                password: $.cookie("password")
+                            };
+                            $.ajax({
+                                url: "/mobilpiac-war/CheckAdminServlet",
+                                type: "get",
+                                dataType: "json",
+                                data: auth2
+                            }).success(function(data2) {
+                                if (!data2.result)
+                                {
+                                    $("#managebtn").css('visibility', 'hidden');
+                                }
+                                else
+                                {
+                                    $("#managebtn").css('visibility', 'visible');
+                                }
+                            });
+                        }
+                        else
+                        {
+                            $("#logbtn").html("Bejelentkezés");
+                            $("#logbtn").attr("href", "signin.html");
+                            $("#managebtn").hide();
+                            $("#newadbtn").hide();
+                        }
+                    });
+                }
+                else
+                {
+
+                    $("#logbtn").html("Bejelentkezés");
+                    $("#logbtn").attr("href", "signin.html");
+                    $("#managebtn").hide();
+                    $("#newadbtn").hide();
+                }
+            });
+        </script>
+    </body>
 
 </html>

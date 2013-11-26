@@ -80,6 +80,24 @@ public class UserSessionBean {
         result.add("Ide csak az adminisztrátor léphet be.");
         return result;
     }
+    
+    public List<String> checkUser(String loginName, String password) {
+        List<String> result = new ArrayList<>();
+
+        TypedQuery<Users> query = em.createQuery("SELECT u FROM Users u WHERE u.loginName = :name AND u.password = :password", Users.class);
+        query.setParameter("name", loginName);
+        query.setParameter("password", password);
+        List<Users> usersList = query.getResultList();
+
+        if (!usersList.isEmpty()) {
+            result.add("true");
+            result.add("Belépés engedélyezve.");
+            return result;
+        }
+        result.add("false");
+        result.add("Ehhez a funkcióhoz be kell jelentkeznie.");
+        return result;
+    }
 
     public JSONArray listAllUsers() {
         List<Users> usersList = em.createQuery("SELECT users FROM Users users").getResultList();
