@@ -143,7 +143,7 @@
 	
                 var Mobile = function(data) {
                     this.phone_view_link = ko.computed(function() {
-                        return "phone_view.html?phone_id="+data.id;
+                        return "phone_view.html?ad_id="+data.id;
                     }, this);
                     this.actual_price = ko.observable(data.actual_price);
                     this.published = ko.observable(data.published);
