@@ -201,4 +201,10 @@ public class AdSessionBean {
         }
         return jarray;
     }
+    
+    public List<String> addBid(String json){
+        List<String> result = new ArrayList<>();
+        
+        return result;
+    }
 }

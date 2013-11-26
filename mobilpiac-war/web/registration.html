@@ -352,7 +352,6 @@
         <script>
             $("#logbtn").click(function(event) {
                 if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined) {
-                    event.preventDefault();
                     $.ajax({
                         url: "/mobilpiac-war/LogoutServlet",
                         type: "get",
