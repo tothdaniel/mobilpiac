@@ -182,7 +182,7 @@
                             type: "get",
                             dataType: "json",
                             data: {
-                                ad_id : getURLParameter("phone_id"),
+                                ad_id : getURLParameter("ad_id"),
                                 bid_price: self.ad()[0].next_price(),
                                 bid_user: $.cookie("login_name")
                             }
@@ -201,7 +201,7 @@
                     url: "/mobilpiac-war/AdHighDetailServlet",
                     type: "get",
                     dataType: "json",
-                    data: { id : getURLParameter("phone_id")}
+                    data: { id : getURLParameter("ad_id")}
                 }).success(function(data) {                 
                     //TODO gondolom itt fogsz majd valahogy adatkotogetni, a data egy JSONObject,
                     //az AdSessionBean getJSONObject(String id) metodusaban latod, mi van neki
