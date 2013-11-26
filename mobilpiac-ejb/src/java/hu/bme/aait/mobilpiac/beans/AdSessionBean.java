@@ -224,6 +224,7 @@ public class AdSessionBean {
             result.add("Nincs ilyen nevű felhasználó.");
             return result;
         } else {
+            Users u = users.get(0);
             TypedQuery<Advertisement> query2 = em.createQuery("SELECT a FROM Advertisement a WHERE a.id = :pid", Advertisement.class);
             query2.setParameter("pid", adId);
             List<Advertisement> ads = query2.getResultList();
@@ -240,25 +241,20 @@ public class AdSessionBean {
                 if (bids.isEmpty()) {
                     if (bidPrice > a.getMinPrice()) {
                         Long id = em.createQuery("SELECT MAX(b.id) FROM Bids b", Long.class).getSingleResult();
-                        if (id == 0) {                            
+                        if (id == null) {
                             id = new Long(1);
                         } else {
-                            id = id+1;
+                            id = id + 1;
                         }
                         try {
                             Bids bid = new Bids();
                             bid.setId(id);
-                            
-                            bid.setAdvertisementId(a);
-                            /*SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                            
-                            Date date = new SimpleDateFormat("yyyy-MM-dd").parse(sdf.format(new Date()));
-                            
-                            bid.setDateOfBid(date);*/
-                            bid.setDateOfBid(new Date());
-                            bid.setPrice(Integer.parseInt(bidPrice.toString()));
 
-                            //PETI IDE
+                            bid.setAdvertisementId(a);
+                            bid.setDateOfBid(new Date());
+                            bid.setBidderUserId(u);
+                            bid.setPrice(bidPrice);
+
                             em.persist(bid);
 
                             result.add("true");
@@ -266,7 +262,7 @@ public class AdSessionBean {
                             return result;
                         } catch (Exception e) {
                             result.add("false");
-                            result.add("Hiba: " + e.getMessage());
+                            result.add("Hiba lépett fel a mentés során. Próbálkozzon később.");
                             return result;
                         }
                     } else {
@@ -288,18 +284,20 @@ public class AdSessionBean {
                         result.add("A licitje nem haladja meg az eddigi legnagyobb értéket.");
                         return result;
                     } else {
-                        Bids bid = new Bids();
-
                         Long id = em.createQuery("SELECT MAX(b.id) FROM Bids b", Long.class).getSingleResult();
                         if (id == null) {
                             id = new Long(1);
                         } else {
-                            id = id+1;
+                            id = id + 1;
                         }
+                        Bids bid = new Bids();
                         bid.setId(id);
+
                         bid.setAdvertisementId(a);
                         bid.setDateOfBid(new Date());
-                        bid.setPrice(maxPrice);
+                        bid.setBidderUserId(u);
+                        bid.setPrice(bidPrice);
+
                         em.persist(bid);
 
                         result.add("true");

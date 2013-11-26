@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -72,7 +73,7 @@ public class Users implements Serializable {
     private Role fkRoleId;
     @OneToMany(mappedBy = "fkUser")
     private List<Advertisement> advertisementList;
-    @OneToMany(mappedBy = "bidderUserId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bidderUserId")
     private List<Bids> bidsList;
 
     public Users() {

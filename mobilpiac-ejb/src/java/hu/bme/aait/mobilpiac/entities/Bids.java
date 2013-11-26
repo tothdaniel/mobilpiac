@@ -44,15 +44,17 @@ public class Bids implements Serializable {
     @Column(name = "ID")
     private Long id;
     @Column(name = "DATE_OF_BID")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date dateOfBid;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "PRICE")
-    private Integer price;
+    private int price;
     @JoinColumn(name = "BIDDER_USER_ID", referencedColumnName = "ID")
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Users bidderUserId;
     @JoinColumn(name = "ADVERTISEMENT_ID", referencedColumnName = "ID")
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Advertisement advertisementId;
 
     public Bids() {
@@ -60,6 +62,11 @@ public class Bids implements Serializable {
 
     public Bids(Long id) {
         this.id = id;
+    }
+
+    public Bids(Long id, int price) {
+        this.id = id;
+        this.price = price;
     }
 
     public Long getId() {
@@ -78,11 +85,11 @@ public class Bids implements Serializable {
         this.dateOfBid = dateOfBid;
     }
 
-    public Integer getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 

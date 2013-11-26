@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -68,7 +69,7 @@ public class Advertisement implements Serializable {
     @JoinColumn(name = "FK_NETWORK_LOCK", referencedColumnName = "ID")
     @ManyToOne
     private MobileNetwork fkNetworkLock;
-    @OneToMany(mappedBy = "advertisementId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "advertisementId")
     private List<Bids> bidsList;
 
     public Advertisement() {
