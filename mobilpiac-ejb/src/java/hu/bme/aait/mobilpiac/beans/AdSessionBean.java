@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package hu.bme.aait.mobilpiac.beans;
 
 import hu.bme.aait.mobilpiac.entities.Advertisement;
@@ -11,14 +10,17 @@ import hu.bme.aait.mobilpiac.entities.Bids;
 import hu.bme.aait.mobilpiac.entities.Manufacturer;
 import hu.bme.aait.mobilpiac.entities.MobileNetwork;
 import hu.bme.aait.mobilpiac.entities.Sim;
+import hu.bme.aait.mobilpiac.entities.Users;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -33,8 +35,8 @@ public class AdSessionBean {
 
     @PersistenceContext
     EntityManager em;
-    
-    public JSONObject getJSONObjectWithLowDetails(Advertisement a,int actPrice) {
+
+    public JSONObject getJSONObjectWithLowDetails(Advertisement a, int actPrice) {
         JSONObject obj = new JSONObject();
         obj.put("id", a.getId());
         obj.put("type_name", a.getFkPhoneType().getTypeName());
@@ -51,17 +53,17 @@ public class AdSessionBean {
         obj.put("res_x", a.getFkPhoneType().getResX());
         obj.put("res_y", a.getFkPhoneType().getResY());
         obj.put("actual_price", actPrice);
-        obj.put("seller_user",a.getFkUser().getLoginName());
+        obj.put("seller_user", a.getFkUser().getLoginName());
         Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String published = formatter.format(a.getPublished());
-        obj.put("published",published);
+        obj.put("published", published);
         return obj;
     }
-    
+
     public JSONObject getJSONObject(String id) {
-        
+
         TypedQuery<Advertisement> query = em.createQuery("SELECT a FROM Advertisement a WHERE a.id = :pid", Advertisement.class);
-        query.setParameter("pid", Long.parseLong(id));        
+        query.setParameter("pid", Long.parseLong(id));
         Advertisement a = query.getSingleResult();
 
         TypedQuery<Bids> query2 = em.createQuery("SELECT b FROM Bids b WHERE b.advertisementId.id = :pid", Bids.class);
@@ -73,7 +75,7 @@ public class AdSessionBean {
                 actPrice = b.getPrice();
             }
         }
-        
+
         JSONObject obj = new JSONObject();
         obj.put("id", a.getId());
         obj.put("description", a.getDescription());
@@ -85,39 +87,39 @@ public class AdSessionBean {
         obj.put("processor_number_of_cores", a.getFkPhoneType().getFkProcessor().getNumberOfCores());
         obj.put("rear_camera", a.getFkPhoneType().getRearCamera());
         obj.put("front_camera", a.getFkPhoneType().getFrontCamera());
-        if(a.getFkPhoneType().getMicrosdEnabled() == 1){
+        if (a.getFkPhoneType().getMicrosdEnabled() == 1) {
             obj.put("microsd_enabled", "bővíthető");
-        }else{
+        } else {
             obj.put("microsd_enabled", "nem bővíthető");
         }
         Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String published = formatter.format(a.getFkPhoneType().getPublished());
-        obj.put("phone_published",published);
+        obj.put("phone_published", published);
         obj.put("image_url", a.getFkPhoneType().getImageUrl());
         obj.put("published", a.getFkPhoneType().getPublished());
         obj.put("ram", a.getFkPhoneType().getRam());
         obj.put("rom", a.getFkPhoneType().getRom());
         obj.put("res_x", a.getFkPhoneType().getResX());
         obj.put("res_y", a.getFkPhoneType().getResY());
-        obj.put("gpu",a.getFkPhoneType().getFkGpu().getGpuName());
-        obj.put("display_inches",a.getFkPhoneType().getDisplayInches());
-        obj.put("dpi",a.getFkPhoneType().getDpi());
-        obj.put("processor_family",a.getFkPhoneType().getFkProcessor().getFamily());
-        obj.put("processor_chipset",a.getFkPhoneType().getFkProcessor().getChipset());
-        obj.put("sim_type", a.getFkPhoneType().getFkSim().getSimType()); 
+        obj.put("gpu", a.getFkPhoneType().getFkGpu().getGpuName());
+        obj.put("display_inches", a.getFkPhoneType().getDisplayInches());
+        obj.put("dpi", a.getFkPhoneType().getDpi());
+        obj.put("processor_family", a.getFkPhoneType().getFkProcessor().getFamily());
+        obj.put("processor_chipset", a.getFkPhoneType().getFkProcessor().getChipset());
+        obj.put("sim_type", a.getFkPhoneType().getFkSim().getSimType());
         obj.put("actual_price", actPrice);
-        obj.put("seller_user",a.getFkUser().getLoginName());
+        obj.put("seller_user", a.getFkUser().getLoginName());
         Format formatter2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String published2 = formatter.format(a.getPublished());
-        obj.put("published",published2);
+        obj.put("published", published2);
         return obj;
     }
-    
-    public JSONArray listAllAds(org.json.JSONObject jobj){
+
+    public JSONArray listAllAds(org.json.JSONObject jobj) {
         List<Advertisement> adsList = em.createQuery(
-            "SELECT a FROM Advertisement a WHERE a.finished = 0 "
-          + "ORDER BY a.fkPhoneType.fkManufacturer.manufacturerName,"
-          + "a.fkPhoneType.typeName").getResultList();
+                "SELECT a FROM Advertisement a WHERE a.finished = 0 "
+                + "ORDER BY a.fkPhoneType.fkManufacturer.manufacturerName,"
+                + "a.fkPhoneType.typeName").getResultList();
         JSONArray jarray = new JSONArray();
 
         int minPrice = jobj.getInt("min_price");
@@ -127,11 +129,9 @@ public class AdSessionBean {
         for (int i = 0; i < mobileNetworks.length(); i++) {
             mobileNetworkList.add(Integer.parseInt(mobileNetworks.get(i).toString()));
         }
-        if(mobileNetworkList.isEmpty())
-        {
+        if (mobileNetworkList.isEmpty()) {
             List<MobileNetwork> mnList = em.createQuery("SELECT mn FROM MobileNetwork mn").getResultList();
-            for(MobileNetwork m:mnList)
-            {
+            for (MobileNetwork m : mnList) {
                 mobileNetworkList.add(Integer.parseInt(m.getId().toString()));
             }
         }
@@ -140,11 +140,9 @@ public class AdSessionBean {
         for (int i = 0; i < manufacturers.length(); i++) {
             manufacturerList.add(Integer.parseInt(manufacturers.get(i).toString()));
         }
-        if(manufacturerList.isEmpty())
-        {
+        if (manufacturerList.isEmpty()) {
             List<Manufacturer> mnList = em.createQuery("SELECT mn FROM Manufacturer mn").getResultList();
-            for(Manufacturer m:mnList)
-            {
+            for (Manufacturer m : mnList) {
                 manufacturerList.add(Integer.parseInt(m.getId().toString()));
             }
         }
@@ -153,17 +151,14 @@ public class AdSessionBean {
         for (int i = 0; i < sims.length(); i++) {
             simList.add(Integer.parseInt(sims.get(i).toString()));
         }
-        if(simList.isEmpty())
-        {
+        if (simList.isEmpty()) {
             List<Sim> mnList = em.createQuery("SELECT s FROM Sim s").getResultList();
-            for(Sim s:mnList)
-            {
+            for (Sim s : mnList) {
                 simList.add(Integer.parseInt(s.getId().toString()));
             }
         }
-        
-        for(Advertisement a:adsList)
-        {
+
+        for (Advertisement a : adsList) {
             //a tovabbi szureseket nem jpql-ben, hanem entitasonkent vegzem, nem akartam egy listaval (for... or)
             //osszehasonlitani
             TypedQuery<Bids> query = em.createQuery("SELECT b FROM Bids b WHERE b.advertisementId.id = :id", Bids.class);
@@ -176,21 +171,14 @@ public class AdSessionBean {
                 }
             }
             //aktualis ar beleesik-e az intervallumba
-            if(actPrice >= minPrice && actPrice <= maxPrice)
-            {
-                for(int mn:mobileNetworkList)
-                {
-                    if(mn == a.getFkNetworkLock().getId())
-                    {
-                        for(int mf:manufacturerList)
-                        {
-                            if(mf == a.getFkPhoneType().getFkManufacturer().getId())
-                            {
-                                for(int sim:simList)
-                                {
-                                    if(sim == a.getFkPhoneType().getFkSim().getId())
-                                    {
-                                        jarray.add(getJSONObjectWithLowDetails(a,actPrice));
+            if (actPrice >= minPrice && actPrice <= maxPrice) {
+                for (int mn : mobileNetworkList) {
+                    if (mn == a.getFkNetworkLock().getId()) {
+                        for (int mf : manufacturerList) {
+                            if (mf == a.getFkPhoneType().getFkManufacturer().getId()) {
+                                for (int sim : simList) {
+                                    if (sim == a.getFkPhoneType().getFkSim().getId()) {
+                                        jarray.add(getJSONObjectWithLowDetails(a, actPrice));
                                     }
                                 }
                             }
@@ -201,10 +189,125 @@ public class AdSessionBean {
         }
         return jarray;
     }
-    
-    public List<String> addBid(String json){
+
+    public List<String> addBid(String json) {
         List<String> result = new ArrayList<>();
-        
-        return result;
+
+        org.json.JSONObject obj = new org.json.JSONObject(json);
+        String loginName = obj.getString("bid_user");
+        Long adId = obj.getLong("ad_id");
+        Integer bidPrice = obj.getInt("bid_price");
+
+        if (loginName == null || loginName.isEmpty()) {
+            result.add("false");
+            result.add("Meg kell adnia a licitáló felhasználó nevét.");
+            return result;
+        }
+
+        if (obj.getString("ad_id") == null || obj.getString("ad_id").isEmpty()) {
+            result.add("false");
+            result.add("Meg kell adnia a hirdetés azonosítóját.");
+            return result;
+        }
+        if (obj.getInt("bid_price") == 0) {
+            result.add("false");
+            result.add("Meg kell adnia a licit összegét.");
+            return result;
+        }
+
+        TypedQuery<Users> query3 = em.createQuery("SELECT u FROM Users u WHERE u.loginName = :name", Users.class);
+        query3.setParameter("name", loginName);
+        List<Users> users = query3.getResultList();
+
+        if (users.isEmpty()) {
+            result.add("false");
+            result.add("Nincs ilyen nevű felhasználó.");
+            return result;
+        } else {
+            TypedQuery<Advertisement> query2 = em.createQuery("SELECT a FROM Advertisement a WHERE a.id = :pid", Advertisement.class);
+            query2.setParameter("pid", adId);
+            List<Advertisement> ads = query2.getResultList();
+            if (ads.isEmpty()) {
+                result.add("false");
+                result.add("Nincs ilyen azonosítójú hirdetés.");
+                return result;
+            } else {
+                Advertisement a = ads.get(0);
+                TypedQuery<Bids> query = em.createQuery("SELECT b FROM Bids b WHERE b.advertisementId.finished = '0' AND b.advertisementId.id = :pid", Bids.class);
+                query.setParameter("pid", a.getId());
+                List<Bids> bids = query.getResultList();
+
+                if (bids.isEmpty()) {
+                    if (bidPrice > a.getMinPrice()) {
+                        Bids bid = new Bids();
+
+                        Long id = em.createQuery("SELECT MAX(b.id) FROM Bids b", Long.class).getSingleResult();
+
+                        if (id == null) {
+                            id = new Long(1);
+                        } else {
+                            id = id++;
+                        }
+                        bid.setId(id);
+                        bid.setAdvertisementId(a);
+                        try {
+                            
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                            
+                            Date date = new SimpleDateFormat("yyyy-MM-dd").parse(sdf.format(new Date()));
+                            
+                            bid.setDateOfBid(date);
+                            bid.setPrice(Integer.parseInt(bidPrice.toString()));
+                        
+                            //em.persist(bid);
+
+                            result.add("true");
+                            result.add("Sikeresen licitált.");
+                            return result;
+                        } catch (Exception e) {
+                            result.add("false");
+                            result.add("Hiba: " + e.getMessage());
+                            return result;
+                        }
+                    } else {
+                        result.add("false");
+                        result.add("A licitje nem haladja meg az eddigi legnagyobb értéket.");
+                        return result;
+                    }
+                } else {
+
+                    Integer maxPrice = a.getMinPrice();
+                    for (Bids b : bids) {
+                        if (maxPrice < b.getPrice()) {
+                            maxPrice = b.getPrice();
+                        }
+                    }
+
+                    if (maxPrice >= bidPrice) {
+                        result.add("false");
+                        result.add("A licitje nem haladja meg az eddigi legnagyobb értéket.");
+                        return result;
+                    } else {
+                        Bids bid = new Bids();
+
+                        Long id = em.createQuery("SELECT MAX(b.id) FROM Bids b", Long.class).getSingleResult();
+                        if (id == null) {
+                            id = new Long(1);
+                        } else {
+                            id = id++;
+                        }
+                        bid.setId(id);
+                        bid.setAdvertisementId(a);
+                        bid.setDateOfBid(new Date());
+                        bid.setPrice(maxPrice);
+                        em.persist(bid);
+
+                        result.add("true");
+                        result.add("Sikeresen licitált.");
+                        return result;
+                    }
+                }
+            }
+        }
     }
 }

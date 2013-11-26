@@ -192,15 +192,17 @@
                             }
                             else
                             {
+                                var bid = {
+                                    ad_id: getURLParameter("ad_id"),
+                                    bid_price: self.ad()[0].next_price(),
+                                    bid_user: $.cookie("login_name")
+                                };
+                                
                                 $.ajax({
                                     url: "/mobilpiac-war/BidServlet",
                                     type: "get",
                                     dataType: "json",
-                                    data: {
-                                        ad_id: getURLParameter("ad_id"),
-                                        bid_price: self.ad()[0].next_price(),
-                                        bid_user: $.cookie("login_name")
-                                    }
+                                    data: {json:JSON.stringify(bid)}
                                 }).success(function(data) {
                                     //Mi legyen sikeres vagy nem sikeres licit esetén
                                     alert(data.message);

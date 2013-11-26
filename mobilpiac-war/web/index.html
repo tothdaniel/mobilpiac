@@ -111,88 +111,88 @@
             ko.applyBindings(new MobileModel());
         </script>
         <script>
-            $("#logbtn").click(function(event) {
-                if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined) {
-
-                    var auth = {
-                        login_name: $.cookie("login_name"),
-                        password: $.cookie("password")
-                    };
-                    $.ajax({
-                        url: "/mobilpiac-war/CheckUserServlet",
-                        type: "get",
-                        dataType: "json",
-                        data: auth
-                    }).success(function(data) {
-                        if (data.result)
-                        {
-                            $.ajax({
-                                url: "/mobilpiac-war/LogoutServlet",
-                                type: "get",
-                                dataType: "json"
-                            }).success(function(data2) {
-                                alert(data2.message);
-                                //if (data2.result)
-                                //{
-                                document.location.href = "index.html";
-                                //}
-                            });
-                        }
-                        else
-                        {
-                            alert(data);
-                        }
-                    });
-                }
+            $("#logbtn").click(function(event){
+               if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined){
+                
+                   var auth = {
+                       login_name : $.cookie("login_name"),
+                       password : $.cookie("password")
+                   };
+                   $.ajax({
+                       url: "/mobilpiac-war/CheckUserServlet",
+                       type: "get",
+                       dataType: "json",
+                       data: auth
+                   }).success(function(data) {                  
+                       if (data.result)
+                       {
+                           $.ajax({
+                               url: "/mobilpiac-war/LogoutServlet",
+                               type: "get",
+                               dataType: "json"
+                           }).success(function(data2) {
+                               alert(data2.message);
+                               //if (data2.result)
+                               //{
+                                   document.location.href="index.html";
+                               //}
+                           });
+                       }
+                       else
+                       {
+                           alert(data);
+                       }
+                   });
+               }
             });
-
-            $("#managebtn").click(function(event) {
-                if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined) {
-                    var auth = {
-                        login_name: $.cookie("login_name"),
-                        password: $.cookie("password")
-                    };
-                    $.ajax({
-                        url: "/mobilpiac-war/CheckAdminServlet",
-                        type: "get",
-                        dataType: "json",
-                        data: auth
-                    }).success(function(data) {
-                        if (!data.result)
-                        {
-                            alert(data.message);
-                        }
-                        else
-                        {
-                            document.location.href = "manage_phone.html";
-                        }
-                    });
-                } else {
-                    alert("Ehhez a funkcióhoz be kell jelentkeznie.");
-                }
+         
+            $("#managebtn").click(function(event){
+               if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined){
+                   var auth = {
+                       login_name : $.cookie("login_name"),
+                       password : $.cookie("password")
+                   };
+                   $.ajax({
+                       url: "/mobilpiac-war/CheckAdminServlet",
+                       type: "get",
+                       dataType: "json",
+                       data: auth
+                   }).success(function(data) {                  
+                       if (!data.result)
+                       {
+                           alert(data.message);
+                       }
+                       else
+                       {
+                           document.location.href="manage_phone.html";
+                       }
+                   });  
+               }else{
+                   alert("Ehhez a funkcióhoz be kell jelentkeznie.");
+               }
             });
-            $("#newadbtn").click(function(event) {
-                if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined) {
-                    var auth = {
-                        login_name: $.cookie("login_name"),
-                        password: $.cookie("password")
-                    };
-                    $.ajax({
-                        url: "/mobilpiac-war/CheckUserServlet",
-                        type: "get",
-                        dataType: "json",
-                        data: auth
-                    }).success(function(data) {
-                        if (data.result)
-                        {
-                            document.location.href = "new_ad.html";
-                        }
-                        else
-                        {
-                            alert("Ehhez a funkcióhoz be kell jelentkeznie.");
-                        }
-                    });
-                }
+            $("#newadbtn").click(function(event){
+                   if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined){
+                       var auth = {
+                           login_name : $.cookie("login_name"),
+                           password : $.cookie("password")
+                       };
+                       $.ajax({
+                           url: "/mobilpiac-war/CheckUserServlet",
+                           type: "get",
+                           dataType: "json",
+                           data: auth
+                       }).success(function(data) {                  
+                           if (data.result)
+                           {
+                               document.location.href="new_ad.html"; 
+                           }
+                           else
+                           {
+                               alert("Ehhez a funkcióhoz be kell jelentkeznie.");
+                           }
+                       });
+                   }
             });
 
         </script>

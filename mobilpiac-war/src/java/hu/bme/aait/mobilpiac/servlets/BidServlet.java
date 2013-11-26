@@ -29,7 +29,9 @@ public class BidServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
+        try (PrintWriter out = response.getWriter()) {            
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
             List<String> result = as.addBid(request.getParameter("json"));
             JSONObject jobj = new JSONObject();
             if(result.get(0).equals("true"))
