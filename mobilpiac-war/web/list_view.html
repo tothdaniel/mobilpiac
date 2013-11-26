@@ -330,24 +330,41 @@
      <script>
          $("#logbtn").click(function(event){
             if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined){
-                event.preventDefault();
+                
+                var auth = {
+                    login_name : $.cookie("login_name"),
+                    password : $.cookie("password")
+                };
                 $.ajax({
-                    url: "/mobilpiac-war/LogoutServlet",
+                    url: "/mobilpiac-war/CheckUserServlet",
                     type: "get",
-                    dataType: "json"
-                }).success(function(data) {
-                    alert(data.message);
+                    dataType: "json",
+                    data: auth
+                }).success(function(data) {                  
                     if (data.result)
                     {
-                        document.location.href="index.html";
+                        $.ajax({
+                            url: "/mobilpiac-war/LogoutServlet",
+                            type: "get",
+                            dataType: "json"
+                        }).success(function(data2) {
+                            alert(data2.message);
+                            //if (data2.result)
+                            //{
+                                document.location.href="index.html";
+                            //}
+                        });
                     }
-                }); 
+                    else
+                    {
+                        alert(data);
+                    }
+                });
             }
          });
          
          $("#managebtn").click(function(event){
             if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined){
-                event.preventDefault();
                 var auth = {
                     login_name : $.cookie("login_name"),
                     password : $.cookie("password")
@@ -372,48 +389,90 @@
             }
          });
          $("#newadbtn").click(function(event){
-            if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined){
-                event.preventDefault();
-                document.location.href="new_ad.html"; 
-            }else{
-                alert("Ehhez a funkcióhoz be kell jelentkeznie.");
-            }
+             $("#logbtn").click(function(event){
+                if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined){
+                    var auth = {
+                        login_name : $.cookie("login_name"),
+                        password : $.cookie("password")
+                    };
+                    $.ajax({
+                        url: "/mobilpiac-war/CheckUserServlet",
+                        type: "get",
+                        dataType: "json",
+                        data: auth
+                    }).success(function(data) {                  
+                        if (data.result)
+                        {
+                            document.location.href="new_ad.html"; 
+                        }
+                        else
+                        {
+                            alert("Ehhez a funkcióhoz be kell jelentkeznie.");
+                        }
+                    });
+                }
+             });
          });
+         
          
     </script>
     <script>
-        $( document ).ready(function() {
-            if ($.cookie("login_name") === undefined || $.cookie("password") === undefined){
-                $("#logbtn").html("Bejelentkezés");
-                $("#logbtn").attr("href","signin.html");
-                $("#managebtn").hide();
-                $("#newadbtn").hide();
-            }else{
-                $("#logbtn").html("Kijelentkezés");
-                $("#logbtn").attr("href","#");
-                $("#regbtn").hide();
-                $("#login_name").html($.cookie("login_name"));
+          $( document ).ready(function() {
+            if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined){
+                
                 var auth = {
                     login_name : $.cookie("login_name"),
                     password : $.cookie("password")
                 };
                 $.ajax({
-                    url: "/mobilpiac-war/CheckAdminServlet",
+                    url: "/mobilpiac-war/CheckUserServlet",
                     type: "get",
                     dataType: "json",
                     data: auth
                 }).success(function(data) {                  
-                    if (!data.result)
+                    if (data.result)
                     {
-                        $("#managebtn").css('visibility', 'hidden');
+                        $("#logbtn").html("Kijelentkezés");
+                        $("#logbtn").attr("href","#");
+                        $("#regbtn").hide();
+                        $("#login_name").html($.cookie("login_name"));
+                        var auth2 = {
+                            login_name : $.cookie("login_name"),
+                            password : $.cookie("password")
+                        };
+                        $.ajax({
+                            url: "/mobilpiac-war/CheckAdminServlet",
+                            type: "get",
+                            dataType: "json",
+                            data: auth2
+                        }).success(function(data2) {                  
+                            if (!data2.result)
+                            {
+                                $("#managebtn").css('visibility', 'hidden');
+                            }
+                            else
+                            {
+                                $("#managebtn").css('visibility', 'visible');
+                            }
+                        });   
                     }
                     else
                     {
-                        $("#managebtn").css('visibility', 'visible');
+                        $("#logbtn").html("Bejelentkezés");
+                        $("#logbtn").attr("href","signin.html");
+                        $("#managebtn").hide();
+                        $("#newadbtn").hide();
                     }
-                });  
+                });
+            }
+            else
+            {
                 
-            }     
+                $("#logbtn").html("Bejelentkezés");
+                $("#logbtn").attr("href","signin.html");
+                $("#managebtn").hide();
+                $("#newadbtn").hide();
+            }
         });
     </script>
 </body>
