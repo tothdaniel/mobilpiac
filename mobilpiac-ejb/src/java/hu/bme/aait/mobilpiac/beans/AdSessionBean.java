@@ -239,27 +239,27 @@ public class AdSessionBean {
 
                 if (bids.isEmpty()) {
                     if (bidPrice > a.getMinPrice()) {
-                        Bids bid = new Bids();
-
                         Long id = em.createQuery("SELECT MAX(b.id) FROM Bids b", Long.class).getSingleResult();
-
-                        if (id == null) {
+                        if (id == 0) {                            
                             id = new Long(1);
                         } else {
-                            id = id++;
+                            id = id+1;
                         }
-                        bid.setId(id);
-                        bid.setAdvertisementId(a);
                         try {
+                            Bids bid = new Bids();
+                            bid.setId(id);
                             
-                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                            bid.setAdvertisementId(a);
+                            /*SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                             
                             Date date = new SimpleDateFormat("yyyy-MM-dd").parse(sdf.format(new Date()));
                             
-                            bid.setDateOfBid(date);
+                            bid.setDateOfBid(date);*/
+                            bid.setDateOfBid(new Date());
                             bid.setPrice(Integer.parseInt(bidPrice.toString()));
-                        
-                            //em.persist(bid);
+
+                            //PETI IDE
+                            em.persist(bid);
 
                             result.add("true");
                             result.add("Sikeresen licitált.");
@@ -294,7 +294,7 @@ public class AdSessionBean {
                         if (id == null) {
                             id = new Long(1);
                         } else {
-                            id = id++;
+                            id = id+1;
                         }
                         bid.setId(id);
                         bid.setAdvertisementId(a);
