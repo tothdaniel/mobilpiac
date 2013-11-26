@@ -40,6 +40,11 @@ public class MobileSessionBean {
     @PersistenceContext
     EntityManager em;
 
+    
+    public boolean isInteger(String str) {
+        return str.matches("^-?[0-9]+(\\.[0-9]+)?$");
+    }
+    
     public JSONObject getJSONObjectWithLowDetails(PhoneType p) {
         JSONObject obj = new JSONObject();
         obj.put("id", p.getId());
@@ -479,10 +484,6 @@ public class MobileSessionBean {
         }
     }
 
-    public boolean isInteger(String str) {
-        return str.matches("^-?[0-9]+(\\.[0-9]+)?$");
-    }
-
     public List<String> addProcessor(String json) {
         List<String> result = new ArrayList<>();
         org.json.JSONObject jobj = new org.json.JSONObject(json);
@@ -550,6 +551,45 @@ public class MobileSessionBean {
 
             result.add("true");
             result.add("Sikeresen hozzáadta a " + p.getChipset() + " chipsettel ellátott processzort.");
+            return result;
+        }
+    }
+    
+    public List<String> addPhoneType(String json) {
+        List<String> result = new ArrayList<>();
+        org.json.JSONObject jobj = new org.json.JSONObject(json);
+
+        if (jobj.getString("type_name") == null || jobj.getString("type_name").isEmpty()) {
+            result.add("false");
+            result.add("A hozzáadandó típus nevét nem adta meg.");
+            return result;
+        }
+        //TODO végignézni nullokkal
+
+        TypedQuery<PhoneType> query = em.createQuery("SELECT p FROM PhoneType p WHERE p.typeName = :name AND p.fkManufacturer.manufacturerName = :manname", PhoneType.class);
+        query.setParameter("name", jobj.getString("type_name"));
+        query.setParameter("manname", jobj.getString("manufacturer_name"));
+        List<PhoneType> ps = query.getResultList();
+
+        if (!ps.isEmpty()) {
+            result.add("false");
+            result.add("Már létezik ilyen nevű (gyártó + típus) készülék.");
+            return result;
+        } else {
+            PhoneType p = new PhoneType();
+            Long id = em.createQuery("SELECT MAX(p.id) FROM PhoneType p", Long.class).getSingleResult();
+            if (id == null) {
+                id = new Long(1);
+            } else {
+                id = id++;
+            }
+            p.setId(id);
+            
+            //TODO bepakolni mindent 
+            em.persist(p);
+
+            result.add("true");
+            result.add("Sikeresen hozzáadta a " + p.getFkManufacturer().getManufacturerName() + " " + p.getTypeName() + " nevű típust.");
             return result;
         }
     }

@@ -9,6 +9,7 @@ package hu.bme.aait.mobilpiac.servlets;
 import hu.bme.aait.mobilpiac.beans.UserSessionBean;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -30,16 +31,16 @@ public class CheckAdminServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             JSONObject obj = new JSONObject();
-            if(us.checkAdmin(request.getParameter("login_name"), request.getParameter("password")))
+            List<String> result = us.checkAdmin(request.getParameter("login_name"), request.getParameter("password"));
+            if(result.get(0).equals("true"))
             {
-                obj.put("message","Belépés engedélyezve.");
                 obj.put("result",true);
             }
             else
             {
-                obj.put("message","Ide csak az adminisztrátor léphet be.");
                 obj.put("result",false);
             }
+            obj.put("message",result.get(1));
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             out.print(obj);

@@ -92,6 +92,10 @@
         <servlet-name>AddOsVersionServlet</servlet-name>
         <servlet-class>hu.bme.aait.mobilpiac.servlets.AddOsVersionServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ManagePhoneTypeServlet</servlet-name>
+        <servlet-class>hu.bme.aait.mobilpiac.servlets.ManagePhoneTypeServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ListUsersServlet</servlet-name>
         <url-pattern>/ListUsersServlet</url-pattern>
@@ -183,6 +187,10 @@
     <servlet-mapping>
         <servlet-name>AddOsVersionServlet</servlet-name>
         <url-pattern>/AddOsVersionServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ManagePhoneTypeServlet</servlet-name>
+        <url-pattern>/ManagePhoneTypeServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -6,13 +6,12 @@
 
 package hu.bme.aait.mobilpiac.servlets;
 
-import hu.bme.aait.mobilpiac.beans.UserSessionBean;
+import hu.bme.aait.mobilpiac.beans.MobileSessionBean;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,39 +21,27 @@ import org.json.simple.JSONObject;
  *
  * @author Daniel
  */
-public class LoginServlet extends HttpServlet {
+public class ManagePhoneTypeServlet extends HttpServlet {
 
     @EJB
-    UserSessionBean us;
-    
+    MobileSessionBean ms;
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            List<String> result = us.login(request.getParameter("login_name"), request.getParameter("password"));
-            JSONObject obj = new JSONObject();
+            List<String> result = ms.addPhoneType(request.getParameter("json"));
+            JSONObject jobj = new JSONObject();
             if(result.get(0).equals("true"))
             {
-                int d = request.getParameter("stay_login").equals("true") ? 24*7 : 1;
-                Cookie cookie1 = new Cookie("login_name", request.getParameter("login_name"));
-                cookie1.setMaxAge(60 * 60 * d); //1*d hour
-                response.addCookie(cookie1);
-                Cookie cookie2 = new Cookie("password", request.getParameter("password"));
-                cookie2.setMaxAge(60 * 60 * d); //1*d hour
-                response.addCookie(cookie2);
-                obj.put("result",true);
+                jobj.put("result",true);
             }
             else
             {
-                obj.put("result",false);
+                jobj.put("result",false);
             }
-            obj.put("message", result.get(1));
-            
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            out.print(obj);
-
+            jobj.put("message", result.get(1));
+            out.print(jobj);
         }
     }
 
