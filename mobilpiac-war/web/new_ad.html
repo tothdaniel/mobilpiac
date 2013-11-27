@@ -35,7 +35,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">Telefon gyártója:</label>
                             <div class="col-sm-8">
-                                <select id="manuFacturerSelect" data-bind="foreach: manufacturers, visible: manufacturers().length > 0" class="form-control">
+                                <select id="manufacturerSelect" data-bind="foreach: manufacturers, visible: manufacturers().length > 0" class="form-control">
                                     <option data-bind="html: manufacturer_name"></option>
                                 </select>
                             </div>
@@ -169,15 +169,40 @@
                     }
                 });
                 
+                var manufacturer = {
+                    manufacturer: $("#manufacturerSelect").val()
+                };
+                
                 $.ajax({
                     url: "/mobilpiac-war/ListMobilesServlet",
                     type: "get",
-                    dataType: "json"
+                    dataType: "json",
+                    data: {json: JSON.stringify(manufacturer)}
                 }).success(function(data) {
+                    self.mobiles.removeAll();
                     for (key in data.mobiles)
                     {
                         self.mobiles.push(new Mobile(data.mobiles[key]));
                     }
+                });
+                
+                
+                $("#osselect").change(function(event) {
+                    var manufacturer = {
+                    manufacturer: $("#manufacturerSelect").val()
+                };
+                    $.ajax({
+                        url: "/mobilpiac-war/ListMobilesServlet",
+                        type: "get",
+                        dataType: "json",
+                        data: {json: JSON.stringify(manufacturer)}
+                    }).success(function(data) {
+                        self.mobiles.removeAll();
+                        for (key in data.mobiles)
+                        {
+                            self.mobiles.push(new Mobile(data.mobiles[key]));
+                        }
+                    });
                 });
 
                 return self;

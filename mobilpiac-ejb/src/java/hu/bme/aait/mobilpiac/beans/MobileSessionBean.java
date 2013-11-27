@@ -41,11 +41,10 @@ public class MobileSessionBean {
     @PersistenceContext
     EntityManager em;
 
-    
     public boolean isInteger(String str) {
         return str.matches("^-?[0-9]+(\\.[0-9]+)?$");
     }
-    
+
     public JSONObject getJSONObjectWithLowDetails(PhoneType p) {
         JSONObject obj = new JSONObject();
         obj.put("id", p.getId());
@@ -133,6 +132,27 @@ public class MobileSessionBean {
         return obj;
     }
 
+    public JSONArray listMobiles(String json) {
+        org.json.JSONObject myobj = new org.json.JSONObject(json);
+        if (myobj.getString("manufacturer") != null) {
+        }
+        TypedQuery<Manufacturer> query = em.createQuery("SELECT m FROM Manufacturer m WHERE m.manufacturerName = :name", Manufacturer.class);
+        query.setParameter("name", myobj.getString("manufacturer"));
+        List<Manufacturer> mList = query.getResultList();
+        JSONArray jarray = new JSONArray();
+
+        if (!mList.isEmpty()) {
+            
+            TypedQuery<PhoneType> query2 = em.createQuery("SELECT p FROM PhoneType p WHERE p.fkManufacturer.manufacturerName = :name",PhoneType.class);
+            query2.setParameter("name", mList.get(0).getManufacturerName());
+            List<PhoneType> phonesList = query2.getResultList();
+            for(PhoneType p:phonesList){
+                jarray.add(getJSONObject(p,0));
+            }
+        }
+        return jarray;
+    }
+
     public JSONArray listAllMobiles() {
         List<PhoneType> phonesList = em.createQuery("SELECT p FROM PhoneType p"
                 + " ORDER BY P.fkManufacturer.manufacturerName,p.typeName"
@@ -145,13 +165,13 @@ public class MobileSessionBean {
                 TypedQuery<Advertisement> query = em.createQuery("SELECT a FROM Advertisement a WHERE a.fkPhoneType.id = :pid", Advertisement.class);
                 query.setParameter("pid", p.getId());
                 List<Advertisement> advertisementList = query.getResultList();
-                
+
                 int cheapest = 1000000;
                 for (Advertisement a : advertisementList) {
                     TypedQuery<Bids> query2 = em.createQuery("SELECT b FROM Bids b WHERE b.advertisementId.fkPhoneType.id = :pid", Bids.class);
                     query2.setParameter("pid", p.getId());
                     List<Bids> bidList = query2.getResultList();
-                    
+
                     int actPrice = a.getMinPrice();
                     for (Bids b : bidList) {
                         if (b.getPrice() > actPrice) {
@@ -331,8 +351,6 @@ public class MobileSessionBean {
         query.setParameter("name", jobj.getString("os_name"));
         List<OperationSystem> tos = query.getResultList();
 
-        
-        
         if (tos.isEmpty()) {
             result.add("false");
             result.add("Nincs " + jobj.getString("os_name") + " nevű operációs rendszer. Válasszon a felsoroltakból.");
@@ -350,26 +368,26 @@ public class MobileSessionBean {
             return result;
         } else {
             OsVersion os = new OsVersion();
-            try{
+            try {
                 Long id = em.createQuery("SELECT MAX(o.id) FROM OsVersion o", Long.class).getSingleResult();
                 if (id == null) {
                     id = Long.parseLong("1");
                 } else {
                     id = id++;
                 }
-             
+
                 os.setId(id);
                 os.setVersionName(jobj.getString("os_version"));
-                TypedQuery<OperationSystem> queryOS = em.createQuery("SELECT os FROM OperationSystem os WHERE os.osName = :osname",OperationSystem.class);
+                TypedQuery<OperationSystem> queryOS = em.createQuery("SELECT os FROM OperationSystem os WHERE os.osName = :osname", OperationSystem.class);
                 queryOS.setParameter("osname", jobj.getString("os_name"));
                 OperationSystem thisOS = queryOS.getSingleResult();
                 os.setFkOs(thisOS);
-                
+
                 em.persist(os);
                 result.add("true");
                 result.add("Sikeresen hozzáadta a " + os.getVersionName() + " verziót a(z) " + os.getFkOs().getOsName() + " operációs rendszerhez.");
                 return result;
-            }catch(Exception e){
+            } catch (Exception e) {
                 result.add("false");
                 result.add(e.getMessage());
                 return result;
@@ -559,22 +577,22 @@ public class MobileSessionBean {
             return result;
         }
     }
-    
-    public List<String> managePhoneType(String json){
+
+    public List<String> managePhoneType(String json) {
         List<String> result = new ArrayList<>();
         org.json.JSONObject jobj = new org.json.JSONObject(json);
         String todo = jobj.getString("type");
-        switch(todo){
-            case "read": 
-               JSONObject obj = getJSONObject(jobj.getString("id"));
-               result.add("true");
-               result.add(obj.toJSONString());
-               break;
+        switch (todo) {
+            case "read":
+                JSONObject obj = getJSONObject(jobj.getString("id"));
+                result.add("true");
+                result.add(obj.toJSONString());
+                break;
         }
-        
+
         return result;
     }
-    
+
     public List<String> addPhoneType(String json) {
         List<String> result = new ArrayList<>();
         org.json.JSONObject jobj = new org.json.JSONObject(json);
@@ -604,7 +622,7 @@ public class MobileSessionBean {
                 id = id++;
             }
             p.setId(id);
-            
+
             //TODO bepakolni mindent 
             em.persist(p);
 

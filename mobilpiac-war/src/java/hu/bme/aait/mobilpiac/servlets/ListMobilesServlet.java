@@ -35,7 +35,11 @@ public class ListMobilesServlet extends HttpServlet {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             JSONObject json = new JSONObject();
-            json.put("mobiles",ms.listAllMobiles());
+            if(request.getParameter("json")!= null){
+                json.put("mobiles", ms.listMobiles(request.getParameter("json")));
+            }else{
+                json.put("mobiles",ms.listAllMobiles());
+            }
             out.print(json);
         }
     }
