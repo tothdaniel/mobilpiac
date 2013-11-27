@@ -1,156 +1,242 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-    <title>MobilPiactér</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta charset="utf-8">
-    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="screen">
-</head>
+    <head>
+        <title>MobilPiactér</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="utf-8">
+        <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="screen">
+    </head>
 
-<body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <body>
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <a href="index.html" class="navbar-brand">MobilPiactér</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <div class="navbar-right navbar-form">
+                        <a id="managebtn" style="visibility: hidden;" class="btn btn-default">Telefontípusok menedzselése</a>
+                        <a id="listbtn" href="list_view.html" class="btn btn-default">Listanézet</a>
+                        <a id="regbtn" href="registration.html" class="btn btn-default">Regisztráció</a>
+                        <a id="logbtn" href="signin.html" class="btn btn-default">Bejelentkezés</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br/>
+        <br/>
+        <br/>
         <div class="container">
-            <div class="navbar-header">
-                <a href="index.html" class="navbar-brand">MobilPiactér</a>
+            <div class="row">
+                <form class="form-horizontal">
+                    <div class="col-md-6 col-md-push-3">
+                        <h2 class="text-center">Új hirdetés</h2>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Telefon gyártója:</label>
+                            <div class="col-sm-8">
+                                <select id="manuFacturerSelect" data-bind="foreach: manufacturers, visible: manufacturers().length > 0" class="form-control">
+                                    <option data-bind="html: manufacturer_name"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Telefon típusa:</label>
+                            <div class="col-sm-8">
+                                <select id="typeSelect" data-bind="foreach: mobiles, visible: mobiles().length > 0" class="form-control">
+                                    <option data-bind="html: type_name"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Kikiáltási ár:</label>
+                            <div class="col-sm-7">
+                                <input id="minpriceInput" type="number" class="form-control" required>
+                            </div>
+                            <div class="col-sm-1 control-label">
+                                Ft
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Szolgáltató:</label>
+                            <div class="col-sm-8">
+                                <select id="networkSelect" data-bind="foreach: mobileNetworks, visible: mobileNetworks().length > 0" class="form-control">
+                                    <option data-bind="html: network_name"></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-10 col-md-push-1">
+                        <div class="form-group">
+                            <label id="descriptionLabel" class="col-sm-3 col-lg-2 control-label">Részletek leírása:</label>
+                            <div class="col-sm-9 col-lg-10">
+                                <textarea id="desc" class="form-control" rows="5">
+                                </textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-sm-push-3 col-md-4 col-md-push-4 text-center">
+                        <label class="checkbox">
+                            <input id="submitCheckbox" type="checkbox" value="terms-conditions-accept">A licitálás feltételeit elfogadom
+                        </label>
+                        <button id="createAdBtn" class="btn btn-md btn-primary" type="submit">Hirdetés feladása</button>
+                    </div>
+                </form>
             </div>
-            <div class="navbar-collapse collapse">
-                <div class="navbar-right navbar-form">
-                    <a id="managebtn" style="visibility: hidden;" class="btn btn-default">Telefontípusok menedzselése</a>
-                    <a id="listbtn" href="list_view.html" class="btn btn-default">Listanézet</a>
-                    <a id="regbtn" href="registration.html" class="btn btn-default">Regisztráció</a>
-                    <a id="logbtn" href="signin.html" class="btn btn-default">Bejelentkezés</a>
-                </div>
-            </div>
+
+
+            <hr>
+
+            <footer>
+                <p>&copy; DaniPeti 2013</p>
+            </footer>
         </div>
-    </div>
-    <br/>
-    <br/>
-    <br/>
-    <div class="container">
-        <div class="row">
-            <form class="form-horizontal">
-                <div class="col-md-6 col-md-push-3">
-                    <h2 class="text-center">Új hirdetés</h2>
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label">Telefon típusa:</label>
-                        <div class="col-sm-8">
-                            <select class="form-control">
-                                <optgroup label="Nexus">
-                                    <option>Nexus 4</option>
-                                    <option>Nexus 5</option>
-                                </optgroup>
-                                <optgroup label="ZTE">
-                                    <option>ZTE Grand X In</option>
-                                    <option>ZTE Blade III</option>
-                                </optgroup>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label">Kikiáltási ár:</label>
-                        <div class="col-sm-7">
-                            <input class="form-control">
-                        </div>
-                        <div class="col-sm-1 control-label">
-                            Ft
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label">Szolgáltató:</label>
-                        <div class="col-sm-8">
-                            <select class="form-control">
-                                <option>Független</option>
-                                <option>Telenor</option>
-                                <option>T-Mobile</option>
-                                <option>Vodafone</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-10 col-md-push-1">
-                    <div class="form-group">
-                        <label class="col-sm-3 col-lg-2 control-label">Részletek leírása:</label>
-                        <div class="col-sm-9 col-lg-10">
-                            <textarea class="form-control" rows="5">
-                            </textarea>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-sm-push-3 col-md-4 col-md-push-4 text-center">
-                	<label class="checkbox">
-	                    <input type="checkbox" value="terms-conditions-accept">A licitálás feltételeit elfogadom
-	                </label>
-	                <button class="btn btn-md btn-primary" type="submit">Hirdetés feladása</button>
-                </div>
-            </form>
-        </div>
+        <!-- /container -->
 
+        <script type="text/javascript" src="lib/jquery-2.0.3.min.js"></script>
+        <script type="text/javascript" src="lib/jquery.cookie.js"></script>
+        <script src="lib/knockout-3.0.0.js"></script>
+        <script type="text/javascript" src="lib/bootstrap/js/bootstrap.min.js"></script>
+        <script>
 
-        <hr>
+            var MobileNetwork = function(data) {
+                this.id = ko.observable(data.id);
+                this.network_name = ko.observable(data.network_name);
+            };
 
-        <footer>
-            <p>&copy; DaniPeti 2013</p>
-        </footer>
-    </div>
-    <!-- /container -->
+            var Manufacturer = function(data) {
+                this.id = ko.observable(data.id);
+                this.manufacturer_name = ko.observable(data.manufacturer_name);
+            };
 
-    <script type="text/javascript" src="lib/jquery-2.0.3.min.js"></script>
-    <script type="text/javascript" src="lib/jquery.cookie.js"></script>
-    <script type="text/javascript" src="lib/bootstrap/js/bootstrap.min.js"></script>
-    <script>
-         $("#logbtn").click(function(event){
-            if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined){
+            var Mobile = function(data) {
+                this.id = ko.observable(data.id);
+                this.type_name = ko.observable(data.type_name);
+            };
+
+            function ViewModel() {
+                // Data
+                var self = this;
+                self.mobiles = ko.observableArray([]);
+                self.mobileNetworks = ko.observableArray([]);
+                self.manufacturers = ko.observableArray([]);
+
+                $("#desc").val("");
+
+                $("#createAdBtn").click(function(event) {
+                    //event.preventDefault();
+                    if($("#submitCheckbox").is(":checked")){
+                        if($("#desc").val() !== ""){
+                            var details = {
+                                
+                            };
+                            $.ajax({
+                                url: "/mobilpiac-war/AddAdvertisementServlet",
+                                type: "get",
+                                dataType: "json",
+                                data:{json:JSON.stringify(details)}
+                            }).success(function(data) {
+                                alert(data.message);
+                            });
+                        }else{
+                            alert("Adjon leírást a hirdetéshez.");
+                        }
+                    }else{
+                        alert("El kell fogadnia a licitálás feltételeit.");
+                    }
+                });
+
+                // Operations
                 $.ajax({
-                    url: "/mobilpiac-war/LogoutServlet",
+                    url: "/mobilpiac-war/ListMobileNetworksServlet",
                     type: "get",
                     dataType: "json"
                 }).success(function(data) {
-                    alert(data.message);
-                    if (data.result)
+                    for (key in data.mobile_networks)
                     {
-                        document.location.href="index.html";
+                        self.mobileNetworks.push(new MobileNetwork(data.mobile_networks[key]));
                     }
-                }); 
-            }
-         });
-         
-         $("#managebtn").click(function(event){
-            if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined){
-                var auth = {
-                    login_name : $.cookie("login_name"),
-                    password : $.cookie("password")
-                };
+                });
+
                 $.ajax({
-                    url: "/mobilpiac-war/CheckAdminServlet",
+                    url: "/mobilpiac-war/ListManufacturersServlet",
                     type: "get",
-                    dataType: "json",
-                    data: auth
-                }).success(function(data) {                  
-                    if (!data.result)
+                    dataType: "json"
+                }).success(function(data) {
+                    for (key in data.manufacturers)
                     {
+                        self.manufacturers.push(new Manufacturer(data.manufacturers[key]));
+                    }
+                });
+                
+                $.ajax({
+                    url: "/mobilpiac-war/ListMobilesServlet",
+                    type: "get",
+                    dataType: "json"
+                }).success(function(data) {
+                    for (key in data.mobiles)
+                    {
+                        self.mobiles.push(new Mobile(data.mobiles[key]));
+                    }
+                });
+
+                return self;
+            }
+            ko.applyBindings(new ViewModel());
+        </script>
+        <script>
+            $("#logbtn").click(function(event) {
+                if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined) {
+                    $.ajax({
+                        url: "/mobilpiac-war/LogoutServlet",
+                        type: "get",
+                        dataType: "json"
+                    }).success(function(data) {
                         alert(data.message);
-                    }
-                    else
-                    {
-                        document.location.href="manage_phone.html";
-                    }
-                });  
-            }else{
-                alert("Ehhez a funkcióhoz be kell jelentkeznie.");
-            }
-         });
-         $("#newadbtn").click(function(event){
-            if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined){
-                event.preventDefault();
-                document.location.href="new_ad.html"; 
-            }else{
-                alert("Ehhez a funkcióhoz be kell jelentkeznie.");
-            }
-         });
-         
-    </script>
-    <script>
+                        if (data.result)
+                        {
+                            document.location.href = "index.html";
+                        }
+                    });
+                }
+            });
+
+            $("#managebtn").click(function(event) {
+                if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined) {
+                    var auth = {
+                        login_name: $.cookie("login_name"),
+                        password: $.cookie("password")
+                    };
+                    $.ajax({
+                        url: "/mobilpiac-war/CheckAdminServlet",
+                        type: "get",
+                        dataType: "json",
+                        data: auth
+                    }).success(function(data) {
+                        if (!data.result)
+                        {
+                            alert(data.message);
+                        }
+                        else
+                        {
+                            document.location.href = "manage_phone.html";
+                        }
+                    });
+                } else {
+                    alert("Ehhez a funkcióhoz be kell jelentkeznie.");
+                }
+            });
+            $("#newadbtn").click(function(event) {
+                if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined) {
+                    event.preventDefault();
+                    document.location.href = "new_ad.html";
+                } else {
+                    alert("Ehhez a funkcióhoz be kell jelentkeznie.");
+                }
+            });
+
+        </script>
+        <script>
             $(document).ready(function() {
                 if ($.cookie("login_name") !== undefined && $.cookie("password") !== undefined) {
 
@@ -185,6 +271,6 @@
                 }
             });
         </script>
-</body>
+    </body>
 
 </html>
