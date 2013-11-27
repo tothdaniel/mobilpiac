@@ -36,7 +36,7 @@
                         <div class="thumbnail admin-phone-list">
                             <h4 style="margin-top: 5px;">Telefonípusok</h4>
                             <ul data-bind="foreach: mobiles, visible: mobiles().length > 0">
-                                <li><a data-bind="html: title" class="btn btn-default"></a></li>
+                                <li><a data-bind="html: title, click: $parent.loadMobile" class="btn btn-default"></a></li>
                             </ul>
 
 
@@ -309,7 +309,7 @@
         <script src="lib/slider/js/bootstrap-slider.js"></script>
         <script>
             var Mobile = function(data) {
-                this.actual_price = ko.observable(data.actual_price);
+                this.id = ko.observable(data.id);
                 this.published = ko.observable(data.published);
                 this.seller_user = ko.observable(data.seller_user);
                 this.price = ko.observable(data.price);
@@ -463,6 +463,18 @@
                         self.processors.push(new Processor(data.processors[key]));
                     }
                 });
+                
+                self.loadMobile = function (data,event) {
+                    $.ajax({
+                        url: "/mobilpiac-war/ManagePhoneTypeServlet",
+                        type: "get",
+                        dataType: "json",
+                        data: {json: JSON.stringify({type: "read", id: data.id()})}
+                    }).success(function(data) {
+                        console.log(data);
+                    });
+                };
+                
                 //ezzel frissul a verziolista, alapbol az Androidot tolti be
                 $("#osselect").change(function(event) {
                     var os = {
