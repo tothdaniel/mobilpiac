@@ -9,6 +9,7 @@ import hu.bme.aait.mobilpiac.entities.Advertisement;
 import hu.bme.aait.mobilpiac.entities.Bids;
 import hu.bme.aait.mobilpiac.entities.Manufacturer;
 import hu.bme.aait.mobilpiac.entities.MobileNetwork;
+import hu.bme.aait.mobilpiac.entities.PhoneType;
 import hu.bme.aait.mobilpiac.entities.Sim;
 import hu.bme.aait.mobilpiac.entities.Users;
 import java.text.Format;
@@ -308,12 +309,97 @@ public class AdSessionBean {
             }
         }
     }
-    
-     public List<String> addAdvertisement(String json) {
+
+    public List<String> addAdvertisement(String json) {
         List<String> result = new ArrayList<>();
+
+        org.json.JSONObject obj = new org.json.JSONObject();
+        String manufacturer = obj.getString("manufacturer");
+        String typeName = obj.getString("type_name");
+        Integer minPrice = obj.getInt("min_price");
+        String network = obj.getString("network");
+        String description = obj.getString("description");
+        String loginName = obj.getString("login_name");
+
+        if (manufacturer == null || manufacturer.isEmpty()) {
+            result.add("false");
+            result.add("Nem adta meg a készülék gyártóját.");
+        }
+
+        if (typeName == null || typeName.isEmpty()) {
+            result.add("false");
+            result.add("Nem adta meg a készülék típusát.");
+        }
+
+        if (minPrice == 0) {
+            result.add("false");
+            result.add("Nem adta meg a készülék minimálárát.");
+        }
+
+        if (description == null || description.isEmpty()) {
+            result.add("false");
+            result.add("Nem adta meg a készülék leírását.");
+        }
+
+        if (network == null || network.isEmpty()) {
+            result.add("false");
+            result.add("Nem adta meg a készülék hálózatfüggőségét.");
+        }
         
-        
-        
-        return result;
-     }
+        if (loginName == null || loginName.isEmpty()) {
+            result.add("false");
+            result.add("Ehhez a funkcióhoz be kell jelentkeznie.");
+        }
+
+        TypedQuery<PhoneType> rquery = em.createQuery("SELECT p FROM PhoneType p WHERE p.typeName = :name and p.fkManufacturer.manufacturerName = :mname", PhoneType.class);
+        rquery.setParameter("name", typeName);
+        rquery.setParameter("mname", manufacturer);
+        List<PhoneType> pList = rquery.getResultList();
+        if(!pList.isEmpty()){
+            TypedQuery<MobileNetwork> mquery = em.createQuery("SELECT m FROM MobileNetwork m WHERE m.networkName = :name", MobileNetwork.class);
+            mquery.setParameter("name", network);
+            List<MobileNetwork> mList = mquery.getResultList();
+            if(!mList.isEmpty()){
+                TypedQuery<Users> uquery = em.createQuery("SELECT u FROM Users u WHERE u.loginName = :name", Users.class);
+                uquery.setParameter("name", loginName);
+                List<Users> uList = uquery.getResultList();
+                if(!uList.isEmpty()){
+                    Advertisement a = new Advertisement();
+                    Long id = em.createQuery("SELECT MAX(a.id) FROM Advertisement a", Long.class).getSingleResult();
+                    if (id == null) {
+                        id = new Long(1);
+                    } else {
+                        id = id + 1;
+                    }
+                    a.setId(id);
+                    a.setDescription(description);
+                    a.setFinished("0");
+                    a.setFkNetworkLock(mList.get(0));
+                    a.setFkPhoneType(pList.get(0));
+                    a.setFkUser(uList.get(0));
+                    a.setMinPrice(minPrice);
+                    a.setPublished(new Date());
+                    
+                    em.persist(a);
+                    
+                    result.add("true");
+                    result.add("Sikeresen feladta a hirdetést.");
+                    return result;
+                }else{
+                    result.add("false");
+                    result.add("Ez a felhasználó található. Kérem, jelentkezzen be.");
+                    return result;
+                }
+                
+            }else{
+                result.add("false");
+                result.add("Ez a hálózat páros nem található. Kérem, ellenőrizze, hogy helyesen adta-e meg.");
+                return result;
+            }
+        }else{
+            result.add("false");
+            result.add("Ez a telefongyártó-típus páros nem található. Kérem, ellenőrizze, hogy helyesen adta-e meg.");
+            return result;
+        }
+    }
 }

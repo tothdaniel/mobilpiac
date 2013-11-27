@@ -204,7 +204,17 @@
                                     dataType: "json",
                                     data: {json:JSON.stringify(bid)}
                                 }).success(function(data) {
-                                    //Mi legyen sikeres vagy nem sikeres licit esetén
+                                    if(data.result){
+                                        $.ajax({
+                                            url: "/mobilpiac-war/AdHighDetailServlet",
+                                            type: "get",
+                                            dataType: "json",
+                                            data: {id: getURLParameter("ad_id")}
+                                        }).success(function(data) {
+                                            self.ad.removeAll();
+                                            self.ad.push(new Ad(data));
+                                        }); 
+                                    }
                                     alert(data.message);
                                 });
                             }
