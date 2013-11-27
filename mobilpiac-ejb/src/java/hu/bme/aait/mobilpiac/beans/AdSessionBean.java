@@ -330,7 +330,7 @@ public class AdSessionBean {
             loginName = obj.getString("login_name");
         }catch(JSONException e){
             result.add("false");
-            result.add("Szükséges adat hiányzik.");
+            result.add("Szükséges adat hiányzik. Amennyiben nem áll rendelkezésre, az adott márkához nem tud jelenleg feltölteni.");
             return result;
         }
 

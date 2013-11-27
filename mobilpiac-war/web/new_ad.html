@@ -120,7 +120,7 @@
                 self.mobiles = ko.observableArray([]);
                 self.mobileNetworks = ko.observableArray([]);
                 self.manufacturers = ko.observableArray([]);
-
+                //init
                 $("#desc").val("");
 
                 $("#createAdBtn").click(function(event) {
@@ -142,11 +142,9 @@
                                 if ($("#submitCheckbox").is(":checked")) {
                                     if ($("#desc").val() !== "") {
                                         if($("#minpriceInput").val()!== ""){
-                                            if($("#typeSelect").val("visibility") === "true"){
-                                                //alert("ok");
                                                 var details = {
-                                                    manufacturer: $("#manufacturerSelect").val(),
                                                     type_name: $("#typeSelect").val(),
+                                                    manufacturer: $("#manufacturerSelect").val(),
                                                     min_price: $("#minpriceInput").val(),
                                                     network: $("#networkSelect").val(),
                                                     description: $("#desc").val(),
@@ -161,9 +159,6 @@
                                                 }).success(function(data) {
                                                     alert(data.message);
                                                 });
-                                            }else{
-                                                alert("Válasszon típust. Amennyiben nem áll rendelkezésre, az adott márkához nem tud jelenleg feltölteni.");
-                                            }
                                         }else{
                                             alert("Adja meg a minimálárat.");
                                         }
