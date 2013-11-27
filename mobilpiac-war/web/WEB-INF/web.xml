@@ -104,6 +104,10 @@
         <servlet-name>BidServlet</servlet-name>
         <servlet-class>hu.bme.aait.mobilpiac.servlets.BidServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AddAdvertisementServlet</servlet-name>
+        <servlet-class>hu.bme.aait.mobilpiac.servlets.AddAdvertisementServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ListUsersServlet</servlet-name>
         <url-pattern>/ListUsersServlet</url-pattern>
@@ -207,6 +211,10 @@
     <servlet-mapping>
         <servlet-name>BidServlet</servlet-name>
         <url-pattern>/BidServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddAdvertisementServlet</servlet-name>
+        <url-pattern>/AddAdvertisementServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -308,4 +308,12 @@ public class AdSessionBean {
             }
         }
     }
+    
+     public List<String> addAdvertisement(String json) {
+        List<String> result = new ArrayList<>();
+        
+        
+        
+        return result;
+     }
 }
