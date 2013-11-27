@@ -31,6 +31,7 @@ public class AddAdvertisementServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            request.setCharacterEncoding("UTF-8");
             List<String> result = as.addAdvertisement(request.getParameter("json"));
             JSONObject jobj = new JSONObject();
             if(result.get(0).equals("true"))
@@ -42,6 +43,10 @@ public class AddAdvertisementServlet extends HttpServlet {
                 jobj.put("result",false);
             }
             jobj.put("message", result.get(1));
+            
+            /*JSONObject jobj = new JSONObject();
+            jobj.put("result",true);
+            jobj.put("message",request.getParameter("json"));*/
             out.print(jobj);
         }
     }

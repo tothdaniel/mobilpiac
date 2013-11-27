@@ -134,20 +134,19 @@ public class MobileSessionBean {
 
     public JSONArray listMobiles(String json) {
         org.json.JSONObject myobj = new org.json.JSONObject(json);
-        if (myobj.getString("manufacturer") != null) {
-        }
-        TypedQuery<Manufacturer> query = em.createQuery("SELECT m FROM Manufacturer m WHERE m.manufacturerName = :name", Manufacturer.class);
-        query.setParameter("name", myobj.getString("manufacturer"));
-        List<Manufacturer> mList = query.getResultList();
         JSONArray jarray = new JSONArray();
+        if (myobj.getString("manufacturer") != null) {
+            TypedQuery<Manufacturer> query = em.createQuery("SELECT m FROM Manufacturer m WHERE m.manufacturerName = :name", Manufacturer.class);
+            query.setParameter("name", myobj.getString("manufacturer"));
+            List<Manufacturer> mList = query.getResultList();
+            if (!mList.isEmpty()) {
 
-        if (!mList.isEmpty()) {
-            
-            TypedQuery<PhoneType> query2 = em.createQuery("SELECT p FROM PhoneType p WHERE p.fkManufacturer.manufacturerName = :name",PhoneType.class);
-            query2.setParameter("name", mList.get(0).getManufacturerName());
-            List<PhoneType> phonesList = query2.getResultList();
-            for(PhoneType p:phonesList){
-                jarray.add(getJSONObject(p,0));
+                TypedQuery<PhoneType> query2 = em.createQuery("SELECT p FROM PhoneType p WHERE p.fkManufacturer.manufacturerName = :name",PhoneType.class);
+                query2.setParameter("name", mList.get(0).getManufacturerName());
+                List<PhoneType> phonesList = query2.getResultList();
+                for(PhoneType p:phonesList){
+                    jarray.add(getJSONObject(p,0));
+                }
             }
         }
         return jarray;

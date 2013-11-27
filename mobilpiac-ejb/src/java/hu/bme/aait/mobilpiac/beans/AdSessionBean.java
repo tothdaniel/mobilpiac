@@ -23,6 +23,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
+import org.json.JSONException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -312,44 +313,64 @@ public class AdSessionBean {
 
     public List<String> addAdvertisement(String json) {
         List<String> result = new ArrayList<>();
+        org.json.JSONObject obj = new org.json.JSONObject(json);
+        String manufacturer = null;
+        String typeName = null;
+        Integer minPrice = null;
+        String network = null;
+        String description = null;;
+        String loginName = null;
+        
+        try{
+            manufacturer = obj.getString("manufacturer");
+            typeName = obj.getString("type_name");
+            minPrice = obj.getInt("min_price");
+            network = obj.getString("network");
+            description = obj.getString("description");
+            loginName = obj.getString("login_name");
+        }catch(JSONException e){
+            result.add("false");
+            result.add("Szükséges adat hiányzik.");
+            return result;
+        }
 
-        org.json.JSONObject obj = new org.json.JSONObject();
-        String manufacturer = obj.getString("manufacturer");
-        String typeName = obj.getString("type_name");
-        Integer minPrice = obj.getInt("min_price");
-        String network = obj.getString("network");
-        String description = obj.getString("description");
-        String loginName = obj.getString("login_name");
-
-        if (manufacturer == null || manufacturer.isEmpty()) {
+       if (manufacturer == null || manufacturer.isEmpty()) {
             result.add("false");
             result.add("Nem adta meg a készülék gyártóját.");
+            return result;
         }
 
         if (typeName == null || typeName.isEmpty()) {
             result.add("false");
             result.add("Nem adta meg a készülék típusát.");
+            return result;
         }
 
         if (minPrice == 0) {
             result.add("false");
             result.add("Nem adta meg a készülék minimálárát.");
+            return result;
         }
 
         if (description == null || description.isEmpty()) {
             result.add("false");
             result.add("Nem adta meg a készülék leírását.");
+            return result;
         }
 
         if (network == null || network.isEmpty()) {
             result.add("false");
             result.add("Nem adta meg a készülék hálózatfüggőségét.");
+            return result;
         }
         
         if (loginName == null || loginName.isEmpty()) {
             result.add("false");
             result.add("Ehhez a funkcióhoz be kell jelentkeznie.");
+            return result;
         }
+        
+
 
         TypedQuery<PhoneType> rquery = em.createQuery("SELECT p FROM PhoneType p WHERE p.typeName = :name and p.fkManufacturer.manufacturerName = :mname", PhoneType.class);
         rquery.setParameter("name", typeName);
@@ -364,6 +385,7 @@ public class AdSessionBean {
                 uquery.setParameter("name", loginName);
                 List<Users> uList = uquery.getResultList();
                 if(!uList.isEmpty()){
+                    
                     Advertisement a = new Advertisement();
                     Long id = em.createQuery("SELECT MAX(a.id) FROM Advertisement a", Long.class).getSingleResult();
                     if (id == null) {
@@ -393,7 +415,7 @@ public class AdSessionBean {
                 
             }else{
                 result.add("false");
-                result.add("Ez a hálózat páros nem található. Kérem, ellenőrizze, hogy helyesen adta-e meg.");
+                result.add("Ez a hálózat nem található. Kérem, ellenőrizze, hogy helyesen adta-e meg.");
                 return result;
             }
         }else{
