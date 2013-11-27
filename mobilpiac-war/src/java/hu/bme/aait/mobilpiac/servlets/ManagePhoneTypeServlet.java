@@ -30,7 +30,7 @@ public class ManagePhoneTypeServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            List<String> result = ms.addPhoneType(request.getParameter("json"));
+            List<String> result = ms.managePhoneType(request.getParameter("json"));
             JSONObject jobj = new JSONObject();
             if(result.get(0).equals("true"))
             {

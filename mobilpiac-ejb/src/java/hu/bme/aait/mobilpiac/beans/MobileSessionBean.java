@@ -560,6 +560,21 @@ public class MobileSessionBean {
         }
     }
     
+    public List<String> managePhoneType(String json){
+        List<String> result = new ArrayList<>();
+        org.json.JSONObject jobj = new org.json.JSONObject(json);
+        String todo = jobj.getString("type");
+        switch(todo){
+            case "read": 
+               JSONObject obj = getJSONObject(jobj.getString("id"));
+               result.add("true");
+               result.add(obj.toJSONString());
+               break;
+        }
+        
+        return result;
+    }
+    
     public List<String> addPhoneType(String json) {
         List<String> result = new ArrayList<>();
         org.json.JSONObject jobj = new org.json.JSONObject(json);
