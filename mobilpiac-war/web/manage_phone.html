@@ -49,9 +49,13 @@
                 <div id="phonetypeform" class="col-xs-8 col-sm-9 col-md-9 col-lg-9" style="display: none;">
                     <input type="hidden" id="operation_type">
                     <input type="hidden" id="mobile_id">
+                    <input type="hidden" id="img_url">
                     <div class="form-horizontal">
-                        <div class="form-group">
-                            <input name="file" id="file" type="file" />
+                        <div class="form-group" id="image_upload">
+                            <label class="col-sm-3 control-label">Fájl feltöltése:</label>
+                            <div class="col-sm-7">
+                                <input name="file" id="file" type="file" />
+                            </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Típus neve:</label>
@@ -322,10 +326,9 @@
                             removeUrl: "ImageUploadServlet?save=false",
                             autoUpload: true
                         },
-                        select: function(e) { 
-                            console.log(e.files[0].name);
-                            console.log(e);
-                            //console.log(e.files[0].name);
+                        success: function(e) {
+                           $("#img_url").val("img/"+e.files[0].name);
+                           $("#file").data("kendoUpload").disable();
                         }
                     });
             
@@ -835,6 +838,7 @@
                 });
 
                 $("#newtypebtn").click(function() {
+                    $("#img_url").val();
                     $("#image_upload").show();
                     $("#type_name").val("");
                     $("#manufacturer").val("");
@@ -862,40 +866,46 @@
                 });
 
                 $("#savetypebtn").click(function() {
-                    var details = {
-                        type: $("#operation_type").val(),
-                        type_name: $("#type_name").val(),
-                        manufacturer: $("#manufacturer").val(),
-                        os_name: $("#osselect").val(),
-                        os_version: $("#osversionselect").val(),
-                        processor: $("#processor").val(),
-                        gpu: $("#gpu").val(),
-                        sim_type: $("#sim_type").val(),
-                        microsd_enabled: $("#microsd").find("option:selected").html(),
-                        ram: $("#ram").val(),
-                        rom: $("#rom").val(),
-                        res_x: $("#resx").val(),
-                        res_y: $("#resy").val(),
-                        display_inches: $("#display_inches").val(),
-                        dpi: $("#dpi").val(),
-                        rear_camera: $("#rear_camera").val(),
-                        front_camera: $("#front_camera").val(),
-                        id: $("#mobile_id").val()
-                    };
-                    $.ajax({
-                        url: "/mobilpiac-war/ManagePhoneTypeServlet",
-                        type: "get",
-                        dataType: "json",
-                        data: {json: JSON.stringify(details)}
-                    }).success(function(data) {
-                        if(data.result)
-                        {
-                            $("#phonetypeform").slideUp();
-                        }
-                        alert(data.message);
-                    });
-                    
-                    //$("#phonetypeform").slideUp();
+                    if ($("#img_url").val() != "")
+                    {
+                        var details = {
+                            image_url: $("#img_url").val(),
+                            type: $("#operation_type").val(),
+                            type_name: $("#type_name").val(),
+                            manufacturer: $("#manufacturer").val(),
+                            os_name: $("#osselect").val(),
+                            os_version: $("#osversionselect").val(),
+                            processor: $("#processor").val(),
+                            gpu: $("#gpu").val(),
+                            sim_type: $("#sim_type").val(),
+                            microsd_enabled: $("#microsd").find("option:selected").html(),
+                            ram: $("#ram").val(),
+                            rom: $("#rom").val(),
+                            res_x: $("#resx").val(),
+                            res_y: $("#resy").val(),
+                            display_inches: $("#display_inches").val(),
+                            dpi: $("#dpi").val(),
+                            rear_camera: $("#rear_camera").val(),
+                            front_camera: $("#front_camera").val(),
+                            id: $("#mobile_id").val()
+                        };
+                        $.ajax({
+                            url: "/mobilpiac-war/ManagePhoneTypeServlet",
+                            type: "get",
+                            dataType: "json",
+                            data: {json: JSON.stringify(details)}
+                        }).success(function(data) {
+                            if(data.result)
+                            {
+                                $("#phonetypeform").slideUp();
+                            }
+                            alert(data.message);
+                        });
+                    }
+                    else
+                    {
+                        alert("Nem töltöttél fel képet!");
+                    }
                 });
 
                 $("#deletetypebtn").click(function() {
