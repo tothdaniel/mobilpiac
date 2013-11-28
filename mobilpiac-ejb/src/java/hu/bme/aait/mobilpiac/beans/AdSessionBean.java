@@ -429,7 +429,7 @@ public class AdSessionBean {
         JSONArray array = new JSONArray();
         
         TypedQuery<Bids> query = em.createQuery("SELECT b FROM Bids b WHERE b.advertisementId.id = :pid",Bids.class);
-        query.setParameter("pid", id);
+        query.setParameter("pid", Long.parseLong(id));
         List<Bids> bidsList = query.getResultList();
         for(Bids b:bidsList)
         {
@@ -439,10 +439,9 @@ public class AdSessionBean {
             String published = formatter.format(b.getDateOfBid());
             obj.put("date_of_bid", published);
             obj.put("price",b.getPrice());
-            obj.put("bidder_user_id",b.getBidderUserId());
+            obj.put("bidder_user_id",b.getBidderUserId().getLoginName());
             array.add(obj);
         }
-        
         return array;
     }
 }
