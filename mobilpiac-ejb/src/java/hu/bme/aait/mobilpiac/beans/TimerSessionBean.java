@@ -82,6 +82,7 @@ public class TimerSessionBean {
         String winnerBidderName = getWinnerBid().getBidderUserId().getLoginName();
         String winnerBidderEmail = getWinnerBid().getBidderUserId().getEmailAddress();
         String winnerBidderEmailLink = "<a href=\"mailto:"+winnerBidderEmail+"\">"+winnerBidderEmail+"</a>";
+        Integer price = getWinnerBid().getPrice();
         
         // Email küldése a hirdetőnek
         String emailTemplate = getEmailTemplate();
@@ -93,6 +94,7 @@ public class TimerSessionBean {
             message += "A nyertes felhasználót is értesítjük, de javasoljuk, hogy vedd fel vele te a kapcsolatot!<br/><br/>";
             message += "- Felhasználóneve: " + winnerBidderName + "<br/>";
             message += "- E-mail címe: " + winnerBidderEmailLink + "<br/>";
+            message += "- Az eladási ár: " + price.toString() + "<br/>";
         }
         else
         {
@@ -116,6 +118,7 @@ public class TimerSessionBean {
             message += "Az eladót is értesítjük, de javasoljuk, hogy vedd fel vele te a kapcsolatot!<br/><br/>";
             message += "- Felhasználóneve: " + sellerName + "<br/>";
             message += "- E-mail címe: " + sellerEmailLink + "<br/>";
+            message += "- A vételár: " + price.toString() + "<br/>";
             
             emailTemplate = emailTemplate.replace("[MESSAGE]", message); 
             
