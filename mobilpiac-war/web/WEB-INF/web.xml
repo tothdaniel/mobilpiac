@@ -108,6 +108,10 @@
         <servlet-name>AddAdvertisementServlet</servlet-name>
         <servlet-class>hu.bme.aait.mobilpiac.servlets.AddAdvertisementServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ListBidsServlet</servlet-name>
+        <servlet-class>hu.bme.aait.mobilpiac.servlets.ListBidsServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ListUsersServlet</servlet-name>
         <url-pattern>/ListUsersServlet</url-pattern>
@@ -216,12 +220,15 @@
         <servlet-name>AddAdvertisementServlet</servlet-name>
         <url-pattern>/AddAdvertisementServlet</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListBidsServlet</servlet-name>
+        <url-pattern>/ListBidsServlet</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
-    
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>view dept data</web-resource-name>
@@ -236,5 +243,4 @@
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
         </user-data-constraint>
     </security-constraint>
-    
 </web-app>

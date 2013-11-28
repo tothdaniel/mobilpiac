@@ -424,4 +424,25 @@ public class AdSessionBean {
             return result;
         }
     }
+    
+    public JSONArray listBids(String id){
+        JSONArray array = new JSONArray();
+        
+        TypedQuery<Bids> query = em.createQuery("SELECT b FROM Bids b WHERE b.advertisementId.id = :pid",Bids.class);
+        query.setParameter("pid", id);
+        List<Bids> bidsList = query.getResultList();
+        for(Bids b:bidsList)
+        {
+            JSONObject obj = new JSONObject();
+            obj.put("id",b.getId());
+            Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String published = formatter.format(b.getDateOfBid());
+            obj.put("date_of_bid", published);
+            obj.put("price",b.getPrice());
+            obj.put("bidder_user_id",b.getBidderUserId());
+            array.add(obj);
+        }
+        
+        return array;
+    }
 }
