@@ -35,12 +35,14 @@ public class ManagePhoneTypeServlet extends HttpServlet {
             if(result.get(0).equals("true"))
             {
                 jobj.put("result",true);
+                jobj.put("message", new org.json.JSONObject(result.get(1)));
             }
             else
             {
                 jobj.put("result",false);
+                jobj.put("message", result.get(1));
             }
-            jobj.put("message", result.get(1));
+            
             out.print(jobj);
         }
     }

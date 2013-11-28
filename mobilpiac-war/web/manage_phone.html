@@ -56,13 +56,13 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Típus neve:</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" required >
+                                <input id="type_name" type="text" class="form-control" required >
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Gyártó:</label>
                             <div class="col-sm-8">
-                                <select data-bind="foreach: manufacturers, visible: manufacturers().length > 0" class="form-control">
+                                <select id="manufacturer" data-bind="foreach: manufacturers, visible: manufacturers().length > 0" class="form-control">
                                     <option data-bind="html: manufacturer_name"></option>
                                 </select>
                             </div>
@@ -143,7 +143,7 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Processzor:</label>
                             <div class="col-sm-8">
-                                <select data-bind="foreach: processors, visible: processors().length > 0" class="form-control">
+                                <select id="processor" data-bind="foreach: processors, visible: processors().length > 0" class="form-control">
                                     <option data-bind="html: chipset"></option>
                                 </select>
                             </div>
@@ -187,7 +187,7 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Grafikus processzor:</label>
                             <div class="col-sm-8">
-                                <select data-bind="foreach: gpus, visible: gpus().length > 0" class="form-control">
+                                <select id="gpu" data-bind="foreach: gpus, visible: gpus().length > 0" class="form-control">
                                     <option data-bind="html: gpu_name"></option>
                                 </select>
                             </div>
@@ -213,7 +213,7 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Sim kártya típus:</label>
                             <div class="col-sm-8">
-                                <select data-bind="foreach: sims, visible: sims().length > 0" class="form-control">
+                                <select id="sim_type" data-bind="foreach: sims, visible: sims().length > 0" class="form-control">
                                     <option data-bind="html: sim_type"></option>
                                 </select>
                             </div>
@@ -239,7 +239,7 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">microSD foglalat:</label>
                             <div class="col-sm-8">
-                                <select class="form-control">
+                                <select id="microsd" class="form-control">
                                     <option>Van</option>
                                     <option>Nincs</option>
                                 </select>
@@ -248,43 +248,49 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">RAM mérete (Mb):</label>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control" required>
+                                <input id="ram" type="number" class="form-control" required>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">ROM mérete (Gb):</label>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control" required>
+                                <input id="rom" type="number" class="form-control" required>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Felbontás:</label>
                             <div class="col-sm-3">
-                                <input type="number" class="form-control" required >
+                                <input id="resx" type="number" class="form-control" required >
                             </div>
                             <b class="col-sm-2 text-center" style="margin-top:5px;">
                                 x
                             </b>
                             <div class="col-sm-3">
-                                <input type="number" class="form-control" required >
+                                <input id="resy" type="number" class="form-control" required >
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Képpontsűrűség:</label>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control" required >
+                                <input id="dpi" type="number" class="form-control" required >
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Kijelző mérete:</label>
                             <div class="col-sm-8">
-                                <input type="number" step="any" class="form-control" required >
+                                <input id="display_inches" type="number" step="any" class="form-control" required >
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">Kamera (Mpixel):</label>
+                            <label class="col-sm-3 control-label">Előlapi Kamera (Mpixel):</label>
                             <div class="col-sm-8">
-                                <input type="number" step="any" class="form-control" required >
+                                <input id="front_camera" type="number" step="any" class="form-control" required >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Hátlapi Kamera (Mpixel):</label>
+                            <div class="col-sm-8">
+                                <input id="rear_camera" type="number" step="any" class="form-control" required >
                             </div>
                         </div>
                         <div class="form-group text-center">
@@ -472,7 +478,16 @@
                         dataType: "json",
                         data: {json: JSON.stringify({type: "read", id: data.id()})}
                     }).success(function(data) {
-                        console.log(data);
+                        //console.log(data);
+                        if(data.result){
+                            $("#phonetypeform").slideDown();
+                            $("#type_name").val(data.message.type_name);
+                            $("#manufacturer").val(data.message.manufacturer);
+                            $("#osselect").val(data.message.os_name);
+                            $("#").val(data.message.os_version);
+                        }else{
+                            alert(data.message);
+                        }
                     });
                 };
                 
@@ -494,7 +509,6 @@
                         }
                     });
                 });
-
                 $("#newossubnewmit").click(function(event) {
                     event.preventDefault();
                     if (!$("#newosname").val())
@@ -532,7 +546,6 @@
                         });
                     }
                 });
-
                 $("#newmanufacturersubnewmit").click(function(event) {
                     event.preventDefault();
                     if (!$("#newmanufacturername").val())
@@ -570,7 +583,6 @@
                         });
                     }
                 });
-
                 $("#newosversionsubnewmit").click(function(event) {
                     event.preventDefault();
                     if (!$("#newosversionname").val())
@@ -609,7 +621,6 @@
                         });
                     }
                 });
-
                 $("#newgpusubnewmit").click(function(event) {
                     event.preventDefault();
                     if (!$("#newgpuname").val())
@@ -647,7 +658,6 @@
                         });
                     }
                 });
-
                 $("#newsimsubnewmit").click(function(event) {
                     event.preventDefault();
                     if (!$("#newsimname").val())
@@ -685,7 +695,6 @@
                         });
                     }
                 });
-
                 $("#newprocessorsubnewmit").click(function(event) {
                     event.preventDefault();
                     if (!$("#newprocessorchipset").val() || !$("#newprocessorfamily").val() || !$("#newprocessorclock").val() || !$("#newprocessornumberofcores").val())
@@ -735,10 +744,6 @@
                     }
 
                 });
-
-
-
-
 
                 $(".close-bubble").click(function() {
                     $(this).parents(".bubble").slideUp();
@@ -797,18 +802,10 @@
                 });
 
                 $("#savetypebtn").click(function() {
-                    $("#phonetypeform").slideUp();
-                });
-
-                $("#deletetypebtn").click(function() {
-                    $("#phonetypeform").slideUp();
-                });
-
-                $("#tempbtn").click(function(event){
-                    //event.preventDefault();
                     var details = {
-                        type: "read",
-                        id: 12
+                        type: "add",
+                        type_name: $("#type_name").val()
+                        
                     };
                     $.ajax({
                         url: "/mobilpiac-war/ManagePhoneTypeServlet",
@@ -819,6 +816,11 @@
                         alert(data.message);
                     });
                     
+                    $("#phonetypeform").slideUp();
+                });
+
+                $("#deletetypebtn").click(function() {
+                    $("#phonetypeform").slideUp();
                 });
             }
 
