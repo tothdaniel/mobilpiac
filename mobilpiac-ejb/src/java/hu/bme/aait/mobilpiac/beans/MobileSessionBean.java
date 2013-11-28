@@ -66,12 +66,12 @@ public class MobileSessionBean {
     }
 
     public JSONObject getJSONObject(String id) {
-        TypedQuery<PhoneType> query = em.createQuery("SELECT p FROM PhoneType p WHERE p.id = :pid", PhoneType.class);
+        TypedQuery<PhoneType> query = em.createQuery("SELECT p FROM PhoneType p WHERE p.id = :pid AND p.deleted = 0", PhoneType.class);
         query.setParameter("pid", Long.parseLong(id));
         List<PhoneType> pList = query.getResultList();
 
         JSONObject obj = new JSONObject();
-        if(!pList.isEmpty()){
+        if (!pList.isEmpty()) {
             PhoneType p = pList.get(0);
             obj.put("id", p.getId());
             obj.put("type_name", p.getTypeName());
@@ -146,11 +146,11 @@ public class MobileSessionBean {
             List<Manufacturer> mList = query.getResultList();
             if (!mList.isEmpty()) {
 
-                TypedQuery<PhoneType> query2 = em.createQuery("SELECT p FROM PhoneType p WHERE p.fkManufacturer.manufacturerName = :name",PhoneType.class);
+                TypedQuery<PhoneType> query2 = em.createQuery("SELECT p FROM PhoneType p WHERE p.fkManufacturer.manufacturerName = :name AND p.deleted = 0", PhoneType.class);
                 query2.setParameter("name", mList.get(0).getManufacturerName());
                 List<PhoneType> phonesList = query2.getResultList();
-                for(PhoneType p:phonesList){
-                    jarray.add(getJSONObject(p,0));
+                for (PhoneType p : phonesList) {
+                    jarray.add(getJSONObject(p, 0));
                 }
             }
         }
@@ -158,7 +158,7 @@ public class MobileSessionBean {
     }
 
     public JSONArray listAllMobiles() {
-        List<PhoneType> phonesList = em.createQuery("SELECT p FROM PhoneType p"
+        List<PhoneType> phonesList = em.createQuery("SELECT p FROM PhoneType p WHERE p.deleted = 0"
                 + " ORDER BY P.fkManufacturer.manufacturerName,p.typeName"
         ).getResultList();
         JSONArray jarray = new JSONArray();
@@ -586,21 +586,21 @@ public class MobileSessionBean {
         List<String> result = new ArrayList<>();
         org.json.JSONObject jobj = new org.json.JSONObject(json);
         String todo = jobj.getString("type");
-        if(todo.equals("read")){
-            JSONObject obj = getJSONObject(""+jobj.getInt("id"));
-            
-            if(obj != null){
+        if (todo.equals("read")) {
+            JSONObject obj = getJSONObject("" + jobj.getInt("id"));
+
+            if (obj != null) {
                 result.add("trueread");
-                result.add(obj.toJSONString());  
-            }else{
+                result.add(obj.toJSONString());
+            } else {
                 result.add("false");
                 result.add("Nem található a telefon.");
             }
-        }else if(todo.equals("add")){
+        } else if (todo.equals("add")) {
             return addPhoneType(json);
-        }else if(todo.equals("modify")){
+        } else if (todo.equals("modify")) {
             return modifyPhoneType(json);
-        }else if(todo.equals("delete")){
+        } else if (todo.equals("delete")) {
             return deletePhoneType(json);
         }
         result.add("false");
@@ -608,14 +608,14 @@ public class MobileSessionBean {
         return result;
     }
 
-    public List<String> deletePhoneType(String json){
+    public List<String> deletePhoneType(String json) {
         List<String> result = new ArrayList<>();
         org.json.JSONObject jobj = new org.json.JSONObject(json);
         Long id = null;
-        try{
+        try {
             id = jobj.getLong("id");
-            
-        }catch(Exception e){
+
+        } catch (Exception e) {
             result.add("false");
             result.add("Szükséges adat hiányzik.");
             return result;
@@ -623,7 +623,7 @@ public class MobileSessionBean {
         TypedQuery<PhoneType> pquery = em.createQuery("SELECT p FROM PhoneType p WHERE p.id = :pid", PhoneType.class);
         pquery.setParameter("pid", id);
         List<PhoneType> pList = pquery.getResultList();
-        if(pList.isEmpty()){
+        if (pList.isEmpty()) {
             result.add("false");
             result.add("Nincs ilyen telefontípus.");
             return result;
@@ -631,59 +631,156 @@ public class MobileSessionBean {
         //PhoneType phoneType = pList.get(0);
         PhoneType phoneType = em.find(PhoneType.class, id);
         phoneType.setDeleted(new Short("1"));
-        
+
         em.persist(phoneType);
 
         result.add("true");
-        result.add("Sikeresen telefontípust.");
+        result.add("Sikeresen törölre a telefontípust.");
         return result;
     }
-    
+
     public List<String> addPhoneType(String json) {
         List<String> result = new ArrayList<>();
         org.json.JSONObject jobj = new org.json.JSONObject(json);
+        //STEP 1: parsing
         String typeName = null;
-        String manufacturer = null;
-        try{
+        String manufacturerName = null;
+        String osName = null;
+        String osVersion = null;
+        String processorChipset = null;
+        String gpuName = null;
+        String simType = null;
+        Short microsd = null;
+        Short ram = null;
+        Integer rom = null;
+        Short resx = null;
+        Short resy = null;
+        Short dpi = null;
+        Double screenSize = null;
+        Double frontCam = null;
+        Double rearCam = null;
+
+        try {
             typeName = jobj.getString("type_name");
-            manufacturer = jobj.getString("manufacturer");
-            
-        }catch(Exception e){
+            manufacturerName = jobj.getString("manufacturer");
+            osName = jobj.getString("os_name");
+            osVersion = jobj.getString("os_version");
+            processorChipset = jobj.getString("processor");
+            gpuName = jobj.getString("gpu");
+            simType = jobj.getString("sim_type");
+            microsd = jobj.getString("microsd_enabled").equals("Van") ? new Short("1") : new Short("0");
+            ram = new Short(jobj.getString("ram"));
+            rom = jobj.getInt("rom");
+            resx = new Short(jobj.getString("res_x"));
+            resy = new Short(jobj.getString("res_y"));
+            dpi = new Short(jobj.getString("dpi"));
+            screenSize = Double.parseDouble(jobj.getString("display_inches"));
+            frontCam = Double.parseDouble(jobj.getString("front_camera"));
+            rearCam = Double.parseDouble(jobj.getString("rear_camera"));
+
+        } catch (JSONException | NumberFormatException e) {
             result.add("false");
-            result.add("Szükséges adat hiányzik.");
+            result.add(e.getMessage());
             return result;
         }
-        //TODO végignézni nullokkal
-
-        TypedQuery<PhoneType> query = em.createQuery("SELECT p FROM PhoneType p WHERE p.typeName = :name AND p.fkManufacturer.manufacturerName = :manname", PhoneType.class);
-        query.setParameter("name", jobj.getString("type_name"));
-        query.setParameter("manname", jobj.getString("manufacturer_name"));
-        List<PhoneType> ps = query.getResultList();
-
-        if (!ps.isEmpty()) {
+        //STEP 2: Validating
+        TypedQuery<Manufacturer> mquery = em.createQuery("SELECT m FROM Manufacturer m WHERE m.manufacturerName = :mname", Manufacturer.class);
+        mquery.setParameter("mname", manufacturerName);
+        List<Manufacturer> mList = mquery.getResultList();
+        Manufacturer manufacturer;
+        if (mList.isEmpty()) {
             result.add("false");
-            result.add("Már létezik ilyen nevű (gyártó + típus) készülék.");
+            result.add("Nem található ilyen gyártó. Kérem, ellenőrizze a megadott adatokat.");
             return result;
         } else {
-            PhoneType p = new PhoneType();
-            Long id = em.createQuery("SELECT MAX(p.id) FROM PhoneType p", Long.class).getSingleResult();
-            if (id == null) {
-                id = new Long(1);
-            } else {
-                id = id++;
-            }
-            p.setId(id);
-
-            //TODO bepakolni mindent 
-            em.persist(p);
-
-            result.add("true");
-            result.add("Sikeresen hozzáadta a " + p.getFkManufacturer().getManufacturerName() + " " + p.getTypeName() + " nevű típust.");
-            return result;
+            manufacturer = mList.get(0);
         }
+
+        TypedQuery<OsVersion> oquery = em.createQuery("SELECT o FROM OsVersion o WHERE o.fkOs.osName = :oname AND o.versionName = :vname", OsVersion.class);
+        oquery.setParameter("oname", osName);
+        oquery.setParameter("vname", osVersion);
+        List<OsVersion> oList = oquery.getResultList();
+        OsVersion osv;
+        OperationSystem os;
+        if (oList.isEmpty()) {
+            result.add("false");
+            result.add("Nem található ilyen operációs rendszer - verzió páros. Kérem, ellenőrizze a megadott adatokat.");
+            return result;
+        } else {
+            osv = oList.get(0);
+            os = oList.get(0).getFkOs();
+        }
+
+        TypedQuery<Processor> pquery = em.createQuery("SELECT p FROM Processor p WHERE p.chipset = :pname", Processor.class);
+        pquery.setParameter("pname", processorChipset);
+        List<Processor> pList = pquery.getResultList();
+        Processor processor;
+        if (pList.isEmpty()) {
+            result.add("false");
+            result.add("Nem található ilyen processzor. Kérem, ellenőrizze a megadott adatokat.");
+            return result;
+        } else {
+            processor = pList.get(0);
+        }
+        TypedQuery<Gpu> gquery = em.createQuery("SELECT g FROM Gpu g WHERE g.gpuName = :gname", Gpu.class);
+        gquery.setParameter("gname", gpuName);
+        List<Gpu> gList = gquery.getResultList();
+        Gpu gpu;
+        if (gList.isEmpty()) {
+            result.add("false");
+            result.add("Nem található ilyen grafikus vezérlő. Kérem, ellenőrizze a megadott adatokat.");
+            return result;
+        } else {
+            gpu = gList.get(0);
+        }
+        TypedQuery<Sim> squery = em.createQuery("SELECT s FROM Sim s WHERE s.simType = :sname", Sim.class);
+        squery.setParameter("sname", simType);
+        List<Sim> sList = squery.getResultList();
+        Sim sim;
+        if (sList.isEmpty()) {
+            result.add("false");
+            result.add("Nem található ilyen SIM típus. Kérem, ellenőrizze a megadott adatokat.");
+            return result;
+        } else {
+            sim = sList.get(0);
+        }
+
+        TypedQuery<Long> ptquery = em.createQuery("SELECT MAX(p.id) FROM PhoneType p", Long.class);
+        List<Long> ptList = ptquery.getResultList();
+        Long id = new Long(1);
+        if (!ptList.isEmpty()) {
+            id = ptList.get(0)+1;
+        }
+        //STEP 3: Saving     
+        PhoneType phoneType = new PhoneType();
+        
+        phoneType.setId(id);
+        phoneType.setDeleted(new Short("0"));
+        phoneType.setDisplayInches(screenSize);
+        phoneType.setDpi(Short.parseShort(dpi.toString()));
+        phoneType.setFkGpu(gpu);
+        phoneType.setFkManufacturer(manufacturer);
+        phoneType.setFkOsVersion(osv);
+        phoneType.setFkProcessor(processor);
+        phoneType.setFkSim(sim);
+        phoneType.setFrontCamera(frontCam);
+        //phoneType.setImageUrl();
+        phoneType.setMicrosdEnabled(microsd);
+        phoneType.setPublished(new Date());
+        phoneType.setRam(ram);
+        phoneType.setRearCamera(rearCam);
+        phoneType.setResX(resx);
+        phoneType.setResY(resy);
+        phoneType.setRom(rom);
+        phoneType.setTypeName(typeName);
+
+        em.persist(phoneType);
+        result.add("true");
+        result.add("Sikeresen hozzáadta a telefontípust");
+        return result;
     }
-    
-    public List<String> modifyPhoneType(String json){
+
+    public List<String> modifyPhoneType(String json) {
         List<String> result = new ArrayList<>();
         org.json.JSONObject jobj = new org.json.JSONObject(json);
         Long id;
@@ -704,17 +801,17 @@ public class MobileSessionBean {
         Double screenSize = null;
         Double frontCam = null;
         Double rearCam = null;
-        
-        try{
+
+        try {
             id = jobj.getLong("id");
-            typeName = jobj.getString("type_name");     
+            typeName = jobj.getString("type_name");
             manufacturerName = jobj.getString("manufacturer");
             osName = jobj.getString("os_name");
             osVersion = jobj.getString("os_version");
             processorChipset = jobj.getString("processor");
             gpuName = jobj.getString("gpu");
-            simType = jobj.getString("sim_type"); 
-            microsd=jobj.getString("microsd_enabled").equals("Van")?new Short("1"):new Short("0");
+            simType = jobj.getString("sim_type");
+            microsd = jobj.getString("microsd_enabled").equals("Van") ? new Short("1") : new Short("0");
             ram = new Short(jobj.getString("ram"));
             rom = jobj.getInt("rom");
             resx = new Short(jobj.getString("res_x"));
@@ -723,8 +820,8 @@ public class MobileSessionBean {
             screenSize = Double.parseDouble(jobj.getString("display_inches"));
             frontCam = Double.parseDouble(jobj.getString("front_camera"));
             rearCam = Double.parseDouble(jobj.getString("rear_camera"));
-            
-        }catch(JSONException | NumberFormatException e){
+
+        } catch (JSONException | NumberFormatException e) {
             result.add("false");
             result.add(e.getMessage());
             return result;
@@ -734,25 +831,25 @@ public class MobileSessionBean {
         mquery.setParameter("mname", manufacturerName);
         List<Manufacturer> mList = mquery.getResultList();
         Manufacturer manufacturer;
-        if(mList.isEmpty()){
+        if (mList.isEmpty()) {
             result.add("false");
             result.add("Nem található ilyen gyártó. Kérem, ellenőrizze a megadott adatokat.");
             return result;
-        }else{
+        } else {
             manufacturer = mList.get(0);
         }
-        
+
         TypedQuery<OsVersion> oquery = em.createQuery("SELECT o FROM OsVersion o WHERE o.fkOs.osName = :oname AND o.versionName = :vname", OsVersion.class);
         oquery.setParameter("oname", osName);
         oquery.setParameter("vname", osVersion);
         List<OsVersion> oList = oquery.getResultList();
         OsVersion osv;
         OperationSystem os;
-        if(oList.isEmpty()){
+        if (oList.isEmpty()) {
             result.add("false");
             result.add("Nem található ilyen operációs rendszer - verzió páros. Kérem, ellenőrizze a megadott adatokat.");
             return result;
-        }else{
+        } else {
             osv = oList.get(0);
             os = oList.get(0).getFkOs();
         }
@@ -761,48 +858,49 @@ public class MobileSessionBean {
         pquery.setParameter("pname", processorChipset);
         List<Processor> pList = pquery.getResultList();
         Processor processor;
-        if(pList.isEmpty()){
+        if (pList.isEmpty()) {
             result.add("false");
             result.add("Nem található ilyen processzor. Kérem, ellenőrizze a megadott adatokat.");
             return result;
-        }else{
+        } else {
             processor = pList.get(0);
         }
         TypedQuery<Gpu> gquery = em.createQuery("SELECT g FROM Gpu g WHERE g.gpuName = :gname", Gpu.class);
         gquery.setParameter("gname", gpuName);
         List<Gpu> gList = gquery.getResultList();
         Gpu gpu;
-        if(gList.isEmpty()){
+        if (gList.isEmpty()) {
             result.add("false");
             result.add("Nem található ilyen grafikus vezérlő. Kérem, ellenőrizze a megadott adatokat.");
             return result;
-        }else{
+        } else {
             gpu = gList.get(0);
         }
         TypedQuery<Sim> squery = em.createQuery("SELECT s FROM Sim s WHERE s.simType = :sname", Sim.class);
         squery.setParameter("sname", simType);
         List<Sim> sList = squery.getResultList();
         Sim sim;
-        if(sList.isEmpty()){
+        if (sList.isEmpty()) {
             result.add("false");
             result.add("Nem található ilyen SIM típus. Kérem, ellenőrizze a megadott adatokat.");
             return result;
-        }else{
+        } else {
             sim = sList.get(0);
         }
-        
+
         TypedQuery<PhoneType> ptquery = em.createQuery("SELECT p FROM PhoneType p WHERE p.id = :pid", PhoneType.class);
         ptquery.setParameter("pid", id);
         List<PhoneType> ptList = ptquery.getResultList();
         PhoneType phoneType;
-        if(ptList.isEmpty()){
+        if (ptList.isEmpty()) {
             result.add("false");
             result.add("Nem található ilyen telefontípus. Kérem, ellenőrizze a megadott adatokat.");
             return result;
-        }else{
+        } else {
             phoneType = ptList.get(0);
         }
-        //STEP 3: Saving
+        //STEP 3: Saving       
+        phoneType.setDeleted(new Short("0"));
         phoneType.setDisplayInches(screenSize);
         phoneType.setDpi(Short.parseShort(dpi.toString()));
         phoneType.setFkGpu(gpu);
@@ -820,7 +918,7 @@ public class MobileSessionBean {
         phoneType.setResY(resy);
         phoneType.setRom(rom);
         phoneType.setTypeName(typeName);
-        
+
         em.persist(phoneType);
         result.add("true");
         result.add("Sikeresen módosította a telefontípust");
