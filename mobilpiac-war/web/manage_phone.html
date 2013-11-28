@@ -45,6 +45,8 @@
                     </div>
                 </div>
                 <div id="phonetypeform" class="col-xs-8 col-sm-9 col-md-9 col-lg-9" style="display: none;">
+                    <input type="hidden" id="operation_type">
+                    <input type="hidden" id="mobile_id">
                     <div class="form-horizontal">      
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Kép:</label>
@@ -500,6 +502,8 @@
                             $("#dpi").val(adat.dpi);
                             $("#rear_camera").val(adat.rear_camera);
                             $("#front_camera").val(adat.front_camera);
+                            $("#operation_type").val('modify');
+                            $("#mobile_id").val(adat.id);
                              
                             $("#phonetypeform").slideDown();
                         }else{
@@ -818,11 +822,13 @@
                 $("#newtypebtn").click(function() {
                     $("#phonetypeform").slideUp();
                     $("#phonetypeform").slideDown();
+                    $("#operation_type").val('add');
+                    $("#mobile_id").val('');
                 });
 
                 $("#savetypebtn").click(function() {
                     var details = {
-                        type: "modify",
+                        type: $("#operation_type").val(),
                         type_name: $("#type_name").val(),
                         manufacturer: $("#manufacturer").val(),
                         os_name: $("#osselect").val(),
@@ -838,7 +844,8 @@
                         display_inches: $("#display_inches").val(),
                         dpi: $("#dpi").val(),
                         rear_camera: $("#rear_camera").val(),
-                        front_camera: $("#front_camera").val()
+                        front_camera: $("#front_camera").val(),
+                        id: $("#mobile_id").val()
                     };
                     $.ajax({
                         url: "/mobilpiac-war/ManagePhoneTypeServlet",
@@ -854,6 +861,18 @@
 
                 $("#deletetypebtn").click(function() {
                     $("#phonetypeform").slideUp();
+                    var details = {
+                        id: $("#mobile_id").val(),
+                        type: 'delete'
+                    };
+                    $.ajax({
+                        url: "/mobilpiac-war/ManagePhoneTypeServlet",
+                        type: "get",
+                        dataType: "json",
+                        data: {json: JSON.stringify(details)}
+                    }).success(function(data) {
+                        alert(data.message);
+                    });
                 });
             }
 
