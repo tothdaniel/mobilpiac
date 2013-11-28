@@ -261,23 +261,32 @@
                         var rowArray = ['Időpont', 'Licit ára'];
                         var tableArray = new Array();
                         tableArray[0] = rowArray;
+                        var showDiagram = false;
                         var tableArrayId = 1;
                         for (id in data.bids)
                         {
                             rowArray = [data.bids[id].date_of_bid, data.bids[id].price];
                             tableArray[tableArrayId] = rowArray;
                             tableArrayId++;
+                            showDiagram = true;
                         }
-                        var data = google.visualization.arrayToDataTable(tableArray);
+                        if (showDiagram)
+                        {
+                            var data = google.visualization.arrayToDataTable(tableArray);
 
-                          var options = {
-                            title: 'Telefon árának alakulása',
-                            hAxis: {title: 'Idő',  titleTextStyle: {color: '#333'}},
-                            vAxis: {minValue: 0}
-                          };
+                            var options = {
+                              title: 'Telefon árának alakulása',
+                              hAxis: {title: 'Idő',  titleTextStyle: {color: '#333'}},
+                              vAxis: {minValue: 0}
+                            };
 
-                          var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
-                          chart.draw(data, options);
+                            var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+                            chart.draw(data, options);
+                        }
+                        else
+                        {
+                            $("#chart_div").html("<h3>Nincsenek történeti adatok, mert nem volt még licit!</h3>");
+                        }
                     });
                 
            }           
