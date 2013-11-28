@@ -67,34 +67,38 @@ public class MobileSessionBean {
     public JSONObject getJSONObject(String id) {
         TypedQuery<PhoneType> query = em.createQuery("SELECT p FROM PhoneType p WHERE p.id = :pid", PhoneType.class);
         query.setParameter("pid", Long.parseLong(id));
-        PhoneType p = query.getSingleResult();
+        List<PhoneType> pList = query.getResultList();
 
         JSONObject obj = new JSONObject();
-        obj.put("id", p.getId());
-        obj.put("type_name", p.getTypeName());
-        obj.put("display_inches", p.getDisplayInches());
-        obj.put("dpi", p.getDpi());
-        obj.put("gpu", p.getFkGpu().getGpuName());
-        obj.put("manufacturer", p.getFkManufacturer().getManufacturerName());
-        obj.put("os_version", p.getFkOsVersion().getVersionName());
-        obj.put("os_name", p.getFkOsVersion().getFkOs().getOsName());
-        obj.put("processor_family", p.getFkProcessor().getFamily());
-        obj.put("processor_clock", p.getFkProcessor().getClock());
-        obj.put("processor_number_of_cores", p.getFkProcessor().getNumberOfCores());
-        obj.put("processor_chipset", p.getFkProcessor().getChipset());
-        obj.put("sim_type", p.getFkSim().getSimType());
-        obj.put("front_camera", p.getFrontCamera());
-        obj.put("rear_camera", p.getRearCamera());
-        obj.put("image_url", p.getImageUrl());
-        obj.put("microsd_enabled", p.getMicrosdEnabled());
-        Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String published = formatter.format(p.getPublished());
-        obj.put("published", published);
-        obj.put("ram", p.getRam());
-        obj.put("rom", p.getRom());
-        obj.put("res_x", p.getResX());
-        obj.put("res_y", p.getResY());
-        return obj;
+        if(!pList.isEmpty()){
+            PhoneType p = pList.get(0);
+            obj.put("id", p.getId());
+            obj.put("type_name", p.getTypeName());
+            obj.put("display_inches", p.getDisplayInches());
+            obj.put("dpi", p.getDpi());
+            obj.put("gpu", p.getFkGpu().getGpuName());
+            obj.put("manufacturer", p.getFkManufacturer().getManufacturerName());
+            obj.put("os_version", p.getFkOsVersion().getVersionName());
+            obj.put("os_name", p.getFkOsVersion().getFkOs().getOsName());
+            obj.put("processor_family", p.getFkProcessor().getFamily());
+            obj.put("processor_clock", p.getFkProcessor().getClock());
+            obj.put("processor_number_of_cores", p.getFkProcessor().getNumberOfCores());
+            obj.put("processor_chipset", p.getFkProcessor().getChipset());
+            obj.put("sim_type", p.getFkSim().getSimType());
+            obj.put("front_camera", p.getFrontCamera());
+            obj.put("rear_camera", p.getRearCamera());
+            obj.put("image_url", p.getImageUrl());
+            obj.put("microsd_enabled", p.getMicrosdEnabled());
+            Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String published = formatter.format(p.getPublished());
+            obj.put("published", published);
+            obj.put("ram", p.getRam());
+            obj.put("rom", p.getRom());
+            obj.put("res_x", p.getResX());
+            obj.put("res_y", p.getResY());
+            return obj;
+        }
+        return null;
     }
 
     public JSONObject getJSONObject(PhoneType p, int cheapest) {
@@ -581,14 +585,30 @@ public class MobileSessionBean {
         List<String> result = new ArrayList<>();
         org.json.JSONObject jobj = new org.json.JSONObject(json);
         String todo = jobj.getString("type");
-        switch (todo) {
+        /*switch (todo) {
             case "read":
                 JSONObject obj = getJSONObject(jobj.getString("id"));
                 result.add("true");
-                result.add(obj.toJSONString());
+                result.add("OK");
                 break;
+            default: 
+                result.add("false");
+                result.add("Nem található a megadott utasítás.");
+                break;
+        }*/
+        if(todo.equals("read")){
+            JSONObject obj = getJSONObject(""+jobj.getInt("id"));
+            
+            if(obj != null){
+                result.add("true");
+                result.add(obj.toJSONString());  
+            }else{
+                result.add("false");
+                result.add("Nem található a telefon.");
+            }
+        }else if(todo.equals("add")){
+            addPhoneType(json);
         }
-
         return result;
     }
 
