@@ -79,7 +79,7 @@
                             </div>
                         </div>
                     </div>
-                    <div id="chart_div" class="col-md-12" style="height:200px;">
+                    <div class="thumbnail" id="chart_div" class="col-md-12" style="height:200px;">
                     </div>
                 </div>
             </div>
@@ -269,6 +269,7 @@
                             tableArrayId++;
                             showDiagram = true;
                         }
+                        console.log(tableArray);
                         if (showDiagram)
                         {
                             var data = google.visualization.arrayToDataTable(tableArray);
