@@ -41,13 +41,14 @@ public class ImageUploadServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            final String path = request.getParameter("destination");
+            //final String path = request.getParameter("destination");
+            final String path = "F:"+File.separator+"Projects"+File.separator+"J2EE"+
+                    File.separator+"mobilpiac"+File.separator+"mobilpiac-war"+File.separator+"web"+File.separator+"img";
             final Part filePart = request.getPart("file");
             final String fileName = getFileName(filePart);
 
             OutputStream os = null;
             InputStream filecontent = null;
-            final PrintWriter writer = response.getWriter();
 
             try {
                 os = new FileOutputStream(new File(path + File.separator
@@ -60,17 +61,9 @@ public class ImageUploadServlet extends HttpServlet {
                 while ((read = filecontent.read(bytes)) != -1) {
                     os.write(bytes, 0, read);
                 }
-                writer.println("New file " + fileName + " created at " + path);
-                LOGGER.log(Level.INFO, "File{0}being uploaded to {1}",
-                        new Object[]{fileName, path});
+                out.print("{\"success\": \"true\"}");
             } catch (FileNotFoundException fne) {
-                writer.println("You either did not specify a file to upload or are "
-                        + "trying to upload a file to a protected or nonexistent "
-                        + "location.");
-                writer.println("<br/> ERROR: " + fne.getMessage());
-
-                LOGGER.log(Level.SEVERE, "Problems during file upload. Error: {0}",
-                        new Object[]{fne.getMessage()});
+                out.print("{\"success\": \"false\"}");
             } finally {
                 if (out != null) {
                     out.close();
@@ -78,8 +71,8 @@ public class ImageUploadServlet extends HttpServlet {
                 if (filecontent != null) {
                     filecontent.close();
                 }
-                if (writer != null) {
-                    writer.close();
+                if (out != null) {
+                    out.close();
                 }
             }
         }

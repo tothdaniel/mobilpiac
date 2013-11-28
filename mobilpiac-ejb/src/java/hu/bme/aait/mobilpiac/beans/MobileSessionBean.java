@@ -659,6 +659,7 @@ public class MobileSessionBean {
         Double screenSize = null;
         Double frontCam = null;
         Double rearCam = null;
+        String imageUrl = null;
 
         try {
             typeName = jobj.getString("type_name");
@@ -677,6 +678,7 @@ public class MobileSessionBean {
             screenSize = Double.parseDouble(jobj.getString("display_inches"));
             frontCam = Double.parseDouble(jobj.getString("front_camera"));
             rearCam = Double.parseDouble(jobj.getString("rear_camera"));
+            imageUrl = jobj.getString("image_url");
 
         } catch (JSONException | NumberFormatException e) {
             result.add("false");
@@ -764,7 +766,7 @@ public class MobileSessionBean {
         phoneType.setFkProcessor(processor);
         phoneType.setFkSim(sim);
         phoneType.setFrontCamera(frontCam);
-        //phoneType.setImageUrl();
+        phoneType.setImageUrl(imageUrl);
         phoneType.setMicrosdEnabled(microsd);
         phoneType.setPublished(new Date());
         phoneType.setRam(ram);
