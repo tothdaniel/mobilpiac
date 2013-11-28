@@ -94,7 +94,7 @@
                             </div>
 
                             <div class="col-sm-4">
-                                <select data-bind="foreach: osversions, visible: osversions().length > 0" class="form-control">
+                                <select id="osversionselect" data-bind="foreach: osversions, visible: osversions().length > 0" class="form-control">
                                     <option data-bind="html: version_name"></option>
                                 </select>
                             </div>
@@ -239,8 +239,8 @@
                             <label class="col-sm-3 control-label">microSD foglalat:</label>
                             <div class="col-sm-8">
                                 <select id="microsd" class="form-control">
-                                    <option>Van</option>
-                                    <option>Nincs</option>
+                                    <option value="0">Van</option>
+                                    <option value="1">Nincs</option>
                                 </select>
                             </div>
                         </div>
@@ -281,14 +281,13 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">Előlapi Kamera (Mpixel):</label>
-                            <div class="col-sm-8">
+                            <label class="col-sm-3 control-label">Kamera (Mpixel):</label>
+                            <label class="col-sm-1 control-label">Előlapi:</label>
+                            <div class="col-sm-3">
                                 <input id="front_camera" type="number" step="any" class="form-control" required >
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">Hátlapi Kamera (Mpixel):</label>
-                            <div class="col-sm-8">
+                            <label class="col-sm-1 control-label">Hátlapi:</label>
+                            <div class="col-sm-3">
                                 <input id="rear_camera" type="number" step="any" class="form-control" required >
                             </div>
                         </div>
@@ -482,11 +481,24 @@
                             $("#savetypebtn").html("Módosítások mentése");
                             $("#deletetypebtn").html("Típus törlése");
                             
-                            $("#type_name").val(data.message.type_name);
-                            $("#manufacturer").val(data.message.manufacturer);
-                            $("#osselect").val(data.message.os_name);
-                            $("#").val(data.message.os_version);
-                            
+                            var adat = data.message;
+                            $("#type_name").val(adat.type_name);
+                            $("#manufacturer").val(adat.manufacturer);
+                            $("#osselect").val(adat.os_name);
+                            $("#osversionselect").val(adat.os_version);
+                            $("#processor").val(adat.processor_chipset);
+                            $("#gpu").val(adat.gpu);
+                            $("#sim_type").val(adat.sim_type);
+                            $("#microsd").val(adat.microsd_enabled);
+                            $("#ram").val(adat.ram);
+                            $("#rom").val(adat.rom);
+                            $("#resx").val(adat.res_x);
+                            $("#resy").val(adat.res_y);
+                            $("#display_inches").val(adat.display_inches);
+                            $("#dpi").val(adat.dpi);
+                            $("#rear_camera").val(adat.rear_camera);
+                            $("#front_camera").val(adat.front_camera);
+                             
                             $("#phonetypeform").slideDown();
                         }else{
                             alert(data.message);
@@ -806,9 +818,23 @@
 
                 $("#savetypebtn").click(function() {
                     var details = {
-                        type: "add",
-                        type_name: $("#type_name").val()
-                        
+                        type: "modify",
+                        type_name: $("#type_name").val(),
+                        manufacturer: $("#manufacturer").val(),
+                        os_name: $("#osselect").val(),
+                        os_version: $("#osversionselect").val(),
+                        processor: $("#processor").val(),
+                        gpu: $("#gpu").val(),
+                        sim_type: $("#sim_type").val(),
+                        microsd_enabled: $("#microsd").find("option:selected").html(),
+                        ram: $("#ram").val(),
+                        rom: $("#rom").val(),
+                        res_x: $("#resx").val(),
+                        res_y: $("#resy").val(),
+                        display_inches: $("#display_inches").val(),
+                        dpi: $("#dpi").val(),
+                        rear_camera: $("#rear_camera").val(),
+                        front_camera: $("#front_camera").val()
                     };
                     $.ajax({
                         url: "/mobilpiac-war/ManagePhoneTypeServlet",
@@ -819,7 +845,7 @@
                         alert(data.message);
                     });
                     
-                    $("#phonetypeform").slideUp();
+                    //$("#phonetypeform").slideUp();
                 });
 
                 $("#deletetypebtn").click(function() {
