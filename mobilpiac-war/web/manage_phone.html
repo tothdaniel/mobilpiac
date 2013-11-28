@@ -48,7 +48,7 @@
                     <input type="hidden" id="operation_type">
                     <input type="hidden" id="mobile_id">
                     <div class="form-horizontal">      
-                        <div class="form-group">
+                        <div class="form-group" id="image_upload" style="display: hidden;">
                             <label class="col-sm-3 control-label">Kép:</label>
                             <div class="col-sm-9">
                                 <input type="file" name="file" id="file">
@@ -481,6 +481,7 @@
                     }).success(function(data) {
                         //console.log(data);
                         if(data.result){
+                            $("#image_upload").hide();
                             $("#savetypebtn").html("Módosítások mentése");
                             $("#deletetypebtn").html("Típus törlése");
                             
@@ -820,7 +821,27 @@
                 });
 
                 $("#newtypebtn").click(function() {
-                    $("#phonetypeform").slideUp();
+                    $("#image_upload").show();
+                    $("#type_name").val("");
+                    $("#manufacturer").val("");
+                    $("#osselect").val("");
+                    os_version = "";
+                    $("#osselect").change();
+                    $("#processor").val("");
+                    $("#gpu").val("");
+                    $("#sim_type").val("");
+                    $("#microsd").val("");
+                    $("#ram").val("");
+                    $("#rom").val("");
+                    $("#resx").val("");
+                    $("#resy").val("");
+                    $("#display_inches").val("");
+                    $("#dpi").val("");
+                    $("#rear_camera").val("");
+                    $("#front_camera").val("");
+                   
+                    $("#savetypebtn").html("Új telefontípus mentése");
+                    $("#deletetypebtn").html("Telefontípus elvetése");
                     $("#phonetypeform").slideDown();
                     $("#operation_type").val('add');
                     $("#mobile_id").val('');
@@ -853,6 +874,10 @@
                         dataType: "json",
                         data: {json: JSON.stringify(details)}
                     }).success(function(data) {
+                        if(data.result)
+                        {
+                            $("#phonetypeform").slideUp();
+                        }
                         alert(data.message);
                     });
                     
@@ -860,19 +885,29 @@
                 });
 
                 $("#deletetypebtn").click(function() {
-                    $("#phonetypeform").slideUp();
-                    var details = {
-                        id: $("#mobile_id").val(),
-                        type: 'delete'
-                    };
-                    $.ajax({
-                        url: "/mobilpiac-war/ManagePhoneTypeServlet",
-                        type: "get",
-                        dataType: "json",
-                        data: {json: JSON.stringify(details)}
-                    }).success(function(data) {
-                        alert(data.message);
-                    });
+                    if ($("#operation_type").val() == 'modify')
+                    {
+                        var details = {
+                            id: $("#mobile_id").val(),
+                            type: 'delete'
+                        };
+                        $.ajax({
+                            url: "/mobilpiac-war/ManagePhoneTypeServlet",
+                            type: "get",
+                            dataType: "json",
+                            data: {json: JSON.stringify(details)}
+                        }).success(function(data) {
+                            if(data.result)
+                            {
+                                $("#phonetypeform").slideUp();
+                            }
+                            alert(data.message);
+                        });
+                    }
+                    else
+                    {
+                        $("#phonetypeform").slideUp();
+                    }
                 });
             }
 
