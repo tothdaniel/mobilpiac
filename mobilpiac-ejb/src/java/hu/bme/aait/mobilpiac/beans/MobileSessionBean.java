@@ -15,10 +15,10 @@ import hu.bme.aait.mobilpiac.entities.OsVersion;
 import hu.bme.aait.mobilpiac.entities.PhoneType;
 import hu.bme.aait.mobilpiac.entities.Processor;
 import hu.bme.aait.mobilpiac.entities.Sim;
-import hu.bme.aait.mobilpiac.entities.Users;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
@@ -600,10 +600,39 @@ public class MobileSessionBean {
             return addPhoneType(json);
         }else if(todo.equals("modify")){
             return modifyPhoneType(json);
+        }else if(todo.equals("delete")){
+            return deletePhoneType(json);
         }
         return result;
     }
 
+    public List<String> deletePhoneType(String json){
+        List<String> result = new ArrayList<>();
+        org.json.JSONObject jobj = new org.json.JSONObject(json);
+        Long id = null;
+        try{
+            id = jobj.getLong("id");
+            
+        }catch(Exception e){
+            result.add("false");
+            result.add("Szükséges adat hiányzik.");
+            return result;
+        }
+        TypedQuery<PhoneType> pquery = em.createQuery("SELECT p FROM PhoneType p WHERE p.id = :pid", PhoneType.class);
+        pquery.setParameter("pid", id);
+        List<PhoneType> pList = pquery.getResultList();
+        if(pList.isEmpty()){
+            result.add("false");
+            result.add("Nincs ilyen telefontípus.");
+            return result;
+        }
+        PhoneType phoneType = pList.get(0);
+        
+        em.remove(phoneType);
+        
+        return result;
+    }
+    
     public List<String> addPhoneType(String json) {
         List<String> result = new ArrayList<>();
         org.json.JSONObject jobj = new org.json.JSONObject(json);
@@ -660,7 +689,7 @@ public class MobileSessionBean {
         String processorChipset = null;
         String gpuName = null;
         String simType = null;
-        Short microsd;
+        Short microsd = null;
         Short ram = null;
         Integer rom = null;
         Short resx = null;
@@ -778,7 +807,7 @@ public class MobileSessionBean {
         phoneType.setFrontCamera(frontCam);
         //phoneType.setImageUrl();
         phoneType.setMicrosdEnabled(microsd);
-        //phoneType.setPublished(null);
+        phoneType.setPublished(new Date());
         phoneType.setRam(ram);
         phoneType.setRearCamera(rearCam);
         phoneType.setResX(resx);
