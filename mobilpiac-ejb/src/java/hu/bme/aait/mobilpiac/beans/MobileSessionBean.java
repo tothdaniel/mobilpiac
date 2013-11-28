@@ -604,15 +604,15 @@ public class MobileSessionBean {
     public List<String> addPhoneType(String json) {
         List<String> result = new ArrayList<>();
         org.json.JSONObject jobj = new org.json.JSONObject(json);
-
-        if (jobj.getString("type_name") == null || jobj.getString("type_name").isEmpty()) {
+        String typeName = null;
+        String manufacturer = null;
+        try{
+            typeName = jobj.getString("type_name");
+            manufacturer = jobj.getString("manufacturer");
+            
+        }catch(Exception e){
             result.add("false");
-            result.add("A hozzáadandó típus nevét nem adta meg.");
-            return result;
-        }
-        if (jobj.getString("type_name") == null || jobj.getString("type_name").isEmpty()) {
-            result.add("false");
-            result.add("A hozzáadandó típus nevét nem adta meg.");
+            result.add("Szükséges adat hiányzik.");
             return result;
         }
         //TODO végignézni nullokkal

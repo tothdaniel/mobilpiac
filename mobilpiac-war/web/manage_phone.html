@@ -293,8 +293,8 @@
                             </div>
                         </div>
                         <div class="form-group text-center">
-                            <button id="savetypebtn" type="submit" class="btn btn-primary">Adatlap mentése</button>
-                            <button id="deletetypebtn" type="reset" class="btn btn-danger">Törlés</button>
+                            <button id="savetypebtn" type="submit" class="btn btn-primary">Típus hozzáadása</button>
+                            <button id="deletetypebtn" type="reset" class="btn btn-danger">Mégsem</button>
                         </div>
                     </div>
                 </div>
@@ -479,6 +479,9 @@
                     }).success(function(data) {
                         //console.log(data);
                         if(data.result){
+                            $("#savetypebtn").html("Módosítások mentése");
+                            $("#deletetypebtn").html("Típus törlése");
+                            
                             $("#type_name").val(data.message.type_name);
                             $("#manufacturer").val(data.message.manufacturer);
                             $("#osselect").val(data.message.os_name);
