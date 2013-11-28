@@ -67,6 +67,8 @@
                             <h4 class="col-md-2">Leírás:</h4>
                             <div class="col-md-12" data-bind="html: description">
                             </div>
+                            <div class="col-md-12">
+                            </div>
                         </div>
                     </div>
                     <div class="row" data-bind="foreach: mobile_specification">
@@ -76,6 +78,8 @@
                                 <span data-bind="html: value"></span>
                             </div>
                         </div>
+                    </div>
+                    <div id="chart_div" class="col-md-12" style="height:200px;">
                     </div>
                 </div>
             </div>
@@ -91,8 +95,11 @@
         <script src="lib/jquery-2.0.3.min.js"></script>
         <script src="lib/jquery.cookie.js"></script>
         <script src="lib/knockout-3.0.0.js"></script>
+        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
         <script src="lib/bootstrap/js/bootstrap.min.js"></script>
         <script>
+            google.load("visualization", "1", {packages:["corechart"]});
+            google.setOnLoadCallback(drawChart);
             var Ad = function(data) {
                 this.actual_price = ko.observable(data.actual_price);
                 this.next_price = ko.computed(function() {
@@ -106,6 +113,9 @@
                 this.price = ko.observable(data.price);
                 this.image_url = ko.observable(data.image_url);
                 this.description = ko.observable(data.description);
+                this.diagram = ko.computed(function() {
+                    return data.diagram
+                }, this);
                 this.title = ko.computed(function() {
                     return data.manufacturer + " " + data.type_name;
                 }, this);
@@ -205,15 +215,7 @@
                                     data: {json:JSON.stringify(bid)}
                                 }).success(function(data) {
                                     if(data.result){
-                                        $.ajax({
-                                            url: "/mobilpiac-war/AdHighDetailServlet",
-                                            type: "get",
-                                            dataType: "json",
-                                            data: {id: getURLParameter("ad_id")}
-                                        }).success(function(data) {
-                                            self.ad.removeAll();
-                                            self.ad.push(new Ad(data));
-                                        }); 
+                                        self.loadAd({id: getURLParameter("ad_id")}); 
                                     }
                                     alert(data.message);
                                 });
@@ -224,16 +226,20 @@
                     }
                 };
 
-
-                // Operations
-                $.ajax({
-                    url: "/mobilpiac-war/AdHighDetailServlet",
-                    type: "get",
-                    dataType: "json",
-                    data: {id: getURLParameter("ad_id")}
-                }).success(function(data) {
-                    self.ad.push(new Ad(data));
-                });
+                self.loadAd = function (id) {
+                    // Operations
+                    $.ajax({
+                        url: "/mobilpiac-war/AdHighDetailServlet",
+                        type: "get",
+                        dataType: "json",
+                        data: id
+                    }).success(function(data) {
+                        self.ad.removeAll();
+                        self.ad.push(new Ad(data));
+                    });
+                };
+                
+                self.loadAd({id: getURLParameter("ad_id")});
             }
 
             ko.applyBindings(new ViewModel());
@@ -243,6 +249,38 @@
                         (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search) || [, null])[1]
                         );
             }
+            
+            function drawChart() {
+                $.ajax({
+                        url: "/mobilpiac-war/ListBidsServlet",
+                        type: "get",
+                        dataType: "json",
+                        data: {id: getURLParameter("ad_id")}
+                    }).success(function(data) {
+                        console.log(data.bids);
+                        var rowArray = ['Időpont', 'Licit ára'];
+                        var tableArray = new Array();
+                        tableArray[0] = rowArray;
+                        var tableArrayId = 1;
+                        for (id in data.bids)
+                        {
+                            rowArray = [data.bids[id].date_of_bid, data.bids[id].price];
+                            tableArray[tableArrayId] = rowArray;
+                            tableArrayId++;
+                        }
+                        var data = google.visualization.arrayToDataTable(tableArray);
+
+                          var options = {
+                            title: 'Telefon árának alakulása',
+                            hAxis: {title: 'Idő',  titleTextStyle: {color: '#333'}},
+                            vAxis: {minValue: 0}
+                          };
+
+                          var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+                          chart.draw(data, options);
+                    });
+                
+           }           
         </script>
         <script>
             $("#logbtn").click(function(event) {
