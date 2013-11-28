@@ -25,6 +25,7 @@ import javax.ejb.LocalBean;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import org.json.JSONException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -597,6 +598,8 @@ public class MobileSessionBean {
             }
         }else if(todo.equals("add")){
             return addPhoneType(json);
+        }else if(todo.equals("modify")){
+            return modifyPhoneType(json);
         }
         return result;
     }
@@ -643,5 +646,149 @@ public class MobileSessionBean {
             result.add("Sikeresen hozzáadta a " + p.getFkManufacturer().getManufacturerName() + " " + p.getTypeName() + " nevű típust.");
             return result;
         }
+    }
+    
+    public List<String> modifyPhoneType(String json){
+        List<String> result = new ArrayList<>();
+        org.json.JSONObject jobj = new org.json.JSONObject(json);
+        Long id;
+        //STEP 1: parsing
+        String typeName = null;
+        String manufacturerName = null;
+        String osName = null;
+        String osVersion = null;
+        String processorChipset = null;
+        String gpuName = null;
+        String simType = null;
+        Short microsd;
+        Short ram = null;
+        Integer rom = null;
+        Short resx = null;
+        Short resy = null;
+        Short dpi = null;
+        Double screenSize = null;
+        Double frontCam = null;
+        Double rearCam = null;
+        
+        try{
+            id = jobj.getLong("id");
+            typeName = jobj.getString("type_name");     
+            manufacturerName = jobj.getString("manufacturer");
+            osName = jobj.getString("os_name");
+            osVersion = jobj.getString("os_version");
+            processorChipset = jobj.getString("processor");
+            gpuName = jobj.getString("gpu");
+            simType = jobj.getString("sim"); 
+            microsd=jobj.getString("microsd").equals("Van")?new Short("1"):new Short("0");
+            ram = new Short(jobj.getString("ram"));
+            rom = jobj.getInt("rom");
+            resx = new Short(jobj.getString("resx"));
+            resy = new Short(jobj.getString("resy"));
+            dpi = new Short(jobj.getString("dpi"));
+            screenSize = Double.parseDouble(jobj.getString("display_inches"));
+            frontCam = Double.parseDouble(jobj.getString("front_camera"));
+            rearCam = Double.parseDouble(jobj.getString("rear_camera"));
+            
+        }catch(JSONException | NumberFormatException e){
+            result.add("false");
+            result.add("Szükséges adat hiányzik.");
+            return result;
+        }
+        //STEP 2: Validating
+        TypedQuery<Manufacturer> mquery = em.createQuery("SELECT m FROM Manufacturer m WHERE m.manufacturerName = :mname", Manufacturer.class);
+        mquery.setParameter("mname", manufacturerName);
+        List<Manufacturer> mList = mquery.getResultList();
+        Manufacturer manufacturer;
+        if(mList.isEmpty()){
+            result.add("false");
+            result.add("Nem található ilyen gyártó. Kérem, ellenőrizze a megadott adatokat.");
+            return result;
+        }else{
+            manufacturer = mList.get(0);
+        }
+        
+        TypedQuery<OsVersion> oquery = em.createQuery("SELECT o FROM OsVersion o WHERE o.fkOs.osName = :oname AND o.versionName = :vname", OsVersion.class);
+        oquery.setParameter("oname", osName);
+        oquery.setParameter("vname", osVersion);
+        List<OsVersion> oList = oquery.getResultList();
+        OsVersion osv;
+        OperationSystem os;
+        if(oList.isEmpty()){
+            result.add("false");
+            result.add("Nem található ilyen operációs rendszer - verzió páros. Kérem, ellenőrizze a megadott adatokat.");
+            return result;
+        }else{
+            osv = oList.get(0);
+            os = oList.get(0).getFkOs();
+        }
+
+        TypedQuery<Processor> pquery = em.createQuery("SELECT p FROM Processor p WHERE p.chipset = :pname", Processor.class);
+        pquery.setParameter("pname", processorChipset);
+        List<Processor> pList = pquery.getResultList();
+        Processor processor;
+        if(pList.isEmpty()){
+            result.add("false");
+            result.add("Nem található ilyen processzor. Kérem, ellenőrizze a megadott adatokat.");
+            return result;
+        }else{
+            processor = pList.get(0);
+        }
+        TypedQuery<Gpu> gquery = em.createQuery("SELECT g FROM Gpu g WHERE g.gpuName = :gname", Gpu.class);
+        gquery.setParameter("gname", gpuName);
+        List<Gpu> gList = gquery.getResultList();
+        Gpu gpu;
+        if(gList.isEmpty()){
+            result.add("false");
+            result.add("Nem található ilyen grafikus vezérlő. Kérem, ellenőrizze a megadott adatokat.");
+            return result;
+        }else{
+            gpu = gList.get(0);
+        }
+        TypedQuery<Sim> squery = em.createQuery("SELECT s FROM Sim s WHERE s.simType = :sname", Sim.class);
+        squery.setParameter("sname", simType);
+        List<Sim> sList = squery.getResultList();
+        Sim sim;
+        if(sList.isEmpty()){
+            result.add("false");
+            result.add("Nem található ilyen SIM típus. Kérem, ellenőrizze a megadott adatokat.");
+            return result;
+        }else{
+            sim = sList.get(0);
+        }
+        
+        TypedQuery<PhoneType> ptquery = em.createQuery("SELECT p FROM PhoneType p WHERE p.id = :pid", PhoneType.class);
+        ptquery.setParameter("pid", id);
+        List<PhoneType> ptList = ptquery.getResultList();
+        PhoneType phoneType;
+        if(ptList.isEmpty()){
+            result.add("false");
+            result.add("Nem található ilyen telefontípus. Kérem, ellenőrizze a megadott adatokat.");
+            return result;
+        }else{
+            phoneType = ptList.get(0);
+        }
+        //STEP 3: Saving
+        phoneType.setDisplayInches(screenSize);
+        phoneType.setDpi(Short.parseShort(dpi.toString()));
+        phoneType.setFkGpu(gpu);
+        phoneType.setFkManufacturer(manufacturer);
+        phoneType.setFkOsVersion(osv);
+        phoneType.setFkProcessor(processor);
+        phoneType.setFkSim(sim);
+        phoneType.setFrontCamera(frontCam);
+        //phoneType.setImageUrl();
+        phoneType.setMicrosdEnabled(microsd);
+        //phoneType.setPublished(null);
+        phoneType.setRam(ram);
+        phoneType.setRearCamera(rearCam);
+        phoneType.setResX(resx);
+        phoneType.setResY(resy);
+        phoneType.setRom(rom);
+        phoneType.setTypeName(typeName);
+        
+        em.persist(phoneType);
+        result.add("true");
+        result.add("Sikeresen módosította a telefontípust");
+        return result;
     }
 }
