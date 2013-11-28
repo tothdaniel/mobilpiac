@@ -112,6 +112,10 @@
         <servlet-name>ListBidsServlet</servlet-name>
         <servlet-class>hu.bme.aait.mobilpiac.servlets.ListBidsServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ImageUploadServlet</servlet-name>
+        <servlet-class>hu.bme.aait.mobilpiac.servlets.ImageUploadServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ListUsersServlet</servlet-name>
         <url-pattern>/ListUsersServlet</url-pattern>
@@ -223,6 +227,10 @@
     <servlet-mapping>
         <servlet-name>ListBidsServlet</servlet-name>
         <url-pattern>/ListBidsServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ImageUploadServlet</servlet-name>
+        <url-pattern>/ImageUploadServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
