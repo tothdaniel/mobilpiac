@@ -40,8 +40,7 @@ public class ManagePhoneTypeServlet extends HttpServlet {
             {
                 jobj.put("result",true);
                 jobj.put("message", result.get(1));
-            }
-            else
+            }else
             {
                 jobj.put("result",false);
                 jobj.put("message", result.get(1));
