@@ -313,6 +313,7 @@
         <script src="lib/bootstrap/js/bootstrap.min.js"></script>
         <script src="lib/slider/js/bootstrap-slider.js"></script>
         <script>
+            var os_version;
             var Mobile = function(data) {
                 this.id = ko.observable(data.id);
                 this.published = ko.observable(data.published);
@@ -485,7 +486,8 @@
                             $("#type_name").val(adat.type_name);
                             $("#manufacturer").val(adat.manufacturer);
                             $("#osselect").val(adat.os_name);
-                            $("#osversionselect").val(adat.os_version);
+                            os_version = adat.os_version;
+                            $("#osselect").change();
                             $("#processor").val(adat.processor_chipset);
                             $("#gpu").val(adat.gpu);
                             $("#sim_type").val(adat.sim_type);
@@ -522,6 +524,7 @@
                         {
                             self.osversions.push(new OsVersion(data.osversions[key]));
                         }
+                        $("#osversionselect").val(os_version);
                     });
                 });
                 $("#newossubnewmit").click(function(event) {
@@ -813,7 +816,8 @@
                 });
 
                 $("#newtypebtn").click(function() {
-                    $("#phonetypeform").slideToggle();
+                    $("#phonetypeform").slideUp();
+                    $("#phonetypeform").slideDown();
                 });
 
                 $("#savetypebtn").click(function() {
