@@ -585,17 +585,6 @@ public class MobileSessionBean {
         List<String> result = new ArrayList<>();
         org.json.JSONObject jobj = new org.json.JSONObject(json);
         String todo = jobj.getString("type");
-        /*switch (todo) {
-            case "read":
-                JSONObject obj = getJSONObject(jobj.getString("id"));
-                result.add("true");
-                result.add("OK");
-                break;
-            default: 
-                result.add("false");
-                result.add("Nem található a megadott utasítás.");
-                break;
-        }*/
         if(todo.equals("read")){
             JSONObject obj = getJSONObject(""+jobj.getInt("id"));
             
@@ -607,7 +596,7 @@ public class MobileSessionBean {
                 result.add("Nem található a telefon.");
             }
         }else if(todo.equals("add")){
-            addPhoneType(json);
+            return addPhoneType(json);
         }
         return result;
     }
@@ -616,6 +605,11 @@ public class MobileSessionBean {
         List<String> result = new ArrayList<>();
         org.json.JSONObject jobj = new org.json.JSONObject(json);
 
+        if (jobj.getString("type_name") == null || jobj.getString("type_name").isEmpty()) {
+            result.add("false");
+            result.add("A hozzáadandó típus nevét nem adta meg.");
+            return result;
+        }
         if (jobj.getString("type_name") == null || jobj.getString("type_name").isEmpty()) {
             result.add("false");
             result.add("A hozzáadandó típus nevét nem adta meg.");

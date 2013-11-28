@@ -32,10 +32,14 @@ public class ManagePhoneTypeServlet extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             List<String> result = ms.managePhoneType(request.getParameter("json"));
             JSONObject jobj = new JSONObject();
-            if(result.get(0).equals("true"))
+            if(result.get(0).equals("trueread"))
             {
                 jobj.put("result",true);
                 jobj.put("message", new org.json.JSONObject(result.get(1)));
+            }else if(result.get(0).equals("true"))
+            {
+                jobj.put("result",true);
+                jobj.put("message", result.get(1));
             }
             else
             {
