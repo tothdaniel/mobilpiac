@@ -860,10 +860,9 @@
                 });
 
                 $("#deletetypebtn").click(function() {
-                    $("#phonetypeform").slideUp();
                     var details = {
                         id: $("#mobile_id").val(),
-                        type: 'delete'
+                        type: "delete"
                     };
                     $.ajax({
                         url: "/mobilpiac-war/ManagePhoneTypeServlet",
@@ -872,6 +871,9 @@
                         data: {json: JSON.stringify(details)}
                     }).success(function(data) {
                         alert(data.message);
+                        if(data.result){
+                            $("#phonetypeform").slideUp();
+                        }
                     });
                 });
             }

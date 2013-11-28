@@ -603,6 +603,8 @@ public class MobileSessionBean {
         }else if(todo.equals("delete")){
             return deletePhoneType(json);
         }
+        result.add("false");
+        result.add("Utasítás nem található. Kérem, frissítse az oldalt.");
         return result;
     }
 
@@ -626,10 +628,14 @@ public class MobileSessionBean {
             result.add("Nincs ilyen telefontípus.");
             return result;
         }
-        PhoneType phoneType = pList.get(0);
+        //PhoneType phoneType = pList.get(0);
+        PhoneType phoneType = em.find(PhoneType.class, id);
+        phoneType.setDeleted(new Short("1"));
         
-        em.remove(phoneType);
-        
+        em.persist(phoneType);
+
+        result.add("true");
+        result.add("Sikeresen telefontípust.");
         return result;
     }
     
@@ -707,12 +713,12 @@ public class MobileSessionBean {
             osVersion = jobj.getString("os_version");
             processorChipset = jobj.getString("processor");
             gpuName = jobj.getString("gpu");
-            simType = jobj.getString("sim"); 
-            microsd=jobj.getString("microsd").equals("Van")?new Short("1"):new Short("0");
+            simType = jobj.getString("sim_type"); 
+            microsd=jobj.getString("microsd_enabled").equals("Van")?new Short("1"):new Short("0");
             ram = new Short(jobj.getString("ram"));
             rom = jobj.getInt("rom");
-            resx = new Short(jobj.getString("resx"));
-            resy = new Short(jobj.getString("resy"));
+            resx = new Short(jobj.getString("res_x"));
+            resy = new Short(jobj.getString("res_y"));
             dpi = new Short(jobj.getString("dpi"));
             screenSize = Double.parseDouble(jobj.getString("display_inches"));
             frontCam = Double.parseDouble(jobj.getString("front_camera"));
@@ -720,7 +726,7 @@ public class MobileSessionBean {
             
         }catch(JSONException | NumberFormatException e){
             result.add("false");
-            result.add("Szükséges adat hiányzik.");
+            result.add(e.getMessage());
             return result;
         }
         //STEP 2: Validating
