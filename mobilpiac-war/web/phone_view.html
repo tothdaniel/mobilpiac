@@ -257,7 +257,6 @@
                         dataType: "json",
                         data: {id: getURLParameter("ad_id")}
                     }).success(function(data) {
-                        console.log(data.bids);
                         var rowArray = ['Időpont', 'Licit ára'];
                         var tableArray = new Array();
                         tableArray[0] = rowArray;
@@ -265,7 +264,7 @@
                         var tableArrayId = 1;
                         for (id in data.bids)
                         {
-                            rowArray = [data.bids[id].date_of_bid, data.bids[id].price];
+                            rowArray = [new Date(data.bids[id].date_of_bid), data.bids[id].price];
                             tableArray[tableArrayId] = rowArray;
                             tableArrayId++;
                             showDiagram = true;
