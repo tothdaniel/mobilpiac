@@ -48,7 +48,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "PhoneType.findByResX", query = "SELECT p FROM PhoneType p WHERE p.resX = :resX"),
     @NamedQuery(name = "PhoneType.findByResY", query = "SELECT p FROM PhoneType p WHERE p.resY = :resY"),
     @NamedQuery(name = "PhoneType.findByRom", query = "SELECT p FROM PhoneType p WHERE p.rom = :rom"),
-    @NamedQuery(name = "PhoneType.findByTypeName", query = "SELECT p FROM PhoneType p WHERE p.typeName = :typeName")})
+    @NamedQuery(name = "PhoneType.findByTypeName", query = "SELECT p FROM PhoneType p WHERE p.typeName = :typeName"),
+    @NamedQuery(name = "PhoneType.findByDeleted", query = "SELECT p FROM PhoneType p WHERE p.deleted = :deleted")})
 public class PhoneType implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -84,6 +85,8 @@ public class PhoneType implements Serializable {
     @Size(max = 255)
     @Column(name = "TYPE_NAME")
     private String typeName;
+    @Column(name = "DELETED")
+    private Short deleted;
     @JoinColumn(name = "FK_SIM", referencedColumnName = "ID")
     @ManyToOne
     private Sim fkSim;
@@ -211,6 +214,14 @@ public class PhoneType implements Serializable {
 
     public void setTypeName(String typeName) {
         this.typeName = typeName;
+    }
+
+    public Short getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Short deleted) {
+        this.deleted = deleted;
     }
 
     public Sim getFkSim() {
