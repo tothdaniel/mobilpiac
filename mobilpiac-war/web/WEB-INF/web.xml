@@ -115,6 +115,12 @@
     <servlet>
         <servlet-name>ImageUploadServlet</servlet-name>
         <servlet-class>hu.bme.aait.mobilpiac.servlets.ImageUploadServlet</servlet-class>
+        <multipart-config>
+            <location>/img</location>
+            <max-file-size>20848820</max-file-size>
+            <max-request-size>418018841</max-request-size>
+            <file-size-threshold>1048576</file-size-threshold>
+        </multipart-config>
     </servlet>
     <servlet-mapping>
         <servlet-name>ListUsersServlet</servlet-name>
