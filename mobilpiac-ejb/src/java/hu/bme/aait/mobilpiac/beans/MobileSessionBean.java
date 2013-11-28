@@ -589,7 +589,7 @@ public class MobileSessionBean {
             JSONObject obj = getJSONObject(""+jobj.getInt("id"));
             
             if(obj != null){
-                result.add("true");
+                result.add("trueread");
                 result.add(obj.toJSONString());  
             }else{
                 result.add("false");

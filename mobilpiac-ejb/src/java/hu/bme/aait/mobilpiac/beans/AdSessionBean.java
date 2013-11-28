@@ -435,7 +435,8 @@ public class AdSessionBean {
         {
             JSONObject obj = new JSONObject();
             obj.put("id",b.getId());
-            Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            //Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Format formatter = new SimpleDateFormat("yy-MM-dd HH:mm");
             String published = formatter.format(b.getDateOfBid());
             obj.put("date_of_bid", published);
             obj.put("price",b.getPrice());

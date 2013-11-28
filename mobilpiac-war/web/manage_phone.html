@@ -479,11 +479,12 @@
                     }).success(function(data) {
                         //console.log(data);
                         if(data.result){
-                            $("#phonetypeform").slideDown();
                             $("#type_name").val(data.message.type_name);
                             $("#manufacturer").val(data.message.manufacturer);
                             $("#osselect").val(data.message.os_name);
                             $("#").val(data.message.os_version);
+                            
+                            $("#phonetypeform").slideDown();
                         }else{
                             alert(data.message);
                         }
