@@ -42,6 +42,7 @@
                             </ul>
 
 
+                            <a id="refreshmobiles" class="btn btn-primary" style="display: none;">Telefonok frissítése</a>
                             <a id="newtypebtn" class="btn btn-primary">Új telefontípus</a>
                         </div>	
                     </div>
@@ -406,16 +407,23 @@
                 self.processors = ko.observableArray([]);
 
                 // Operations
-                $.ajax({
-                    url: "/mobilpiac-war/ListMobilesServlet",
-                    type: "get",
-                    dataType: "json"
-                }).success(function(data) {
-                    for (key in data.mobiles)
-                    {
-                        self.mobiles.push(new Mobile(data.mobiles[key]));
-                    }
-                });
+                self.refreshmobiles = function() {
+                    $.ajax({
+                       url: "/mobilpiac-war/ListMobilesServlet",
+                       type: "get",
+                       dataType: "json"
+                   }).success(function(data) {
+                       self.mobiles.removeAll();
+                       for (key in data.mobiles)
+                       {
+                           self.mobiles.push(new Mobile(data.mobiles[key]));
+                       }
+                   });
+                };
+                
+                self.refreshmobiles();
+                        
+                $("#refreshmobiles").click(function(){self.refreshmobiles();});
 
                 $.ajax({
                     url: "/mobilpiac-war/ListSimsServlet",
@@ -889,6 +897,7 @@
                             front_camera: $("#front_camera").val(),
                             id: $("#mobile_id").val()
                         };
+                        
                         $.ajax({
                             url: "/mobilpiac-war/ManagePhoneTypeServlet",
                             type: "get",
@@ -897,6 +906,7 @@
                         }).success(function(data) {
                             if(data.result)
                             {
+                                $("#refreshmobiles").click();                        
                                 $("#phonetypeform").slideUp();
                             }
                             alert(data.message);
@@ -923,6 +933,7 @@
                         }).success(function(data) {
                             if(data.result)
                             {
+                                $("#refreshmobiles").click();                        
                                 $("#phonetypeform").slideUp();
                             }
                             alert(data.message);
