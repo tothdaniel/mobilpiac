@@ -42,7 +42,7 @@ public class TimerSessionBean {
     EntityManager em;
     
     // Ellenőrzés, hogy lejár-e már az adott hirdetés
-    @Schedule(minute = "*/10", second = "*", dayOfMonth = "*", month = "*", year = "*", hour = "*", dayOfWeek = "*")
+    @Schedule(minute = "*/5", second = "*", dayOfMonth = "*", month = "*", year = "*", hour = "*", dayOfWeek = "*")
     public void myTimer() {
        System.out.println("E-mail küldés!"+new Date());
        setAdsFinished();
