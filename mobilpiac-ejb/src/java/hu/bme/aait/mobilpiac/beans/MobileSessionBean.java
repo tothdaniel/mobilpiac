@@ -166,7 +166,7 @@ public class MobileSessionBean {
         for (PhoneType p : phonesList) {
             //az elso 12-t listazza csak ki, ezek a legnezettebbek
             if (cntr < 12) {
-                TypedQuery<Advertisement> query = em.createQuery("SELECT a FROM Advertisement a WHERE a.fkPhoneType.id = :pid", Advertisement.class);
+                TypedQuery<Advertisement> query = em.createQuery("SELECT a FROM Advertisement a WHERE a.fkPhoneType.id = :pid AND a.finished = 0", Advertisement.class);
                 query.setParameter("pid", p.getId());
                 List<Advertisement> advertisementList = query.getResultList();
 
